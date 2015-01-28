@@ -2,7 +2,6 @@ package com.android.toorcomp;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -103,6 +102,10 @@ public class Map extends Activity implements SensorEventListener {
 		m_mapView.setMultiTouchControls(true);
 		m_mapView.setClickable(false);
 		m_mapView.setUseDataConnection(true);
+		
+		// https://github.com/johnjohndoe/OSMDroidOfflineDemo/blob/master/app/src/main/java/com/example/android/osmdroidofflinedemo/MainActivity.java
+		
+		m_mapView.setTileSource(TileSourceFactory.MAPNIK);
 		m_mapView.getController().setZoom(MAP_DEFAULT_ZOOM);
 
 		/*
@@ -149,7 +152,8 @@ public class Map extends Activity implements SensorEventListener {
 
 		// If gps enabled
 
-		if (mGPS.canGetLocation) {
+		if (mGPS.canGetLocation) 
+		{
 
 			// get Lat Long from gps
 
@@ -173,8 +177,8 @@ public class Map extends Activity implements SensorEventListener {
 				// GPS if not ready
 
 			} else {
-				// Toast.makeText(getApplicationContext(), "GPS is not Ready",
-				// Toast.LENGTH_LONG).show();
+				 Toast.makeText(getApplicationContext(), "GPS is not Ready",
+				 Toast.LENGTH_LONG).show();
 
 				LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 				LocationListener mlocListener = new MyLocationListener(Map.this);
@@ -215,7 +219,8 @@ public class Map extends Activity implements SensorEventListener {
 			try {
 				XMLData = getXmlFromFile("/osmdroid/Pois.xml");
 
-				BufferedReader br = new BufferedReader(new StringReader(XMLData));
+				BufferedReader br = new BufferedReader(
+						new StringReader(XMLData));
 				InputSource is = new InputSource(br);
 
 				/************ Parse XML **************/
@@ -249,12 +254,13 @@ public class Map extends Activity implements SensorEventListener {
 					/*
 					 * int level = m_mapView.getZoomLevel();
 					 * 
-					 * if (level > 16) marker = R.drawable.markerbig; if (level ==
-					 * 15 || level == 14) marker = R.drawable.marker_small; if
-					 * (level < 13) marker = R.drawable.marker_smaller;
+					 * if (level > 16) marker = R.drawable.markerbig; if (level
+					 * == 15 || level == 14) marker = R.drawable.marker_small;
+					 * if (level < 13) marker = R.drawable.marker_smaller;
 					 */
 
-					Drawable newMarker = this.getResources().getDrawable(marker);
+					Drawable newMarker = this.getResources()
+							.getDrawable(marker);
 
 					olItem.setMarker(newMarker);
 					overlayItemArray.add(olItem);
@@ -264,9 +270,10 @@ public class Map extends Activity implements SensorEventListener {
 				// ------- Add Your Position -----------------------------------
 				/*
 				 * olItem = new OverlayItem("Position", "You Are Here", new
-				 * GeoPoint( MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE)); Drawable
-				 * newMarker = this.getResources().getDrawable( R.drawable.marker);
-				 * olItem.setMarker(newMarker); overlayItemArray.add(olItem);
+				 * GeoPoint( MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE));
+				 * Drawable newMarker = this.getResources().getDrawable(
+				 * R.drawable.marker); olItem.setMarker(newMarker);
+				 * overlayItemArray.add(olItem);
 				 */
 
 				MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,
@@ -275,7 +282,8 @@ public class Map extends Activity implements SensorEventListener {
 				// setContentView(m_mapView); //displaying the MapView
 			} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block
-				Toast.makeText(getApplicationContext(),
+				Toast.makeText(
+						getApplicationContext(),
 						"Parcer Configuration Error=" + e.getLocalizedMessage(),
 						Toast.LENGTH_LONG).show();
 			} catch (SAXException e) {
@@ -289,11 +297,8 @@ public class Map extends Activity implements SensorEventListener {
 						"IO Exception=" + e.getLocalizedMessage(),
 						Toast.LENGTH_LONG).show();
 			}
-			
-			
-		}
 
-		
+		}
 
 		// ------------------------------------------------------------
 
