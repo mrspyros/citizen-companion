@@ -74,85 +74,71 @@ public class Map extends Activity implements SensorEventListener {
 
 	private LocationManager InnerLocationManager;
 	private LocationListener InnerLocationListener;
-	
+
 	// Compass and Rotation
-	private MyLocationOverlay myCompass; 
-	 private SensorManager sensorManager;
-     private boolean filterSensor = false;
-     ArrayList<OverlayItem> overlayItemArray = new ArrayList<OverlayItem>();
-    private float compassBearing;
-	
-	
-	
-	
+	private MyLocationOverlay myCompass;
+	private SensorManager sensorManager;
+	private boolean filterSensor = false;
+	ArrayList<OverlayItem> overlayItemArray = new ArrayList<OverlayItem>();
+	private float compassBearing;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		
-		//seeeeeensorrrr
-		  
-		  
-		  
+		// seeeeeensorrrr
+
 		if (!Globals.getInstance().isFirstTimeOnMapActivity())
 			MAP_DEFAULT_ZOOM = Globals.getInstance().getMapZoomLevel();
 
 		// Specify the XML layout to use:
 		setContentView(R.layout.map);
-		
-		
-		
 
 		// Find the MapView controller in that layout:
 		m_mapView = (MapView) findViewById(R.id.mapview);
 		// Setup the mapView controller:
-				m_mapView.setBuiltInZoomControls(true);
-				m_mapView.setMultiTouchControls(true);
-				m_mapView.setClickable(false);
-				m_mapView.setUseDataConnection(true);
-				m_mapView.getController().setZoom(MAP_DEFAULT_ZOOM);
+		m_mapView.setBuiltInZoomControls(true);
+		m_mapView.setMultiTouchControls(true);
+		m_mapView.setClickable(false);
+		m_mapView.setUseDataConnection(true);
+		m_mapView.getController().setZoom(MAP_DEFAULT_ZOOM);
 
-				
-		/*m_mapView.setOnClickListener(new View.OnClickListener() {
+		/*
+		 * m_mapView.setOnClickListener(new View.OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { // TODO Auto-generated method
+		 * stub Globals.getInstance().setFirstTimeOnMapActivity(false);
+		 * Globals.getInstance().setMap_Center(m_mapView.getMapCenter());
+		 * Globals.getInstance().setMapZoomLevel(m_mapView.getZoomLevel());
+		 * 
+		 * Toast.makeText(getApplicationContext(), "On Click=" +
+		 * MAP_DEFAULT_ZOOM, Toast.LENGTH_LONG) .show();
+		 * 
+		 * if (Globals.getInstance().getMapZoomLevel() != MAP_DEFAULT_ZOOM) {
+		 * 
+		 * finish(); startActivity(getIntent()); }
+		 * 
+		 * } });
+		 */
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Globals.getInstance().setFirstTimeOnMapActivity(false);
-				Globals.getInstance().setMap_Center(m_mapView.getMapCenter());
-				Globals.getInstance().setMapZoomLevel(m_mapView.getZoomLevel());
-				
-				 * Toast.makeText(getApplicationContext(), "On Click=" +
-				 * MAP_DEFAULT_ZOOM, Toast.LENGTH_LONG) .show();
-				 
-				if (Globals.getInstance().getMapZoomLevel() != MAP_DEFAULT_ZOOM) {
+		// My location overlay
+		{
+			// Create a static Overlay showing a the current location and a
+			// compass
 
-					finish();
-					startActivity(getIntent());
+			this.myCompass = new MyLocationOverlay(this, m_mapView);
+			this.m_mapView.getOverlays().add(myCompass);
+
+			this.myCompass.runOnFirstFix(new Runnable() {
+				public void run() {
+					// Animate to the current location on first GPS fix
+					m_mapView.getController().animateTo(
+							myCompass.getMyLocation());
 				}
-
-			}
-		});*/
-
-		
-		 // My location overlay 
-        {
-                // Create a static Overlay showing a the current location and a compass 
-           
-        	this.myCompass = new MyLocationOverlay(this, m_mapView);
-                this.m_mapView.getOverlays().add(myCompass);
-                
-                        this.myCompass.runOnFirstFix(new Runnable() {
-                    public void run() {
-                        //Animate to the current location on first GPS fix 
-                        m_mapView.getController().animateTo(myCompass.getMyLocation());
-                    }
-                });
-        }
-        
-		
+			});
+		}
 
 		InnerLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		InnerLocationListener = new InnerLocationListener();
@@ -218,102 +204,112 @@ public class Map extends Activity implements SensorEventListener {
 		// -------------------------------------------------------------
 		// Parce xml for pois
 		// -------------------------------------------------------------
-		/************** Read XML *************/
 
-		String XMLData;
-		try {
-			XMLData = getXmlFromFile("/osmdroid/Pois.xml");
+		Globals g = Globals.getInstance();
 
-			BufferedReader br = new BufferedReader(new StringReader(XMLData));
-			InputSource is = new InputSource(br);
+		if (g.getXmLERROR() == "NO") {
 
-			/************ Parse XML **************/
+			/************** Read XML *************/
 
-			XMLParser parser = new XMLParser();
-			SAXParserFactory factory = SAXParserFactory.newInstance();
+			String XMLData;
+			try {
+				XMLData = getXmlFromFile("/osmdroid/Pois.xml");
 
-			SAXParser sp;
-			sp = factory.newSAXParser();
+				BufferedReader br = new BufferedReader(new StringReader(XMLData));
+				InputSource is = new InputSource(br);
 
-			XMLReader reader = sp.getXMLReader();
-			reader.setContentHandler(parser);
-			reader.parse(is);
+				/************ Parse XML **************/
 
-			// -----------------------------------------------------------------
+				XMLParser parser = new XMLParser();
+				SAXParserFactory factory = SAXParserFactory.newInstance();
 
-			List<Poi_Struct> pois = new ArrayList<Poi_Struct>();
+				SAXParser sp;
+				sp = factory.newSAXParser();
 
-			pois = parser.getPois();
+				XMLReader reader = sp.getXMLReader();
+				reader.setContentHandler(parser);
+				reader.parse(is);
 
-			//ArrayList<OverlayItem> overlayItemArray = new ArrayList<OverlayItem>();
+				// -----------------------------------------------------------------
 
-			int marker = R.drawable.markerbig;
-			OverlayItem olItem;
-			for (int i = 0; i < pois.size(); i++) {
-				olItem = new OverlayItem(pois.get(i).getName(), pois.get(i)
-						.getDesc(), new GeoPoint(pois.get(i).getLon(), pois
-						.get(i).getLat()));
+				List<Poi_Struct> pois = new ArrayList<Poi_Struct>();
 
+				pois = parser.getPois();
+
+				// ArrayList<OverlayItem> overlayItemArray = new
+				// ArrayList<OverlayItem>();
+
+				int marker = R.drawable.markerbig;
+				OverlayItem olItem;
+				for (int i = 0; i < pois.size(); i++) {
+					olItem = new OverlayItem(pois.get(i).getName(), pois.get(i)
+							.getDesc(), new GeoPoint(pois.get(i).getLon(), pois
+							.get(i).getLat()));
+
+					/*
+					 * int level = m_mapView.getZoomLevel();
+					 * 
+					 * if (level > 16) marker = R.drawable.markerbig; if (level ==
+					 * 15 || level == 14) marker = R.drawable.marker_small; if
+					 * (level < 13) marker = R.drawable.marker_smaller;
+					 */
+
+					Drawable newMarker = this.getResources().getDrawable(marker);
+
+					olItem.setMarker(newMarker);
+					overlayItemArray.add(olItem);
+
+				}
+
+				// ------- Add Your Position -----------------------------------
 				/*
-				 * int level = m_mapView.getZoomLevel();
-				 * 
-				 * if (level > 16) marker = R.drawable.markerbig; if (level ==
-				 * 15 || level == 14) marker = R.drawable.marker_small; if
-				 * (level < 13) marker = R.drawable.marker_smaller;
+				 * olItem = new OverlayItem("Position", "You Are Here", new
+				 * GeoPoint( MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE)); Drawable
+				 * newMarker = this.getResources().getDrawable( R.drawable.marker);
+				 * olItem.setMarker(newMarker); overlayItemArray.add(olItem);
 				 */
 
-				Drawable newMarker = this.getResources().getDrawable(marker);
-
-				olItem.setMarker(newMarker);
-				overlayItemArray.add(olItem);
-
+				MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,
+						overlayItemArray);
+				m_mapView.getOverlays().add(overlay);
+				// setContentView(m_mapView); //displaying the MapView
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				Toast.makeText(getApplicationContext(),
+						"Parcer Configuration Error=" + e.getLocalizedMessage(),
+						Toast.LENGTH_LONG).show();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				Toast.makeText(getApplicationContext(),
+						"SAX Exception=" + e.getLocalizedMessage(),
+						Toast.LENGTH_LONG).show();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Toast.makeText(getApplicationContext(),
+						"IO Exception=" + e.getLocalizedMessage(),
+						Toast.LENGTH_LONG).show();
 			}
-
-			// ------- Add Your Position -----------------------------------
-			/*olItem = new OverlayItem("Position", "You Are Here", new GeoPoint(
-					MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE));
-			Drawable newMarker = this.getResources().getDrawable(
-					R.drawable.marker);
-			olItem.setMarker(newMarker);
-			overlayItemArray.add(olItem);*/
-
-			MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,
-					overlayItemArray);
-			m_mapView.getOverlays().add(overlay);
-			// setContentView(m_mapView); //displaying the MapView
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			Toast.makeText(getApplicationContext(),
-					"Parcer Configuration Error=" + e.getLocalizedMessage(),
-					Toast.LENGTH_LONG).show();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			Toast.makeText(getApplicationContext(),
-					"SAX Exception=" + e.getLocalizedMessage(),
-					Toast.LENGTH_LONG).show();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Toast.makeText(getApplicationContext(),
-					"IO Exception=" + e.getLocalizedMessage(),
-					Toast.LENGTH_LONG).show();
+			
+			
 		}
+
+		
 
 		// ------------------------------------------------------------
 
-		/* Toast.makeText(getApplicationContext(),
-		 "ZoomLevel="+MAP_DEFAULT_ZOOM,
-		 Toast.LENGTH_LONG).show();*/
+		/*
+		 * Toast.makeText(getApplicationContext(),
+		 * "ZoomLevel="+MAP_DEFAULT_ZOOM, Toast.LENGTH_LONG).show();
+		 */
 
 		Globals.getInstance().setFirstTimeOnMapActivity(false);
 		Globals.getInstance().setMap_Center(m_mapView.getMapCenter());
 		Globals.getInstance().setMapZoomLevel(m_mapView.getZoomLevel());
 
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-		
-		
+
 	} // end onCreate()
-	
-	
+
 	public String getXmlFromFile(String filename) throws IOException {
 		StringBuffer buff = new StringBuffer();
 		File root = Environment.getExternalStorageDirectory();
@@ -364,53 +360,47 @@ public class Map extends Activity implements SensorEventListener {
 		return false;
 	};
 
-	
-	 @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	@Override
-	    public void onResume() {
-	        super.onResume();
-	        
-	        myCompass.enableCompass();
-	        myCompass.enableMyLocation();          
-	        myCompass.followLocation(true);
-	        sensorManager.registerListener(this,
-                    sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
-                    SensorManager.SENSOR_DELAY_FASTEST);
-	        
-	    }
-	    
-	    /** disable compass and location updates */
-	    @Override
-	    public void onPause() {
-	        super.onPause();
-	        
-	                this.myCompass.disableMyLocation();
-	                this.myCompass.disableCompass();
-	                sensorManager.unregisterListener(this);
-	               
-	    }
+	public void onResume() {
+		super.onResume();
 
-		@Override
-		public void onAccuracyChanged(Sensor sensor, int accuracy) {
-			// TODO Auto-generated method stub
-			
+		myCompass.enableCompass();
+		myCompass.enableMyLocation();
+		myCompass.followLocation(true);
+		sensorManager.registerListener(this,
+				sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
+				SensorManager.SENSOR_DELAY_FASTEST);
+
+	}
+
+	/** disable compass and location updates */
+	@Override
+	public void onPause() {
+		super.onPause();
+
+		this.myCompass.disableMyLocation();
+		this.myCompass.disableCompass();
+		sensorManager.unregisterListener(this);
+
+	}
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		float bearing = event.values[0];
+		if (filterSensor) {
+			bearing = (int) bearing;
 		}
+		compassBearing = bearing;
+		// m_mapView.setMapOrientation(-bearing);
 
-		@Override
-		public void onSensorChanged(SensorEvent event) {
-			float bearing = event.values[0];
-            if (filterSensor) {
-                    bearing = (int) bearing;
-            }
-            compassBearing=bearing;
-           // m_mapView.setMapOrientation(-bearing);
-         
-     
-		}
+	}
 
-	
-	    
-		 
-	    
 } // end class YourMap
 

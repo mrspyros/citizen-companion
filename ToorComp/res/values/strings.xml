@@ -5,6 +5,10 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Καλώς ήλθατε στην εφαρμογή μας!</string>
     <string name="pois_intro">Επιλογή σημείων ενδιαφέροντος!</string>
+    <string name="noxmltitle">Η Βάση σημείων Ενδιαφέροντος Δέν βρέθηκε!</string>
+    <string name="noxmlmessage">Θέλετε να γίνει λήψη της βάσης?</string>
+    <string name="noxmldl">Δέν ήταν δυνατή η λήψη της βάσης</string>
+    <string name="noxmldlok">Εγινε λήψη της Βάσης</string>
     
     
     <string-array name="ypiresies">

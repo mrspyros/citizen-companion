@@ -25,7 +25,7 @@ public class MainScreen extends Activity  {
 		
 		
 		
-		if (ERROR=="XML") Toast.makeText(getApplicationContext(), "Δέν βρέθηκαν αποθηκευμένα σημεία ενδιαφέροντος", Toast.LENGTH_LONG).show(); 
+		//if (ERROR=="YES") Toast.makeText(getApplicationContext(), "Δέν βρέθηκαν αποθηκευμένα σημεία ενδιαφέροντος", Toast.LENGTH_LONG).show(); 
 		
 		
 		

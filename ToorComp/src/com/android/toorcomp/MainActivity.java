@@ -8,7 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 
 /**
- * @author chuck noris
+ * @author mrspyros
  * 
  */
 public class MainActivity extends Activity {
@@ -25,13 +25,12 @@ public class MainActivity extends Activity {
 		final Intent intent = new Intent(getApplicationContext(),
 				MainScreen.class);
 
-		if (!XMLExists) 
-		{
+		if (!XMLExists) {
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-			builder.setTitle("Η Βάση σημείων Ενδιαφέροντος Δέν βρέθηκε");
-			builder.setMessage("Θέλετε να γίνει λήψη της βάσης?");
+			builder.setTitle(R.string.noxmltitle);
+			builder.setMessage(R.string.noxmlmessage);
 
 			builder.setPositiveButton("YES",
 					new DialogInterface.OnClickListener() {
@@ -40,30 +39,31 @@ public class MainActivity extends Activity {
 						public void onClick(DialogInterface dialog, int which) {
 
 							// Code that is executed when clicking YES
-
+							
 							Boolean download = init.DownloadXML();
-
+														
 							if (!download) {
 								Globals g = Globals.getInstance();
-								Toast.makeText(
-										getApplicationContext(),
-										"Δέν ήταν δυνατή η λήψη της βάσης"
-												+ g.getWait(),
-										Toast.LENGTH_LONG).show();
+								Toast.makeText(getApplicationContext(),
+										R.string.noxmldl+g.getWait() ,
+										Toast.LENGTH_LONG)
+										.show();
 								g.setXmLERROR("YES");
 								dialog.dismiss();
 								finish();
 								startActivity(intent);
-							}
+							} else {
+								Globals g = Globals.getInstance();
+								Toast.makeText(getApplicationContext(),
+										R.string.noxmldlok, 
+										Toast.LENGTH_LONG)
+										.show();
+								g.setXmLERROR("NO");
+								dialog.dismiss();
+								finish();
+								startActivity(intent);
 
-							Globals g = Globals.getInstance();
-							Toast.makeText(getApplicationContext(),
-									"Εγινε λήψη της Βάσης", Toast.LENGTH_LONG)
-									.show();
-							g.setXmLERROR("NO");
-							dialog.dismiss();
-							finish();
-							startActivity(intent);
+							}
 
 						}
 
@@ -78,7 +78,6 @@ public class MainActivity extends Activity {
 							// Code that is executed when clicking NO
 							Globals g = Globals.getInstance();
 							g.setXmLERROR("YES");
-
 							dialog.dismiss();
 							finish();
 							startActivity(intent);
@@ -92,14 +91,13 @@ public class MainActivity extends Activity {
 
 		}
 
-		else 
-		{
+		else {
 			Globals g = Globals.getInstance();
 			g.setXmLERROR("NO");
 			finish();
 			startActivity(intent);
 		}
-		
+
 	}
 
 }
