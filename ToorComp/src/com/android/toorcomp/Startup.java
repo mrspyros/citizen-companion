@@ -100,8 +100,12 @@ public class Startup  {
 	public Boolean CheckXML(){
 		//File SDCardRoot = Environment.getExternalStorageDirectory();
 		//deleteFiles(SDCardRoot+"/osmdroid/tiles/Mapnik/");
-		return false;
-	    //return CheckFileExists(Environment.getExternalStorageDirectory().getAbsolutePath()+"/osmdroid/Pois.xml");
+		//return false;
+	    
+		
+		//return CheckFileExists(Environment.getExternalStorageDirectory().getAbsolutePath()+"/osmdroid/");
+		
+		return CheckFileExists(Environment.getExternalStorageDirectory().getAbsolutePath()+"/osmdroid/Pois.xml");
 				
 	}
 	
