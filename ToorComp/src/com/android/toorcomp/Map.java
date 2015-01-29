@@ -105,7 +105,7 @@ public class Map extends Activity implements SensorEventListener {
 		
 		// https://github.com/johnjohndoe/OSMDroidOfflineDemo/blob/master/app/src/main/java/com/example/android/osmdroidofflinedemo/MainActivity.java
 		
-		m_mapView.setTileSource(TileSourceFactory.MAPNIK);
+		m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
 		m_mapView.getController().setZoom(MAP_DEFAULT_ZOOM);
 
 		/*
@@ -131,6 +131,11 @@ public class Map extends Activity implements SensorEventListener {
 			// Create a static Overlay showing a the current location and a
 			// compass
 
+		//https://code.google.com/p/osmdroid/source/browse/branches/rotation/OpenStreetMapViewer/src/org/osmdroid/MapActivity.java?r=914
+			
+			
+			
+			
 			this.myCompass = new MyLocationOverlay(this, m_mapView);
 			this.m_mapView.getOverlays().add(myCompass);
 
@@ -153,6 +158,7 @@ public class Map extends Activity implements SensorEventListener {
 		// If gps enabled
 
 		if (mGPS.canGetLocation) 
+		//if (1==0)
 		{
 
 			// get Lat Long from gps
@@ -160,8 +166,8 @@ public class Map extends Activity implements SensorEventListener {
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! uncomment to read gps
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-			MAP_DEFAULT_LATITUDE = mGPS.getLatitude();
-			MAP_DEFAULT_LONGITUDE = mGPS.getLongitude();
+			//MAP_DEFAULT_LATITUDE = mGPS.getLatitude();
+			//MAP_DEFAULT_LONGITUDE = mGPS.getLongitude();
 
 			// if GPS is ready
 			if (MAP_DEFAULT_LATITUDE > 0) {
@@ -202,7 +208,7 @@ public class Map extends Activity implements SensorEventListener {
 					Globals.getInstance().getMap_Center());
 		}
 
-		m_mapView.setTileSource(TileSourceFactory.MAPNIK);
+		m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
 		// start overlays ----------------------------
 
 		// -------------------------------------------------------------
@@ -211,7 +217,8 @@ public class Map extends Activity implements SensorEventListener {
 
 		Globals g = Globals.getInstance();
 
-		if (g.getXmLERROR() == "NO") {
+		if (g.getXmLERROR() == "NO") 
+		{
 
 			/************** Read XML *************/
 
@@ -251,13 +258,6 @@ public class Map extends Activity implements SensorEventListener {
 							.getDesc(), new GeoPoint(pois.get(i).getLon(), pois
 							.get(i).getLat()));
 
-					/*
-					 * int level = m_mapView.getZoomLevel();
-					 * 
-					 * if (level > 16) marker = R.drawable.markerbig; if (level
-					 * == 15 || level == 14) marker = R.drawable.marker_small;
-					 * if (level < 13) marker = R.drawable.marker_smaller;
-					 */
 
 					Drawable newMarker = this.getResources()
 							.getDrawable(marker);
@@ -268,18 +268,19 @@ public class Map extends Activity implements SensorEventListener {
 				}
 
 				// ------- Add Your Position -----------------------------------
-				/*
-				 * olItem = new OverlayItem("Position", "You Are Here", new
-				 * GeoPoint( MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE));
-				 * Drawable newMarker = this.getResources().getDrawable(
-				 * R.drawable.marker); olItem.setMarker(newMarker);
-				 * overlayItemArray.add(olItem);
-				 */
+				
+//				OverlayItem olItem = new OverlayItem("Position", "You Are Here", new
+//				 GeoPoint( MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE));
+//				 Drawable newMarker = this.getResources().getDrawable(
+//				 R.drawable.marker); olItem.setMarker(newMarker);
+//				 overlayItemArray.add(olItem);
+				 
 
-				MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,
-						overlayItemArray);
-				m_mapView.getOverlays().add(overlay);
-				// setContentView(m_mapView); //displaying the MapView
+			//	MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,
+				//		overlayItemArray);
+				//m_mapView.getOverlays().add(overlay);
+			//	 setContentView(m_mapView); //displaying the MapView
+				 
 			} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block
 				Toast.makeText(
@@ -300,6 +301,8 @@ public class Map extends Activity implements SensorEventListener {
 
 		}
 
+	
+		
 		// ------------------------------------------------------------
 
 		/*
@@ -307,9 +310,9 @@ public class Map extends Activity implements SensorEventListener {
 		 * "ZoomLevel="+MAP_DEFAULT_ZOOM, Toast.LENGTH_LONG).show();
 		 */
 
-		Globals.getInstance().setFirstTimeOnMapActivity(false);
-		Globals.getInstance().setMap_Center(m_mapView.getMapCenter());
-		Globals.getInstance().setMapZoomLevel(m_mapView.getZoomLevel());
+	//	Globals.getInstance().setFirstTimeOnMapActivity(false);
+	//	Globals.getInstance().setMap_Center(m_mapView.getMapCenter());
+	//	Globals.getInstance().setMapZoomLevel(m_mapView.getZoomLevel());
 
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
