@@ -4,15 +4,19 @@ import org.osmdroid.util.GeoPoint;
 
 //import com.android.toorcomp.Map.InnerLocationListener;
 
+
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +25,7 @@ import android.widget.TextView;
 
 public class New_request extends Activity {
 
+	private static int PICK_IMAGE = 0;
 	private LocationManager InnerLocationManager;
 	private LocationListener InnerLocationListener;
 
@@ -32,7 +37,9 @@ public class New_request extends Activity {
 		final GPSTracker mGPS = new GPSTracker(this);
 		final TextView myTextView1 = (TextView) findViewById(R.id.editText2);
 		final TextView myTextView = (TextView) findViewById(R.id.editText1);
+        final TextView photoTextView=(TextView) findViewById(R.id.photo);
 
+		
 		Button button2 = (Button) findViewById(R.id.button2);
 		button2.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {
@@ -62,11 +69,20 @@ public class New_request extends Activity {
 
 											// if GPS is ready
 											if (mGPS.getLatitude() != 0) {
-
-												myTextView1.append("Lat="
+											myTextView1.append("http://www.google.com/maps/place/"
+															+ mGPS.getLatitude()
+															+ ","
+															+ mGPS.getLongitude()
+															+"/@"
+															+mGPS.getLatitude()
+															+","
+															+mGPS.getLongitude()
+															+"17z");			
+													
+											/*	myTextView1.append("Lat="
 														+ mGPS.getLatitude()
 														+ "Lon="
-														+ mGPS.getLongitude());
+														+ mGPS.getLongitude());*/
 
 											} else {
 
@@ -134,10 +150,48 @@ public class New_request extends Activity {
 			}
 		});
 
+		
+		// ------------------ If tapped to load photo -----------------
+		PICK_IMAGE = 2;
+		photoTextView.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		    	Intent intent = new Intent();
+		    	intent.setType("image/*");
+		    	intent.setAction(Intent.ACTION_GET_CONTENT);
+		    	startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+		    }
+		});
+		
+		
+		
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+		// ----------- pick image -------------------
+		
+		 if(requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+		        Uri _uri = data.getData();
+
+		        //User had pick an image.
+		        Cursor cursor = getContentResolver().query(_uri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
+		        cursor.moveToFirst();
+
+		        //Link to the image
+		        final String imageFilePath = cursor.getString(0);
+		        cursor.close();
+		        final TextView photoTextView=(TextView) findViewById(R.id.photo);
+		        photoTextView.setText(imageFilePath);
+		    }
+		    super.onActivityResult(requestCode, resultCode, data);
+		
+		// ----------- pick image end ---------------
+		
+		
+		
+		
+		
 		if (requestCode == 1) {
 
 			if (resultCode == RESULT_OK) {

@@ -12,16 +12,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.osmdroid.DefaultResourceProxyImpl;
-import org.osmdroid.ResourceProxy;
-import org.osmdroid.api.IGeoPoint;
-import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.ExtendedOverlayItem;
 import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MyLocationOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.xml.sax.InputSource;
@@ -29,25 +24,17 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -108,23 +95,6 @@ public class Map extends Activity implements SensorEventListener {
 		m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
 		m_mapView.getController().setZoom(MAP_DEFAULT_ZOOM);
 
-		/*
-		 * m_mapView.setOnClickListener(new View.OnClickListener() {
-		 * 
-		 * @Override public void onClick(View v) { // TODO Auto-generated method
-		 * stub Globals.getInstance().setFirstTimeOnMapActivity(false);
-		 * Globals.getInstance().setMap_Center(m_mapView.getMapCenter());
-		 * Globals.getInstance().setMapZoomLevel(m_mapView.getZoomLevel());
-		 * 
-		 * Toast.makeText(getApplicationContext(), "On Click=" +
-		 * MAP_DEFAULT_ZOOM, Toast.LENGTH_LONG) .show();
-		 * 
-		 * if (Globals.getInstance().getMapZoomLevel() != MAP_DEFAULT_ZOOM) {
-		 * 
-		 * finish(); startActivity(getIntent()); }
-		 * 
-		 * } });
-		 */
 
 		// My location overlay
 		{
@@ -138,7 +108,6 @@ public class Map extends Activity implements SensorEventListener {
 			
 			this.myCompass = new MyLocationOverlay(this, m_mapView);
 			this.m_mapView.getOverlays().add(myCompass);
-
 			this.myCompass.runOnFirstFix(new Runnable() {
 				public void run() {
 					// Animate to the current location on first GPS fix
@@ -171,7 +140,7 @@ public class Map extends Activity implements SensorEventListener {
 
 			// if GPS is ready
 			if (MAP_DEFAULT_LATITUDE > 0) {
-
+			//if (1==1) {
 				// String LAT = Double.toString(MAP_DEFAULT_LATITUDE);
 				// String LONGT = Double.toString(MAP_DEFAULT_LONGITUDE);
 				if (Globals.getInstance().isFirstTimeOnMapActivity())
@@ -266,6 +235,8 @@ public class Map extends Activity implements SensorEventListener {
 					overlayItemArray.add(olItem);
 
 				}
+				
+				//---------- Here we put xml overlays to map -----------------
 
 				// ------- Add Your Position -----------------------------------
 				
@@ -376,6 +347,7 @@ public class Map extends Activity implements SensorEventListener {
 		myCompass.enableCompass();
 		myCompass.enableMyLocation();
 		myCompass.followLocation(true);
+		myCompass.enableFollowLocation();
 		sensorManager.registerListener(this,
 				sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
 				SensorManager.SENSOR_DELAY_FASTEST);
@@ -387,8 +359,9 @@ public class Map extends Activity implements SensorEventListener {
 	public void onPause() {
 		super.onPause();
 
-		this.myCompass.disableMyLocation();
-		this.myCompass.disableCompass();
+		myCompass.disableMyLocation();
+		myCompass.disableCompass();
+		myCompass.disableFollowLocation();
 		sensorManager.unregisterListener(this);
 
 	}
@@ -411,4 +384,3 @@ public class Map extends Activity implements SensorEventListener {
 	}
 
 } // end class YourMap
-

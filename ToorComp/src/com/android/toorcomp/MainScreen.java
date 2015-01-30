@@ -51,16 +51,15 @@ public class MainScreen extends Activity  {
 	    btn2.setOnClickListener(new android.view.View.OnClickListener(){
 	    public void onClick(View v) {
 	     	 Intent intent =new Intent(getApplicationContext(), Pois.class);//Pois.class);
-	 	     startActivity(intent);
+	    	
+	    	startActivity(intent);
 	    }});
 	    
 	    
 	    Button btn3 = (Button) findViewById(R.id.btn3);
 	    btn3.setOnClickListener(new android.view.View.OnClickListener(){
  	    public void onClick(View v) {
-	     	 
- 	    	
- 	    	 Globals.getInstance().setFirstTimeOnMapActivity(true);
+	     	 Globals.getInstance().setFirstTimeOnMapActivity(true);
  	    	 Globals.getInstance().setMapZoomLevel(16);
  	    	 Intent intent =new Intent(getApplicationContext(), Map.class);
 	 	     startActivity(intent);

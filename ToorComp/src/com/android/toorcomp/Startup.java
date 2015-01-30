@@ -32,7 +32,7 @@ public class Startup  {
 			Globals g = Globals.getInstance();
 			g.setWait("YES");
 			
-	        URL url = new URL("http://rss.in.gr/feed/news");
+	        URL url = new URL("https://docs.google.com/uc?authuser=0&id=0B2s4PStL3vizczhqQVI0UndmdGs&export=download");
 
 	        //create the new connection
 	        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
