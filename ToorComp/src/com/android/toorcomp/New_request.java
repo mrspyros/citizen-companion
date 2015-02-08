@@ -1,5 +1,7 @@
 package com.android.toorcomp;
 
+import mail.GMailSender;
+
 import org.osmdroid.util.GeoPoint;
 
 //import com.android.toorcomp.Map.InnerLocationListener;
@@ -19,9 +21,12 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class New_request extends Activity {
 
@@ -34,12 +39,14 @@ public class New_request extends Activity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_request);
-		final GPSTracker mGPS = new GPSTracker(this);
-		final TextView myTextView1 = (TextView) findViewById(R.id.editText2);
-		final TextView myTextView = (TextView) findViewById(R.id.editText1);
-        final TextView photoTextView=(TextView) findViewById(R.id.photo);
-
 		
+		final GPSTracker mGPS = new GPSTracker(this);
+		final TextView descText = (TextView) findViewById(R.id.editText2);
+		final TextView shortDes = (TextView) findViewById(R.id.editText1);
+        final TextView photoTextView=(TextView) findViewById(R.id.photo);
+        final Spinner  forSelector=(Spinner) findViewById(R.id.spinner1);
+		
+        
 		Button button2 = (Button) findViewById(R.id.button2);
 		button2.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {
@@ -69,7 +76,7 @@ public class New_request extends Activity {
 
 											// if GPS is ready
 											if (mGPS.getLatitude() != 0) {
-											myTextView1.append("http://www.google.com/maps/place/"
+											descText.append("http://www.google.com/maps/place/"
 															+ mGPS.getLatitude()
 															+ ","
 															+ mGPS.getLongitude()
@@ -79,7 +86,7 @@ public class New_request extends Activity {
 															+mGPS.getLongitude()
 															+"17z");			
 													
-											/*	myTextView1.append("Lat="
+											/*	descText.append("Lat="
 														+ mGPS.getLatitude()
 														+ "Lon="
 														+ mGPS.getLongitude());*/
@@ -102,7 +109,7 @@ public class New_request extends Activity {
 														LocationManager.GPS_PROVIDER, 0, 0, InnerLocationListener);
 												
 												
-												  /*myTextView1.append("Lat=" +
+												  /*descText.append("Lat=" +
 												  mGPS.getLatitude() + "Lon=" +
 												  mGPS.getLongitude());*/
 												 
@@ -139,10 +146,10 @@ public class New_request extends Activity {
 		Button button3 = (Button) findViewById(R.id.button3);
 		button3.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {
-				TextView myTextView = (TextView) findViewById(R.id.editText1);
-				myTextView.setText("");
-				TextView myTextView1 = (TextView) findViewById(R.id.editText2);
-				myTextView1.setText("");
+				TextView shortDes = (TextView) findViewById(R.id.editText1);
+				shortDes.setText("");
+				TextView descText = (TextView) findViewById(R.id.editText2);
+				descText.setText("");
 
 				// Intent intent =new Intent(getApplicationContext(),
 				// New_request.class);
@@ -150,6 +157,27 @@ public class New_request extends Activity {
 			}
 		});
 
+		
+		
+		Button button4 = (Button) findViewById(R.id.send);
+		button4.setOnClickListener(new android.view.View.OnClickListener() {
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(),"I WAS HERE", Toast.LENGTH_LONG).show();  
+				
+				try {   
+	                    GMailSender sender = new GMailSender("aaaaa@gmail.com", "password");
+	                    sender.sendMail(shortDes.toString(),   
+	                            "For = "+forSelector.getSelectedItem().toString() 
+	                                  +" Desc = "+ descText.toString(),   
+	                            "mrspyros@gmail.com",   
+	                            "mrspyros@gmail.com");   
+	                } catch (Exception e) {   
+	                    Log.e("SendMail", e.getMessage(), e);   
+	                } 
+				
+			}
+		});
+		
 		
 		// ------------------ If tapped to load photo -----------------
 		PICK_IMAGE = 2;
@@ -200,8 +228,8 @@ public class New_request extends Activity {
 			if (resultCode == RESULT_CANCELED) {
 
 				Globals.getInstance().getMap_Center();
-				final TextView myTextView1 = (TextView) findViewById(R.id.editText2);
-				myTextView1.append("Lat="
+				final TextView descText = (TextView) findViewById(R.id.editText2);
+				descText.append("Lat="
 						+ Globals.getInstance().getMap_Center().getLatitudeE6()
 						+ "Lon="
 						+ Globals.getInstance().getMap_Center()
@@ -221,8 +249,8 @@ public class New_request extends Activity {
 					(int) (argLocation.getLatitude() * 1000000),
 					(int) (argLocation.getLongitude() * 1000000));
 			
-			final TextView myTextView1 = (TextView) findViewById(R.id.editText2);
-			 myTextView1.append("    Lat= " +
+			final TextView descText = (TextView) findViewById(R.id.editText2);
+			 descText.append("    Lat= " +
 					 argLocation.getLatitude() + " Lon= " +
 					 argLocation.getLongitude());
 			
