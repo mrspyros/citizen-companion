@@ -1,10 +1,17 @@
 package com.android.toorcomp;
 
+import java.io.File;
+
+import javax.mail.internet.MimeMessage;
+
 import mail.GMailSender;
 
 import org.osmdroid.util.GeoPoint;
 
 //import com.android.toorcomp.Map.InnerLocationListener;
+
+
+
 
 
 
@@ -21,6 +28,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +54,25 @@ public class New_request extends Activity {
         final TextView photoTextView=(TextView) findViewById(R.id.photo);
         final Spinner  forSelector=(Spinner) findViewById(R.id.spinner1);
 		
+        // ------------- Clear description text -------------------
+        
+        shortDes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             shortDes.setText("");            
+            }
+        });
+        
+        descText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+             descText.setText("");            
+            }
+        });
+        
+        
+        
+        
         
 		Button button2 = (Button) findViewById(R.id.button2);
 		button2.setOnClickListener(new android.view.View.OnClickListener() {
@@ -106,7 +133,7 @@ public class New_request extends Activity {
 												InnerLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 												InnerLocationListener = new InnerLocationListener();
 												InnerLocationManager.requestLocationUpdates(
-														LocationManager.GPS_PROVIDER, 0, 0, InnerLocationListener);
+												LocationManager.GPS_PROVIDER, 0, 0, InnerLocationListener);
 												
 												
 												  /*descText.append("Lat=" +
@@ -157,20 +184,28 @@ public class New_request extends Activity {
 			}
 		});
 
-		
+		// ---------------  send request -----------------------------------
 		
 		Button button4 = (Button) findViewById(R.id.send);
 		button4.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(),"I WAS HERE", Toast.LENGTH_LONG).show();  
-				
+				File imageFile = new File(""); 
 				try {   
-	                    GMailSender sender = new GMailSender("aaaaa@gmail.com", "password");
-	                    sender.sendMail(shortDes.toString(),   
+					
+	                    GMailSender sender = new GMailSender("aaa@gmail.com", "password");
+	                    try {  
+	                        imageFile = new File(photoTextView.getText().toString());
+	                    } catch (Exception e) {   
+	                    	imageFile = new File("");  
+	                    	Log.e("imageFile", e.getMessage(), e);
+		                } 
+	                    sender.sendMail(shortDes.getText().toString(),   
 	                            "For = "+forSelector.getSelectedItem().toString() 
-	                                  +" Desc = "+ descText.toString(),   
-	                            "mrspyros@gmail.com",   
-	                            "mrspyros@gmail.com");   
+	                                  +" Desc = "+ descText.getText().toString(), 
+	                                  imageFile,
+	                            "aaa@gmail.com",   
+	                            "aaa@gmail.com");   
 	                } catch (Exception e) {   
 	                    Log.e("SendMail", e.getMessage(), e);   
 	                } 
@@ -229,12 +264,13 @@ public class New_request extends Activity {
 
 				Globals.getInstance().getMap_Center();
 				final TextView descText = (TextView) findViewById(R.id.editText2);
-				descText.append("Lat="
-						+ Globals.getInstance().getMap_Center().getLatitudeE6()
-						+ "Lon="
-						+ Globals.getInstance().getMap_Center()
-								.getLongitudeE6());
-				// Write your code if there's no result
+				
+				descText.append("http://maps.google.com/maps?f=q&q="
+				+ Globals.getInstance().getMap_Center().getLatitudeE6()/1E6
+				+ ","
+				+Globals.getInstance().getMap_Center().getLongitudeE6()/1E6
+				+"&z=16");	
+			
 			}
 		}
 
@@ -251,7 +287,7 @@ public class New_request extends Activity {
 			
 			final TextView descText = (TextView) findViewById(R.id.editText2);
 			 descText.append("    Lat= " +
-					 argLocation.getLatitude() + " Lon= " +
+					 argLocation.getLatitude()/1E6 + " Lon= " +
 					 argLocation.getLongitude());
 			
 			//m_mapView.getController().setCenter(myGeoPoint);

@@ -16,5 +16,8 @@
 	<classpathentry kind="lib" path="C:/Users/chuck noris/Desktop/Προγραματισμός/toorcomp/for mail handler/additionnal.jar"/>
 	<classpathentry kind="lib" path="C:/Users/chuck noris/Desktop/Προγραματισμός/toorcomp/for mail handler/android-support-v4.jar"/>
 	<classpathentry kind="lib" path="C:/Users/chuck noris/Desktop/Προγραματισμός/toorcomp/for mail handler/mail.jar"/>
+	<classpathentry kind="lib" path="libs/additionnal.jar"/>
+	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="libs/mail.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
