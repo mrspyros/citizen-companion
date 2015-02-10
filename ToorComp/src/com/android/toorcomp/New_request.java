@@ -103,7 +103,7 @@ public class New_request extends Activity {
 
 											// if GPS is ready
 											if (mGPS.getLatitude() != 0) {
-											descText.append("http://www.google.com/maps/place/"
+											descText.append("\n ИЭуз : http://www.google.com/maps/place/"
 															+ mGPS.getLatitude()
 															+ ","
 															+ mGPS.getLongitude()
@@ -189,11 +189,12 @@ public class New_request extends Activity {
 		Button button4 = (Button) findViewById(R.id.send);
 		button4.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(),"I WAS HERE", Toast.LENGTH_LONG).show();  
+				
+				
 				File imageFile = new File(""); 
 				try {   
 					
-	                    GMailSender sender = new GMailSender("aaa@gmail.com", "password");
+					GMailSender sender = new GMailSender("aaa@gmail.com", "password");
 	                    try {  
 	                        imageFile = new File(photoTextView.getText().toString());
 	                    } catch (Exception e) {   
@@ -265,7 +266,7 @@ public class New_request extends Activity {
 				Globals.getInstance().getMap_Center();
 				final TextView descText = (TextView) findViewById(R.id.editText2);
 				
-				descText.append("http://maps.google.com/maps?f=q&q="
+				descText.append("\n ИЭуз : http://maps.google.com/maps?f=q&q="
 				+ Globals.getInstance().getMap_Center().getLatitudeE6()/1E6
 				+ ","
 				+Globals.getInstance().getMap_Center().getLongitudeE6()/1E6

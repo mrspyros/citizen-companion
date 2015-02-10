@@ -5,151 +5,151 @@
     android:background="@drawable/border"
     android:orientation="vertical" >
 
-    
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        android:padding = "15dip" >
 
-        <TableLayout
-            android:layout_width="fill_parent"
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="20dp"
-            android:layout_weight="0.00" >
+            android:gravity="center_horizontal" >
 
-            <TableRow
-                android:id="@+id/tableRow1"
+            <Button
+                android:id="@+id/mapBtn"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:background="@color/red"
+                android:clickable="false"
+                android:longClickable="false"
+                android:layout_span="2"
+                android:text="Υποβολή Αιτήματος" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="center_vertical"
+                android:inputType="text"
+                android:paddingLeft="30dp"
+                android:layout_span="2"
+                android:text="Σύντομη περιγραφή" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="167dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.00"
+                android:text="Επιλογή κατηγορίας"
+                android:layout_span="2"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/white" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <Spinner
+                android:id="@+id/spinner1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="52dp"
+                android:layout_span="2"
+                android:entries="@array/ypiresies" />
+        </TableRow>
 
-                <Button
-                    android:id="@+id/mapBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="34dp"
-                    android:background="@color/red"
-                    android:clickable="false"
-                    android:longClickable="false"
-                    android:text="Υποβολή Αιτήματος" />
-            </TableRow>
+        <TableRow
+            android:id="@+id/tableRow5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
 
-            <TableRow
-                android:id="@+id/tableRow2"
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.00"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:lines="4"
+                android:layout_span="2"
+                android:text="Περιγραφή Αιτήματος" />
+        </TableRow>
+
+        
+        <TableRow
+            android:id="@+id/tableRow7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+            
+            
+            
+            <Button
+                android:id="@+id/button2"
+                android:text="Εισαγωγή Θέσης"
+                android:layout_span="1" />
+
+            <Button
+                android:id="@+id/button3"
+                android:text="Καθαρισμός"
+                android:layout_span="1" />
+        </TableRow>
+
+        
+        <TableRow
+            android:id="@+id/tableRow6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
+
+            <EditText
+                android:id="@+id/photo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:ems="10"
+                android:focusable="false"
+                android:onClick="onClick"
+                android:layout_span="2"
+                android:text="Εισαγωγή φωτογραφίας" />
+        </TableRow>
+        
+        
+        
+        <TableRow
+            android:id="@+id/tableRow9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal" >
 
-                <EditText
-                    android:id="@+id/editText1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:gravity="center_vertical"
-                    android:inputType="text"
-                    android:paddingLeft="30dp"
-                    android:text="Σύντομη περιγραφή" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="167dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.00"
-                    android:text="Επιλογή κατηγορίας"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/white" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <Spinner
-                    android:id="@+id/spinner1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="52dp"
-                    android:entries="@array/ypiresies" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <EditText
-                    android:id="@+id/editText2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.00"
-                    android:ems="10"
-                    android:inputType="textMultiLine"
-                    android:lines="4"
-                    android:text="Περιγραφή Αιτήματος" >
-
-                    <requestFocus />
-                </EditText>
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <EditText
-                    android:id="@+id/photo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:onClick="onClick"
-                    android:text="Εισαγωγή φωτογραφίας" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Εισαγωγή Θέσης" />
-</TableRow>
-  <TableRow
-                android:id="@+id/tableRow6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-                
-                
-                <Button
-                    android:id="@+id/button3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Καθαρισμός" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-
-                <Button
-                    android:id="@+id/send"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Send" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
-            </TableRow>
-        </TableLayout>
-    
+            <Button
+                android:id="@+id/send"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_span="2"
+                android:text="Send" />
+        </TableRow>
+    </TableLayout>
 
 </LinearLayout>

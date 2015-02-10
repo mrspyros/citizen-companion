@@ -1,6 +1,7 @@
 package com.android.toorcomp;
 
 import org.osmdroid.api.IGeoPoint;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
@@ -104,6 +105,7 @@ public class Selector_map extends Activity /*implements MapEventsReceiver*/ {
 		m_mapView.setClickable(false);
 		m_mapView.setUseDataConnection(true);
 		m_mapView.getController().setZoom(MAP_DEFAULT_ZOOM);
+		m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
 		m_mapView.getController().setCenter(
 				new GeoPoint(MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE));
 
