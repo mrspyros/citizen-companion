@@ -19,38 +19,41 @@
 
     <Button
         android:id="@+id/btn3"
-        android:layout_width="wrap_content"
+        android:layout_width="90dip"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btn2"
         android:layout_alignBottom="@+id/btn2"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
+        android:background="@drawable/btn"
         android:text="Χάρτης" />
 
     <Button
         android:id="@+id/btn2"
-        android:layout_width="wrap_content"
+        android:layout_width="90dip"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btn1"
         android:layout_alignBottom="@+id/btn1"
         android:layout_centerHorizontal="true"
+         android:background="@drawable/btn"
         android:text="P O I S" />
 
     <Button
         android:id="@+id/btn1"
-        android:layout_width="wrap_content"
+        android:layout_width="90dip"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView1"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="18dp"
+         android:background="@drawable/btn"
         android:text="Εξοδος" />
 
     <Button
         android:id="@+id/btn4"
-        android:layout_width="wrap_content"
+        android:layout_width="100dip"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btn4"
         android:layout_marginBottom="88dp"
+        android:background="@drawable/btn"
         android:text="Υποβολή Αιτήματος" />
 
 </RelativeLayout>
