@@ -20,7 +20,7 @@
     <Button
         android:id="@+id/btn3"
         android:layout_width="90dip"
-        android:layout_height="wrap_content"
+        android:layout_height="40dip"
         android:layout_alignBaseline="@+id/btn2"
         android:layout_alignBottom="@+id/btn2"
         android:layout_alignParentRight="true"
@@ -30,7 +30,7 @@
     <Button
         android:id="@+id/btn2"
         android:layout_width="90dip"
-        android:layout_height="wrap_content"
+        android:layout_height="40dip"
         android:layout_alignBaseline="@+id/btn1"
         android:layout_alignBottom="@+id/btn1"
         android:layout_centerHorizontal="true"
@@ -40,7 +40,7 @@
     <Button
         android:id="@+id/btn1"
         android:layout_width="90dip"
-        android:layout_height="wrap_content"
+        android:layout_height="40dip"
         android:layout_alignLeft="@+id/textView1"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="18dp"
@@ -50,26 +50,22 @@
     <Button
         android:id="@+id/btn4"
         android:layout_width="90dip"
-        android:layout_height="wrap_content"
+        android:layout_height="40dip"
         android:layout_above="@+id/btn1"
         android:layout_alignLeft="@+id/btn1"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/btn"
         android:text="Υποβολή Αιτήματος" />
 
-    <ImageButton
-        android:id="@+id/imageButton1"
-        android:layout_width="210dp"
-        android:layout_height="210dp"
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="240dip"
+        android:layout_height="240dip"
+        android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp"
-        android:background="@android:color/transparent"
-        android:clickable="false"
-        android:fitsSystemWindows="false"
-        android:focusable="false"
-        
-        android:src="@drawable/logo2"
-        android:visibility="visible" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="19dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/logo2" />
 
 </RelativeLayout>
