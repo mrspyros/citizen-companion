@@ -49,7 +49,7 @@ public class Startup  {
 	        File dirs=new File(SDCardRoot+"/osmdroid/");
 	        dirs.mkdirs();
 	       
-	        File file = new File(SDCardRoot+"/osmdroid/","Demo.xml");
+	        File file = new File(SDCardRoot+"/osmdroid/","Pois.xml");
             
 	        
 	        //this will be used to write the downloaded data into the file we created

@@ -52,6 +52,17 @@
                <activity
               android:name="com.android.toorcomp.Selector_map">
               </activity>
+               
+               <activity
+              android:name="com.android.toorcomp.webview">
+            
+              </activity>
+               
+                <activity
+              android:name="com.android.toorcomp.custom_dialog">
+            
+              </activity>
+               
     </application>
 
         

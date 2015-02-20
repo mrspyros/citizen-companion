@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@drawable/bgdialog"
+    android:orientation="vertical" >
+    <TextView
+        android:id="@+id/dialog"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#FFF"/>
+
+     <Button
+         android:id="@+id/dialogcancel"
+         android:layout_width="100dp"
+         android:layout_height="wrap_content"
+         android:layout_alignParentLeft="true"
+         android:layout_below="@+id/dialog"
+         android:layout_marginTop="36dp"
+         android:text=" Cancel... " />
+
+     <Button
+         android:id="@+id/morebtn"
+         android:layout_width="100dp"
+         android:layout_height="wrap_content"
+         android:layout_alignBaseline="@+id/dialogcancel"
+         android:layout_alignBottom="@+id/dialogcancel"
+         android:layout_centerHorizontal="true"
+         android:text=" More... " />
+      
+</RelativeLayout>
