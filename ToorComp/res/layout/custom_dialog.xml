@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="200dip"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:background="@drawable/bgdialog"
     android:orientation="vertical" >
     <TextView
         android:id="@+id/dialog"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textColor="#FFF"/>
 
      <Button
          android:id="@+id/dialogcancel"
-         android:layout_width="100dp"
-         android:layout_height="wrap_content"
+         android:layout_width="60dip"
+         android:layout_height="40dip"
          android:layout_alignParentLeft="true"
          android:layout_below="@+id/dialog"
          android:layout_marginTop="36dp"
+         android:layout_marginLeft="10dp"
+         android:background="@drawable/btn"
          android:text=" Cancel... " />
 
      <Button
          android:id="@+id/morebtn"
-         android:layout_width="100dp"
-         android:layout_height="wrap_content"
+         android:layout_width="60dip"
+         android:layout_height="40dip"
+         android:layout_marginRight="10dp"
          android:layout_alignBaseline="@+id/dialogcancel"
          android:layout_alignBottom="@+id/dialogcancel"
-         android:layout_centerHorizontal="true"
+         android:layout_alignRight="@+id/dialog"
+         android:background="@drawable/btn"
          android:text=" More... " />
       
 </RelativeLayout>

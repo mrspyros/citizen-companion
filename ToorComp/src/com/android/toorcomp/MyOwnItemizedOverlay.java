@@ -7,8 +7,13 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.widget.Toast;
+import android.content.Intent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 
@@ -31,11 +36,54 @@ import android.widget.Toast;
 		    @Override 
 		    protected boolean onSingleTapUpHelper(final int index, final OverlayItem item, final MapView mapView) {
 		        //Toast.makeText(mContext, "Item " + index + " has been tapped!", Toast.LENGTH_SHORT).show();
-		        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+		        /*AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 		        dialog.setTitle(item.getTitle());
 		        dialog.setMessage(item.getSnippet());
-		        dialog.show();
-		        return true;
+		        dialog.show();*/
+		       
+		    	
+		    	final Dialog myDialog = new Dialog(mContext,android.R.style.Theme_Translucent);
+		       	myDialog.setContentView(R.layout.custom_dialog);
+		        //myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		        
+		       	
+		       	myDialog.setTitle(item.getTitle());
+		        myDialog.setCancelable(false);
+		        myDialog.setCanceledOnTouchOutside(true);
+
+		        TextView text = (TextView) myDialog.findViewById(R.id.dialog);
+		       // text.setMovementMethod(ScrollingMovementMethod.getInstance());
+		        text.setText(item.getSnippet());
+
+		        Button dismiss= (Button) myDialog.findViewById(R.id.dialogcancel);
+		        dismiss.setOnClickListener(new OnClickListener() {
+		            public void onClick(View v) {
+
+		                myDialog.dismiss();
+		            }
+		        });
+
+		        
+		        Button test = (Button) myDialog.findViewById(R.id.morebtn);
+		        test.setOnClickListener(new OnClickListener() {
+		            public void onClick(View v) {
+/*
+		            	Intent intent = new Intent(getApplicationContext(), webview.class);
+						startActivity(intent);*/
+	                    myDialog.dismiss();
+
+		            }
+		        });
+
+		        
+
+
+		        myDialog.show();
+		    	
+		    	
+		    	
+		    	
+		    	return true;
 		    }
 		
 		    protected boolean onItemLongPressHelper(final int index, final OverlayItem item, final MapView mapView) {

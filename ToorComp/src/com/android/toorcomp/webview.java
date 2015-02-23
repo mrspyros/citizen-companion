@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
  
 public class webview extends Activity {
  
@@ -19,9 +20,10 @@ public class webview extends Activity {
 		setContentView(R.layout.webview);
  
 		webView = (WebView) findViewById(R.id.webView1);
+		webView.setWebViewClient(new WebViewClient());
 		webView.getSettings().setJavaScriptEnabled(true);
 		webView.loadUrl("http://www.google.com");
-        fLag=true;
+        //fLag=true;
 				
 	}
  

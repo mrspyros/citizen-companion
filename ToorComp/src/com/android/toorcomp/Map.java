@@ -240,17 +240,22 @@ public class Map extends Activity implements SensorEventListener {
 
 				// ------- Add Your Position -----------------------------------
 				
-//				OverlayItem olItem = new OverlayItem("Position", "You Are Here", new
-//				 GeoPoint( MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE));
-//				 Drawable newMarker = this.getResources().getDrawable(
-//				 R.drawable.marker); olItem.setMarker(newMarker);
-//				 overlayItemArray.add(olItem);
-				 
-
-			//	MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,
-				//		overlayItemArray);
-				//m_mapView.getOverlays().add(overlay);
-			//	 setContentView(m_mapView); //displaying the MapView
+				 OverlayItem olItem1 = new OverlayItem("Position", "You Are Here", new
+				 GeoPoint( MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE));
+			     Drawable newMarker = this.getResources().getDrawable(
+				 R.drawable.marker); olItem1.setMarker(newMarker);
+				 overlayItemArray.add(olItem1);
+			 
+	      
+				// ------------ This puts the overlays
+				// ------------
+				MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,overlayItemArray);
+                m_mapView.getOverlays().add(overlay);
+                // ------------
+                // ------------ Do not comment
+				
+				// ---- it gives error
+				//setContentView(m_mapView); //displaying the MapView
 				 
 			} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block

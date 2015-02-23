@@ -50,10 +50,10 @@ public class MainScreen extends Activity {
 		Button btn2 = (Button) findViewById(R.id.btn2);
 		btn2.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {
-				// Intent intent =new Intent(getApplicationContext(),
-				// Pois.class);//Pois.class);
-				Intent intent = new Intent(getApplicationContext(),
-						webview.class);
+				 Intent intent =new Intent(getApplicationContext(),
+				 Pois.class);//Pois.class);
+				//Intent intent = new Intent(getApplicationContext(),
+				//		webview.class);
 				startActivity(intent);
 			}
 		});
@@ -80,17 +80,21 @@ public class MainScreen extends Activity {
 		Button test = (Button) findViewById(R.id.test);
 		test.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {
-		    final Dialog myDialog = new Dialog(MainScreen.this);
+		  //  final Dialog myDialog = new Dialog(MainScreen.this);
+	       
+	      final Dialog myDialog = new Dialog(MainScreen.this,android.R.style.Theme_Translucent);
 	        myDialog.setContentView(R.layout.custom_dialog);
-	      //  myDialog.setTitle("hello");
+	        //myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	        //  myDialog.setTitle("hello");
 	        
 	       
 
 	        myDialog.setCancelable(false);
+	        myDialog.setCanceledOnTouchOutside(true);
 
 	        TextView text = (TextView) myDialog.findViewById(R.id.dialog);
 	       // text.setMovementMethod(ScrollingMovementMethod.getInstance());
-	        text.setText("text");
+	        text.setText("hgfhgfhghgfhgfhgfhgfhgfhgfhgfhgfcbbvcyttuuhgvncxcxvzcxz");
 
 	        Button createAccount= (Button) myDialog.findViewById(R.id.dialogcancel);
 	        createAccount.setOnClickListener(new OnClickListener() {
