@@ -74,7 +74,7 @@ public class Map extends Activity implements SensorEventListener {
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		// seeeeeensorrrr
+		//----- seeeeeensorrrr
 
 		if (!Globals.getInstance().isFirstTimeOnMapActivity())
 			MAP_DEFAULT_ZOOM = Globals.getInstance().getMapZoomLevel();
@@ -224,7 +224,7 @@ public class Map extends Activity implements SensorEventListener {
 				OverlayItem olItem;
 				for (int i = 0; i < pois.size(); i++) {
 					olItem = new OverlayItem(pois.get(i).getName(), pois.get(i)
-							.getDesc(), new GeoPoint(pois.get(i).getLon(), pois
+							.getDesc()+"#"+pois.get(i).getLink(), new GeoPoint(pois.get(i).getLon(), pois
 							.get(i).getLat()));
 
 

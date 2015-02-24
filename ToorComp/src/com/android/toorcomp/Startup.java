@@ -32,7 +32,7 @@ public class Startup  {
 			Globals g = Globals.getInstance();
 			g.setWait("YES");
 			
-	        URL url = new URL("https://docs.google.com/uc?authuser=0&id=0B2s4PStL3vizczhqQVI0UndmdGs&export=download");
+	        URL url = new URL("https://drive.google.com/uc?export=download&id=0B2s4PStL3vizdEtGcjNDMUFqUEU");
 
 	        //create the new connection
 	        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

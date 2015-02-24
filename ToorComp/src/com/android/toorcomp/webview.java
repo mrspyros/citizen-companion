@@ -8,10 +8,11 @@ import android.webkit.WebViewClient;
  
 public class webview extends Activity {
  
-	// ---- fLag is used to destroy container webview activity
-	// ---- when we return from inner webview
 	
-	private boolean fLag;
+	// ----- Simple as it gets
+	// ----- We get a link from globals
+	// ----- And show it
+	
 	private WebView webView;
  
 	@SuppressLint("SetJavaScriptEnabled")
@@ -19,17 +20,19 @@ public class webview extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.webview);
  
+		Globals g = Globals.getInstance();
+		  
+		
 		webView = (WebView) findViewById(R.id.webView1);
 		webView.setWebViewClient(new WebViewClient());
 		webView.getSettings().setJavaScriptEnabled(true);
-		webView.loadUrl("http://www.google.com");
-        //fLag=true;
+		webView.loadUrl(g.getWebViewUrl());
+     	g.setWebViewUrl("");
 				
 	}
  
 	public void onResume() {
-	    super.onResume();  // Always call the superclass method first
-	  if (fLag) finish();
+	    super.onResume();  
 	}
 	
 }

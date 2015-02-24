@@ -13,7 +13,7 @@ public class Globals {
 	private boolean FirstTimeOnMapActivity;
 	private IGeoPoint Map_Center;
 	private IGeoPoint Selected;
-	private String WebViewUrl="http:\\www.dodoni.gr";
+	private String WebViewUrl="";
 
 	public IGeoPoint getSelected() {
 		return Selected;
