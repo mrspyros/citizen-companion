@@ -79,7 +79,7 @@ public class MainScreen extends Activity {
 			}
 		});
 
-		Button qRcode = (Button) findViewById(R.id.test);
+		Button qRcode = (Button) findViewById(R.id.qrcode);
 		qRcode.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {
 		  

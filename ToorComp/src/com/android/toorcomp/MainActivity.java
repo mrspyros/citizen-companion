@@ -1,17 +1,19 @@
 package com.android.toorcomp;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
-import android.app.Activity;
-import android.app.AlertDialog;
 
 /**
  * @author mrspyros
  * 
  */
 public class MainActivity extends Activity {
+
+	private boolean download = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +41,14 @@ public class MainActivity extends Activity {
 						public void onClick(DialogInterface dialog, int which) {
 
 							// Code that is executed when clicking YES
-							
-							Boolean download = init.DownloadXML();
-														
+							//dialog.dismiss();
+							download = init.DownloadXML();
+
 							if (!download) {
 								Globals g = Globals.getInstance();
 								Toast.makeText(getApplicationContext(),
-										R.string.noxmldl+g.getWait() ,
-										Toast.LENGTH_LONG)
-										.show();
+										R.string.noxmldl + g.getWait(),
+										Toast.LENGTH_LONG).show();
 								g.setXmLERROR("YES");
 								dialog.dismiss();
 								finish();
@@ -55,10 +56,10 @@ public class MainActivity extends Activity {
 							} else {
 								Globals g = Globals.getInstance();
 								Toast.makeText(getApplicationContext(),
-										R.string.noxmldlok, 
-										Toast.LENGTH_LONG)
+										R.string.noxmldlok, Toast.LENGTH_LONG)
 										.show();
 								g.setXmLERROR("NO");
+
 								dialog.dismiss();
 								finish();
 								startActivity(intent);

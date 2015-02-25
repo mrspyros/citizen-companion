@@ -69,11 +69,12 @@
         android:src="@drawable/logo2" />
 
     <Button
-        android:id="@+id/test"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/qrcode"
+        android:layout_width="90dip"
+        android:layout_height="40dip"
+        android:layout_alignLeft="@+id/btn3"
         android:layout_alignTop="@+id/btn4"
-        android:layout_centerHorizontal="true"
-        android:text="Button" />
+        android:background="@drawable/btn"
+        android:text="QrCode" />
 
 </RelativeLayout>
