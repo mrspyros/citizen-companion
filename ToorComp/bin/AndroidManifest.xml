@@ -3,7 +3,8 @@
     package="com.android.toorcomp"
     android:versionCode="1"
     android:versionName="1.0" >
-
+    
+    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -13,6 +14,7 @@
     <uses-permission android:name="android.permission.ACCESS_GPS" />
     <uses-permission android:name="android.permission.CONTROL_LOCATION_UPDATES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -25,6 +27,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.android.toorcomp.MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,17 +35,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.android.toorcomp.Pois" >
+        <activity 
+                  android:name="com.android.toorcomp.Pois"
+                  android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.android.toorcomp.Map" >
+        <activity 
+            android:name="com.android.toorcomp.Map" 
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name="com.android.toorcomp.MainScreen" >
+        <activity 
+            android:name="com.android.toorcomp.MainScreen" 
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name="com.android.toorcomp.New_request" >
+        <activity 
+            android:name="com.android.toorcomp.New_request"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.android.toorcomp.Selector_map" >
+        <activity 
+            android:name="com.android.toorcomp.Selector_map"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.android.toorcomp.webview" >
+        <activity 
+            android:name="com.android.toorcomp.webview"
+            android:screenOrientation="portrait" >
         </activity>
         <activity android:name="com.android.toorcomp.custom_dialog" >
         </activity>
