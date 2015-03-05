@@ -67,6 +67,17 @@ public class MainScreen extends Activity {
 			}
 		});
 
+		Button stream = (Button) findViewById(R.id.stream_btn);
+		stream.setOnClickListener(new android.view.View.OnClickListener() {
+			public void onClick(View v) {
+				Intent intent = new Intent(getApplicationContext(), StreamPlayer.class);
+				
+				startActivity(intent);
+			}
+		});
+		
+		
+		
 		Button qRcode = (Button) findViewById(R.id.qrcode);
 		qRcode.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {

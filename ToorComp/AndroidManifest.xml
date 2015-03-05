@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.ACCESS_GPS" />
     <uses-permission android:name="android.permission.CONTROL_LOCATION_UPDATES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     
 
     <uses-sdk
@@ -73,7 +74,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-      
+       <activity android:name="com.android.toorcomp.StreamPlayer" >
+        </activity>
     
     
     </application>

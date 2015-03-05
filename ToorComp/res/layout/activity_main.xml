@@ -77,4 +77,13 @@
         android:background="@drawable/btn"
         android:text="QrCode" />
 
+    <Button
+        android:id="@+id/stream_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/qrcode"
+        android:layout_alignBottom="@+id/qrcode"
+        android:layout_centerHorizontal="true"
+        android:text="Button" />
+
 </RelativeLayout>
