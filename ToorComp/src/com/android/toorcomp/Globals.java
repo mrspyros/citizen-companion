@@ -7,14 +7,15 @@ import org.osmdroid.api.IGeoPoint;
 public class Globals {
 	private static Globals instance;
 	// Global variable
-	private String XmLERROR;
+	private boolean XmLERROR;
 	private String Wait; // YES NO ERROR
 	private int MapZoomLevel;
 	private boolean FirstTimeOnMapActivity;
 	private IGeoPoint Map_Center;
 	private IGeoPoint Selected;
 	private String WebViewUrl="";
-
+    private String _Xml_Download_Answer;
+	
 	public IGeoPoint getSelected() {
 		return Selected;
 	}
@@ -59,11 +60,11 @@ public class Globals {
 	private Globals() {
 	}
 
-	public void setXmLERROR(String d) {
-		this.XmLERROR = d;
+	public void setXmLERROR(boolean b) {
+		this.XmLERROR = b;
 	}
 
-	public String getXmLERROR() {
+	public boolean getXmLERROR() {
 		return this.XmLERROR;
 	}
 
@@ -80,5 +81,13 @@ public class Globals {
 
 	public void setWebViewUrl(String webViewUrl) {
 		WebViewUrl = webViewUrl;
+	}
+
+	public String get_Xml_Download_Answer() {
+		return _Xml_Download_Answer;
+	}
+
+	public void set_Xml_Download_Answer(String _Xml_Download_Answer) {
+		this._Xml_Download_Answer = _Xml_Download_Answer;
 	}
 }

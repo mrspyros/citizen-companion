@@ -3,8 +3,8 @@ package com.android.toorcomp;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.MapView.Projection;
 
+import org.osmdroid.views.Projection;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
@@ -34,7 +34,7 @@ public class DummyOverlay extends org.osmdroid.views.overlay.Overlay {
             // This stops the 'jump to, and zoom in' of the default behaviour
             //int zoomLevel = mapView.getZoomLevel();
             //mMapController.setZoom(zoomLevel + 3);
-        	 Projection proj = m_mapView.getProjection();
+        	 org.osmdroid.views.Projection proj = m_mapView.getProjection();
 	            IGeoPoint loc = proj.fromPixels((int)e.getX(), (int)e.getY()); 
 	            Geo=loc;
 	            Globals.getInstance().setSelected(loc);

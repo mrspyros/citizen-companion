@@ -4,7 +4,7 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.MapView.Projection;
+import org.osmdroid.views.Projection;
 
 import android.app.Activity;
 import android.content.Intent;

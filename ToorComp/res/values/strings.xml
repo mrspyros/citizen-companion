@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ToorComp</string>
+    <string name="app_name">CitizenCompanion</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Καλώς ήλθατε στην εφαρμογή μας!</string>
     <string name="pois_intro">Επιλογή σημείων ενδιαφέροντος!</string>
