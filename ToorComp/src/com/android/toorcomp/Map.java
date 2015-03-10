@@ -67,6 +67,7 @@ public class Map extends Activity implements SensorEventListener {
 
 	// Compass and Rotation
 	private MyLocationOverlay myCompass;
+	private MyLocationNewOverlay myPositionOverlay;
 	private SensorManager sensorManager;
 	private boolean filterSensor = false;
 	ArrayList<OverlayItem> overlayItemArray = new ArrayList<OverlayItem>();
@@ -136,22 +137,28 @@ public class Map extends Activity implements SensorEventListener {
 		        });*/
 	
 		
-			MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(this,
+			
+			
+		myPositionOverlay = new MyLocationNewOverlay(this,
 	                new GpsMyLocationProvider(this), m_mapView);
 	        // Enables user's location
-	        mLocationOverlay.enableMyLocation();
+		myPositionOverlay.enableMyLocation();
 	        // Enable follwing user
-	        mLocationOverlay.enableFollowLocation();
+		myPositionOverlay.enableFollowLocation();
 	        // And we add the Overlay
-	        m_mapView.getOverlays().add(mLocationOverlay);
+	        m_mapView.getOverlays().add(myPositionOverlay);
 	         
+	        
+	        
+	        
+	        
 	        // We add the compass
 	        mCompassOverlay = new CompassOverlay(this,
 	                new InternalCompassOrientationProvider(this), m_mapView);
 	        m_mapView.getOverlays().add(mCompassOverlay);
 	        mCompassOverlay.enableCompass();
 	         
-	        setContentView(m_mapView);
+	       // setContentView(m_mapView);
 	         
 	        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 	        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
