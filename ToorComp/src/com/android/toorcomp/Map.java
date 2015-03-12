@@ -39,6 +39,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -66,36 +69,32 @@ public class Map extends Activity implements SensorEventListener {
 	private LocationListener InnerLocationListener;
 
 	// Compass and Rotation
-	private MyLocationOverlay myCompass;
+	
 	private MyLocationNewOverlay myPositionOverlay;
-	private SensorManager sensorManager;
-	private boolean filterSensor = false;
+	
 	ArrayList<OverlayItem> overlayItemArray = new ArrayList<OverlayItem>();
 	private float compassBearing;
 
-	
-	 // private MyMyLocationNewOverlay mLocationOverlay;
-	    private CompassOverlay mCompassOverlay;
-	    private SensorManager mSensorManager;
-	    private Sensor mAccelerometer;
-	    private Sensor mMagnetometer;
-	    private float[] mLastAccelerometer = new float[3];
-	    private float[] mLastMagnetometer = new float[3];
-	    private boolean mLastAccelerometerSet = false;
-	    private boolean mLastMagnetometerSet = false;
-	    private float[] mR = new float[9];
-	    private float[] mOrientation = new float[3];
-	    private float mCurrentDegree = 0f;
-	   
-	
-	
+	// private MyMyLocationNewOverlay mLocationOverlay;
+	private CompassOverlay mCompassOverlay;
+	private SensorManager mSensorManager;
+	private Sensor mAccelerometer;
+	private Sensor mMagnetometer;
+	private float[] mLastAccelerometer = new float[3];
+	private float[] mLastMagnetometer = new float[3];
+	private boolean mLastAccelerometerSet = false;
+	private boolean mLastMagnetometerSet = false;
+	private float[] mR = new float[9];
+	private float[] mOrientation = new float[3];
+	private float mCurrentDegree = 0f;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		//----- seeeeeensorrrr
+		// ----- seeeeeensorrrr
 
 		if (!Globals.getInstance().isFirstTimeOnMapActivity())
 			MAP_DEFAULT_ZOOM = Globals.getInstance().getMapZoomLevel();
@@ -110,66 +109,53 @@ public class Map extends Activity implements SensorEventListener {
 		m_mapView.setMultiTouchControls(true);
 		m_mapView.setClickable(false);
 		m_mapView.setUseDataConnection(true);
-		
+
 		// https://github.com/johnjohndoe/OSMDroidOfflineDemo/blob/master/app/src/main/java/com/example/android/osmdroidofflinedemo/MainActivity.java
-		
+
 		m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
 		m_mapView.getController().setZoom(MAP_DEFAULT_ZOOM);
-
 
 		// My location overlay
 		{
 			// Create a static Overlay showing a the current location and a
 			// compass
 
-		//https://code.google.com/p/osmdroid/source/browse/branches/rotation/OpenStreetMapViewer/src/org/osmdroid/MapActivity.java?r=914
+			
+			myPositionOverlay = new MyLocationNewOverlay(this,
+					new GpsMyLocationProvider(this), m_mapView);
+			// Enables user's location
+			myPositionOverlay.enableMyLocation();
+			// Enable follwing user
+			myPositionOverlay.enableFollowLocation();
+			// And we add the Overlay
+			m_mapView.getOverlays().add(myPositionOverlay);
 			
 			
-		/*	
-		        this.myCompass = new MyLocationOverlay(this, m_mapView);
-		        this.m_mapView.getOverlays().add(myCompass);
-		        this.myCompass.runOnFirstFix(new Runnable() {
-		        	public void run() {
-		        		// Animate to the current location on first GPS fix
-		        		m_mapView.getController().animateTo(
-		        				myCompass.getMyLocation());
-		        	}
-		        });*/
-	
-		
-			
-			
-		myPositionOverlay = new MyLocationNewOverlay(this,
-	                new GpsMyLocationProvider(this), m_mapView);
-	        // Enables user's location
-		myPositionOverlay.enableMyLocation();
-	        // Enable follwing user
-		myPositionOverlay.enableFollowLocation();
-	        // And we add the Overlay
-	        m_mapView.getOverlays().add(myPositionOverlay);
-	         
-	        
-	        
-	        
-	        
-	        // We add the compass
-	        mCompassOverlay = new CompassOverlay(this,
-	                new InternalCompassOrientationProvider(this), m_mapView);
-	        m_mapView.getOverlays().add(mCompassOverlay);
-	        mCompassOverlay.enableCompass();
-	         
-	       // setContentView(m_mapView);
-	         
-	        mSensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
-	        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-	        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-		
-		
-		
+			this.myPositionOverlay.runOnFirstFix(new Runnable()
+			       { public void run() {
+		               // Animate to the current location on first GPS fix
+		               // --- https://github.com/osmdroid/osmdroid/issues/47
+			    	   // --- getMyLocation!=null
+			    	   if (myPositionOverlay.getMyLocation()!=null) 
+			    	   m_mapView.getController().animateTo( myPositionOverlay.getMyLocation());
+			       }});
+
+			// We add the compass
+			mCompassOverlay = new CompassOverlay(this,
+					new InternalCompassOrientationProvider(this), m_mapView);
+			m_mapView.getOverlays().add(mCompassOverlay);
+			mCompassOverlay.enableCompass();
+
+			// setContentView(m_mapView);
+
+			mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+			mAccelerometer = mSensorManager
+					.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+			mMagnetometer = mSensorManager
+					.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
 		}
 
-		
-		
 		InnerLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		InnerLocationListener = new InnerLocationListener();
 		InnerLocationManager.requestLocationUpdates(
@@ -179,8 +165,8 @@ public class Map extends Activity implements SensorEventListener {
 
 		// If gps enabled
 
-		if (mGPS.canGetLocation) 
-		//if (1==0)
+		if (mGPS.canGetLocation)
+		// if (1==0)
 		{
 
 			// get Lat Long from gps
@@ -188,12 +174,12 @@ public class Map extends Activity implements SensorEventListener {
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! uncomment to read gps
 			// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-			//MAP_DEFAULT_LATITUDE = mGPS.getLatitude();
-			//MAP_DEFAULT_LONGITUDE = mGPS.getLongitude();
+			// MAP_DEFAULT_LATITUDE = mGPS.getLatitude();
+			// MAP_DEFAULT_LONGITUDE = mGPS.getLongitude();
 
 			// if GPS is ready
 			if (MAP_DEFAULT_LATITUDE > 0) {
-			//if (1==1) {
+				// if (1==1) {
 				// String LAT = Double.toString(MAP_DEFAULT_LATITUDE);
 				// String LONGT = Double.toString(MAP_DEFAULT_LONGITUDE);
 				if (Globals.getInstance().isFirstTimeOnMapActivity())
@@ -205,8 +191,8 @@ public class Map extends Activity implements SensorEventListener {
 				// GPS if not ready
 
 			} else {
-				 Toast.makeText(getApplicationContext(), "GPS is not Ready",
-				 Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "GPS is not Ready",
+						Toast.LENGTH_LONG).show();
 
 				LocationManager mlocManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 				LocationListener mlocListener = new MyLocationListener(Map.this);
@@ -239,8 +225,7 @@ public class Map extends Activity implements SensorEventListener {
 
 		Globals g = Globals.getInstance();
 
-		if (g.getXmLERROR()) 
-		{
+		if (!g.getXmLERROR()) {
 
 			/************** Read XML *************/
 
@@ -269,17 +254,13 @@ public class Map extends Activity implements SensorEventListener {
 				List<Poi_Struct> pois = new ArrayList<Poi_Struct>();
 
 				pois = parser.getPois();
-
-				// ArrayList<OverlayItem> overlayItemArray = new
-				// ArrayList<OverlayItem>();
-
 				int marker = R.drawable.markerbig;
 				OverlayItem olItem;
 				for (int i = 0; i < pois.size(); i++) {
 					olItem = new OverlayItem(pois.get(i).getName(), pois.get(i)
-							.getDesc()+"#"+pois.get(i).getLink(), new GeoPoint(pois.get(i).getLon(), pois
-							.get(i).getLat()));
-
+							.getDesc() + "#" + pois.get(i).getLink(),
+							new GeoPoint(pois.get(i).getLon(), pois.get(i)
+									.getLat()));
 
 					Drawable newMarker = this.getResources()
 							.getDrawable(marker);
@@ -288,28 +269,15 @@ public class Map extends Activity implements SensorEventListener {
 					overlayItemArray.add(olItem);
 
 				}
-				
-				//---------- Here we put xml overlays to map -----------------
 
-				// ------- Add Your Position -----------------------------------
-				
-				 OverlayItem olItem1 = new OverlayItem("Position", "You Are Here", new
-				 GeoPoint( MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE));
-			     Drawable newMarker = this.getResources().getDrawable(
-				 R.drawable.marker); olItem1.setMarker(newMarker);
-				 overlayItemArray.add(olItem1);
-			 
-	      
-				// ------------ This puts the overlays
+				// ---------- Here we put xml overlays to map -----------------
+				MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,
+						overlayItemArray);
+				m_mapView.getOverlays().add(overlay);
 				// ------------
-				MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,overlayItemArray);
-                m_mapView.getOverlays().add(overlay);
-                // ------------
-                // ------------ Do not comment
-				
 				// ---- it gives error
-				//setContentView(m_mapView); //displaying the MapView
-				 
+				// setContentView(m_mapView); //displaying the MapView
+
 			} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block
 				Toast.makeText(
@@ -328,10 +296,11 @@ public class Map extends Activity implements SensorEventListener {
 						Toast.LENGTH_LONG).show();
 			}
 
-		}
+		} else
+			Toast.makeText(getApplicationContext(),
+					"g.getxmlerror=" + g.getXmLERROR(), Toast.LENGTH_LONG)
+					.show();
 
-	
-		
 		// ------------------------------------------------------------
 
 		/*
@@ -339,14 +308,13 @@ public class Map extends Activity implements SensorEventListener {
 		 * "ZoomLevel="+MAP_DEFAULT_ZOOM, Toast.LENGTH_LONG).show();
 		 */
 
-	//	Globals.getInstance().setFirstTimeOnMapActivity(false);
-	//	Globals.getInstance().setMap_Center(m_mapView.getMapCenter());
-	//	Globals.getInstance().setMapZoomLevel(m_mapView.getZoomLevel());
+		// Globals.getInstance().setFirstTimeOnMapActivity(false);
+		// Globals.getInstance().setMap_Center(m_mapView.getMapCenter());
+		// Globals.getInstance().setMapZoomLevel(m_mapView.getZoomLevel());
 
-		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		//sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
 	} // end onCreate()
-
 
 	public String getXmlFromFile(String filename) throws IOException {
 		StringBuffer buff = new StringBuffer();
@@ -368,7 +336,7 @@ public class Map extends Activity implements SensorEventListener {
 
 		public void onLocationChanged(Location argLocation) {
 			// TODO Auto-generated method stub
-			 //super.onLocationChanged(argLocation);
+			// super.onLocationChanged(argLocation);
 			GeoPoint myGeoPoint = new GeoPoint(
 					(int) (argLocation.getLatitude() * 1000000),
 					(int) (argLocation.getLongitude() * 1000000));
@@ -400,39 +368,24 @@ public class Map extends Activity implements SensorEventListener {
 
 	@Override
 	public void onResume() {
-		/*super.onResume();
-
-		myCompass.enableCompass();
-		myCompass.enableMyLocation();
-		myCompass.followLocation(true);
-		myCompass.enableFollowLocation();
-		sensorManager.registerListener(this,
-				sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),
-				SensorManager.SENSOR_DELAY_FASTEST);
-*/
+		
 		super.onResume();
-        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_GAME);
 		
-		
-		
+		myPositionOverlay.enableMyLocation();
+		myPositionOverlay.enableFollowLocation();
+		mSensorManager.registerListener(this, mAccelerometer,
+				SensorManager.SENSOR_DELAY_GAME);
+		mSensorManager.registerListener(this, mMagnetometer,
+				SensorManager.SENSOR_DELAY_GAME);
+
 	}
 
 	/** disable compass and location updates */
 	@Override
 	public void onPause() {
 		super.onPause();
-/*
-		myCompass.disableMyLocation();
-		myCompass.disableCompass();
-		myCompass.disableFollowLocation();
-		sensorManager.unregisterListener(this);*/
-		
-		super.onPause();
-        mSensorManager.unregisterListener(this, mAccelerometer);
-        mSensorManager.unregisterListener(this, mMagnetometer);
-		
-
+		mSensorManager.unregisterListener(this, mAccelerometer);
+		mSensorManager.unregisterListener(this, mMagnetometer);
 	}
 
 	@Override
@@ -443,30 +396,37 @@ public class Map extends Activity implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		/*float bearing = event.values[0];
-		if (filterSensor) {
-			bearing = (int) bearing;
+		
+		if (event.sensor == mAccelerometer) {
+			System.arraycopy(event.values, 0, mLastAccelerometer, 0,
+					event.values.length);
+			mLastAccelerometerSet = true;
+		} else if (event.sensor == mMagnetometer) {
+			System.arraycopy(event.values, 0, mLastMagnetometer, 0,
+					event.values.length);
+			mLastMagnetometerSet = true;
 		}
-		compassBearing = bearing;
-		m_mapView.setMapOrientation(-bearing);*/
-		
-		 if (event.sensor == mAccelerometer) {
-	            System.arraycopy(event.values, 0, mLastAccelerometer, 0, event.values.length);
-	            mLastAccelerometerSet = true;
-	        } else if (event.sensor == mMagnetometer) {
-	            System.arraycopy(event.values, 0, mLastMagnetometer, 0, event.values.length);
-	            mLastMagnetometerSet = true;
-	        }
-	        if (mLastAccelerometerSet && mLastMagnetometerSet) {
-	            SensorManager.getRotationMatrix(mR, null, mLastAccelerometer, mLastMagnetometer);
-	            SensorManager.getOrientation(mR, mOrientation);
-	            float azimuthInRadians = mOrientation[0];
-	            float azimuthInDegress = (float)(Math.toDegrees(azimuthInRadians)+360)%360;
-	            m_mapView.setMapOrientation(-azimuthInDegress);
-	            mCurrentDegree = -azimuthInDegress;
-	        }
-		
+		if (mLastAccelerometerSet && mLastMagnetometerSet) {
+			SensorManager.getRotationMatrix(mR, null, mLastAccelerometer,
+					mLastMagnetometer);
+			SensorManager.getOrientation(mR, mOrientation);
+			float azimuthInRadians = mOrientation[0];
+			float azimuthInDegress = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
+			m_mapView.setMapOrientation(-azimuthInDegress);
+			mCurrentDegree = -azimuthInDegress;
+		}
 
 	}
 
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+		  MenuItem item = menu.add ("Clear Array");
+		  item.setOnMenuItemClickListener (new OnMenuItemClickListener(){
+		    public boolean onMenuItemClick (MenuItem item){
+		    //  clearArray();
+		      return true;
+		    }
+		  });
+		  return true;
+		}
 } // end class YourMap

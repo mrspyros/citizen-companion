@@ -21,5 +21,11 @@
         <item>Συντήρησης οδών</item>
         <item>Τεχνική</item>
     </string-array>
+        <string name="stream_btn">Live Stream</string>
+        <string name="poi_btn">P O I S</string>
+        <string name="qr_btn">QrCode</string>
+        <string name="map_btn">Χάρτης</string>
+        <string name="exit_btn">Έξοδος</string>
+        <string name="form_subm_btn">Υποβολή Αιτήματος</string>
     
 </resources>

@@ -3,8 +3,8 @@
     package="com.android.toorcomp"
     android:versionCode="1"
     android:versionName="1.0" >
-    
-    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.CONTROL_LOCATION_UPDATES" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -28,35 +27,35 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.android.toorcomp.MainActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name" >
-             <category android:name="android.intent.category.LAUNCHER" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-              
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-                  android:name="com.android.toorcomp.Pois"
-                  android:screenOrientation="portrait" >
+        <activity
+            android:name="com.android.toorcomp.Pois"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
-            android:name="com.android.toorcomp.Map" 
-            android:screenOrientation="portrait">
+        <activity
+            android:name="com.android.toorcomp.Map"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
-            android:name="com.android.toorcomp.MainScreen" 
-            android:screenOrientation="portrait">
+        <activity
+            android:name="com.android.toorcomp.MainScreen"
+            android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.android.toorcomp.New_request"
             android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.android.toorcomp.Selector_map"
             android:screenOrientation="portrait" >
         </activity>
-        <activity 
+        <activity
             android:name="com.android.toorcomp.webview"
             android:screenOrientation="portrait" >
         </activity>
@@ -74,15 +73,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-       <activity android:name="com.android.toorcomp.StreamPlayer" 
-       android:configChanges="orientation|screenSize"
-       android:screenOrientation="portrait">
-       </activity>
-    
-    
+        <activity
+            android:name="com.android.toorcomp.StreamPlayer"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
-  <supports-screens
+    <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
         android:normalScreens="true"

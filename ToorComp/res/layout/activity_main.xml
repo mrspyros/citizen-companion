@@ -2,13 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    
     android:background="@drawable/main_bg"
+    android:gravity="center_horizontal"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-   
     tools:context=".MainScreen" >
 
     <TextView
@@ -25,7 +24,7 @@
         android:layout_alignBottom="@+id/btn2"
         android:layout_alignParentRight="true"
         android:background="@drawable/btn"
-        android:text="Χάρτης" />
+        android:text="@string/map_btn" />
 
     <Button
         android:id="@+id/btn2"
@@ -34,8 +33,8 @@
         android:layout_alignBaseline="@+id/btn1"
         android:layout_alignBottom="@+id/btn1"
         android:layout_centerHorizontal="true"
-         android:background="@drawable/btn"
-        android:text="P O I S" />
+        android:background="@drawable/btn"
+        android:text="@string/poi_btn" />
 
     <Button
         android:id="@+id/btn1"
@@ -44,8 +43,8 @@
         android:layout_alignLeft="@+id/textView1"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="18dp"
-         android:background="@drawable/btn"
-        android:text="Εξοδος" />
+        android:background="@drawable/btn"
+        android:text="@string/exit_btn" />
 
     <Button
         android:id="@+id/btn4"
@@ -55,7 +54,7 @@
         android:layout_alignLeft="@+id/btn1"
         android:layout_marginBottom="15dp"
         android:background="@drawable/btn"
-        android:text="Υποβολή Αιτήματος" />
+        android:text="@string/form_subm_btn" />
 
     <ImageView
         android:id="@+id/imageView1"
@@ -75,15 +74,16 @@
         android:layout_alignLeft="@+id/btn3"
         android:layout_alignTop="@+id/btn4"
         android:background="@drawable/btn"
-        android:text="QrCode" />
+        android:text="@string/qr_btn" />
 
     <Button
         android:id="@+id/stream_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="90dip"
+        android:layout_height="40dip"
         android:layout_alignBaseline="@+id/qrcode"
         android:layout_alignBottom="@+id/qrcode"
         android:layout_centerHorizontal="true"
-        android:text="Button" />
+        android:background="@drawable/btn"
+        android:text="@string/stream_btn" />
 
 </RelativeLayout>
