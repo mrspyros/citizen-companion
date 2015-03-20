@@ -14,7 +14,11 @@ public class Globals {
 	private IGeoPoint Map_Center;
 	private IGeoPoint Selected;
 	private String WebViewUrl="";
-    private String _Xml_Download_Answer;
+    private String _Xml_Download_Answer;                                                       
+    private boolean OfflineMap;
+    private boolean Enable_Pois;
+    private String Pois_To_Display;  // 12345 for all zeroes if not
+    private boolean Options_Changed;
 	
 	public IGeoPoint getSelected() {
 		return Selected;
@@ -89,5 +93,37 @@ public class Globals {
 
 	public void set_Xml_Download_Answer(String _Xml_Download_Answer) {
 		this._Xml_Download_Answer = _Xml_Download_Answer;
+	}
+
+	public boolean isOfflineMap() {
+		return OfflineMap;
+	}
+
+	public void setOfflineMap(boolean offlineMap) {
+		OfflineMap = offlineMap;
+	}
+
+	public boolean isEnable_Pois() {
+		return Enable_Pois;
+	}
+
+	public void setEnable_Pois(boolean enable_Pois) {
+		Enable_Pois = enable_Pois;
+	}
+
+	public String getPois_To_Display() {
+		return Pois_To_Display;
+	}
+
+	public void setPois_To_Display(String pois_To_Display) {
+		Pois_To_Display = pois_To_Display;
+	}
+
+	public boolean isOptions_Changed() {
+		return Options_Changed;
+	}
+
+	public void setOptions_Changed(boolean options_Changed) {
+		Options_Changed = options_Changed;
 	}
 }

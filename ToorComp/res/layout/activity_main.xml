@@ -11,57 +11,57 @@
     tools:context=".MainScreen" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/main_opt_text_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
 
     <Button
-        android:id="@+id/btn3"
+        android:id="@+id/main_btn3"
         android:layout_width="90dip"
         android:layout_height="40dip"
-        android:layout_alignBaseline="@+id/btn2"
-        android:layout_alignBottom="@+id/btn2"
+        android:layout_alignBaseline="@+id/main_btn2"
+        android:layout_alignBottom="@+id/main_btn2"
         android:layout_alignParentRight="true"
         android:background="@drawable/btn"
         android:text="@string/map_btn" />
 
     <Button
-        android:id="@+id/btn2"
+        android:id="@+id/main_btn2"
         android:layout_width="90dip"
         android:layout_height="40dip"
-        android:layout_alignBaseline="@+id/btn1"
-        android:layout_alignBottom="@+id/btn1"
+        android:layout_alignBaseline="@+id/main_btn1"
+        android:layout_alignBottom="@+id/main_btn1"
         android:layout_centerHorizontal="true"
         android:background="@drawable/btn"
         android:text="@string/poi_btn" />
 
     <Button
-        android:id="@+id/btn1"
+        android:id="@+id/main_btn1"
         android:layout_width="90dip"
         android:layout_height="40dip"
-        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignLeft="@+id/main_opt_text_2"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="18dp"
         android:background="@drawable/btn"
         android:text="@string/exit_btn" />
 
     <Button
-        android:id="@+id/btn4"
+        android:id="@+id/main_btn4"
         android:layout_width="90dip"
         android:layout_height="40dip"
-        android:layout_above="@+id/btn1"
-        android:layout_alignLeft="@+id/btn1"
+        android:layout_above="@+id/main_btn1"
+        android:layout_alignLeft="@+id/main_btn1"
         android:layout_marginBottom="15dp"
         android:background="@drawable/btn"
         android:text="@string/form_subm_btn" />
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/main_imageView1"
         android:layout_width="240dip"
         android:layout_height="240dip"
-        android:layout_alignLeft="@+id/textView1"
-        android:layout_below="@+id/textView1"
+        android:layout_alignLeft="@+id/opt_text_2"
+        android:layout_below="@+id/opt_text_2"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="19dp"
         android:scaleType="fitXY"
@@ -71,8 +71,8 @@
         android:id="@+id/qrcode"
         android:layout_width="90dip"
         android:layout_height="40dip"
-        android:layout_alignLeft="@+id/btn3"
-        android:layout_alignTop="@+id/btn4"
+        android:layout_alignLeft="@+id/main_btn3"
+        android:layout_alignTop="@+id/main_btn4"
         android:background="@drawable/btn"
         android:text="@string/qr_btn" />
 

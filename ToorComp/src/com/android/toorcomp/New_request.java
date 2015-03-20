@@ -10,11 +10,6 @@ import org.osmdroid.util.GeoPoint;
 
 //import com.android.toorcomp.Map.InnerLocationListener;
 
-
-
-
-
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -30,6 +25,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -47,33 +45,29 @@ public class New_request extends Activity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_request);
-		
+
 		final GPSTracker mGPS = new GPSTracker(this);
 		final TextView descText = (TextView) findViewById(R.id.editText2);
 		final TextView shortDes = (TextView) findViewById(R.id.editText1);
-        final TextView photoTextView=(TextView) findViewById(R.id.photo);
-        final Spinner  forSelector=(Spinner) findViewById(R.id.spinner1);
-		
-        // ------------- Clear description text -------------------
-        
-        shortDes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             shortDes.setText("");            
-            }
-        });
-        
-        descText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-             descText.setText("");            
-            }
-        });
-        
-        
-        
-        
-        
+		final TextView photoTextView = (TextView) findViewById(R.id.photo);
+		final Spinner forSelector = (Spinner) findViewById(R.id.spinner1);
+
+		// ------------- Clear description text -------------------
+
+		shortDes.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				shortDes.setText("");
+			}
+		});
+
+		descText.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				descText.setText("");
+			}
+		});
+
 		Button button2 = (Button) findViewById(R.id.button2);
 		button2.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {
@@ -103,20 +97,21 @@ public class New_request extends Activity {
 
 											// if GPS is ready
 											if (mGPS.getLatitude() != 0) {
-											descText.append("\n ИЭуз : http://www.google.com/maps/place/"
-															+ mGPS.getLatitude()
-															+ ","
-															+ mGPS.getLongitude()
-															+"/@"
-															+mGPS.getLatitude()
-															+","
-															+mGPS.getLongitude()
-															+"17z");			
-													
-											/*	descText.append("Lat="
+												descText.append("\n ИЭуз : http://www.google.com/maps/place/"
 														+ mGPS.getLatitude()
-														+ "Lon="
-														+ mGPS.getLongitude());*/
+														+ ","
+														+ mGPS.getLongitude()
+														+ "/@"
+														+ mGPS.getLatitude()
+														+ ","
+														+ mGPS.getLongitude()
+														+ "17z");
+
+												/*
+												 * descText.append("Lat=" +
+												 * mGPS.getLatitude() + "Lon=" +
+												 * mGPS.getLongitude());
+												 */
 
 											} else {
 
@@ -129,17 +124,19 @@ public class New_request extends Activity {
 																0, 0,
 																mlocListener);
 
-
 												InnerLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 												InnerLocationListener = new InnerLocationListener();
-												InnerLocationManager.requestLocationUpdates(
-												LocationManager.GPS_PROVIDER, 0, 0, InnerLocationListener);
-												
-												
-												  /*descText.append("Lat=" +
-												  mGPS.getLatitude() + "Lon=" +
-												  mGPS.getLongitude());*/
-												 
+												InnerLocationManager
+														.requestLocationUpdates(
+																LocationManager.GPS_PROVIDER,
+																0, 0,
+																InnerLocationListener);
+
+												/*
+												 * descText.append("Lat=" +
+												 * mGPS.getLatitude() + "Lon=" +
+												 * mGPS.getLongitude());
+												 */
 
 											}
 
@@ -184,78 +181,74 @@ public class New_request extends Activity {
 			}
 		});
 
-		// ---------------  send request -----------------------------------
-		
+		// --------------- send request -----------------------------------
+
 		Button button4 = (Button) findViewById(R.id.send);
 		button4.setOnClickListener(new android.view.View.OnClickListener() {
 			public void onClick(View v) {
-				
-				
-				File imageFile = new File(""); 
-				try {   
-					
-					GMailSender sender = new GMailSender("aaa@gmail.com", "password");
-	                    try {  
-	                        imageFile = new File(photoTextView.getText().toString());
-	                    } catch (Exception e) {   
-	                    	imageFile = new File("");  
-	                    	Log.e("imageFile", e.getMessage(), e);
-		                } 
-	                    sender.sendMail(shortDes.getText().toString(),   
-	                            "For = "+forSelector.getSelectedItem().toString() 
-	                                  +" Desc = "+ descText.getText().toString(), 
-	                                  imageFile,
-	                            "aaa@gmail.com",   
-	                            "aaa@gmail.com");   
-	                } catch (Exception e) {   
-	                    Log.e("SendMail", e.getMessage(), e);   
-	                } 
-				
+
+				File imageFile = new File("");
+				try {
+
+					GMailSender sender = new GMailSender("aaa@gmail.com",
+							"password");
+					try {
+						imageFile = new File(photoTextView.getText().toString());
+					} catch (Exception e) {
+						imageFile = new File("");
+						Log.e("imageFile", e.getMessage(), e);
+					}
+					sender.sendMail(shortDes.getText().toString(), "For = "
+							+ forSelector.getSelectedItem().toString()
+							+ " Desc = " + descText.getText().toString(),
+							imageFile, "aaa@gmail.com", "aaa@gmail.com");
+				} catch (Exception e) {
+					Log.e("SendMail", e.getMessage(), e);
+				}
+
 			}
 		});
-		
-		
+
 		// ------------------ If tapped to load photo -----------------
 		PICK_IMAGE = 2;
 		photoTextView.setOnClickListener(new View.OnClickListener() {
-		    @Override
-		    public void onClick(View v) {
-		    	Intent intent = new Intent();
-		    	intent.setType("image/*");
-		    	intent.setAction(Intent.ACTION_GET_CONTENT);
-		    	startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
-		    }
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent();
+				intent.setType("image/*");
+				intent.setAction(Intent.ACTION_GET_CONTENT);
+				startActivityForResult(
+						Intent.createChooser(intent, "Select Picture"),
+						PICK_IMAGE);
+			}
 		});
-		
-		
-		
+
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		// ----------- pick image -------------------
-		
-		 if(requestCode == PICK_IMAGE && data != null && data.getData() != null) {
-		        Uri _uri = data.getData();
 
-		        //User had pick an image.
-		        Cursor cursor = getContentResolver().query(_uri, new String[] { android.provider.MediaStore.Images.ImageColumns.DATA }, null, null, null);
-		        cursor.moveToFirst();
+		if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+			Uri _uri = data.getData();
 
-		        //Link to the image
-		        final String imageFilePath = cursor.getString(0);
-		        cursor.close();
-		        final TextView photoTextView=(TextView) findViewById(R.id.photo);
-		        photoTextView.setText(imageFilePath);
-		    }
-		    super.onActivityResult(requestCode, resultCode, data);
-		
+			// User had pick an image.
+			Cursor cursor = getContentResolver()
+					.query(_uri,
+							new String[] { android.provider.MediaStore.Images.ImageColumns.DATA },
+							null, null, null);
+			cursor.moveToFirst();
+
+			// Link to the image
+			final String imageFilePath = cursor.getString(0);
+			cursor.close();
+			final TextView photoTextView = (TextView) findViewById(R.id.photo);
+			photoTextView.setText(imageFilePath);
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+
 		// ----------- pick image end ---------------
-		
-		
-		
-		
-		
+
 		if (requestCode == 1) {
 
 			if (resultCode == RESULT_OK) {
@@ -265,13 +258,14 @@ public class New_request extends Activity {
 
 				Globals.getInstance().getMap_Center();
 				final TextView descText = (TextView) findViewById(R.id.editText2);
-				
+
 				descText.append("\n ИЭуз : http://maps.google.com/maps?f=q&q="
-				+ Globals.getInstance().getMap_Center().getLatitudeE6()/1E6
-				+ ","
-				+Globals.getInstance().getMap_Center().getLongitudeE6()/1E6
-				+"&z=16");	
-			
+						+ Globals.getInstance().getMap_Center().getLatitudeE6()
+						/ 1E6
+						+ ","
+						+ Globals.getInstance().getMap_Center()
+								.getLongitudeE6() / 1E6 + "&z=16");
+
 			}
 		}
 
@@ -285,14 +279,13 @@ public class New_request extends Activity {
 			GeoPoint myGeoPoint = new GeoPoint(
 					(int) (argLocation.getLatitude() * 1000000),
 					(int) (argLocation.getLongitude() * 1000000));
-			
+
 			final TextView descText = (TextView) findViewById(R.id.editText2);
-			 descText.append("    Lat= " +
-					 argLocation.getLatitude()/1E6 + " Lon= " +
-					 argLocation.getLongitude());
-			
-			//m_mapView.getController().setCenter(myGeoPoint);
-			//m_mapView.invalidate();
+			descText.append("    Lat= " + argLocation.getLatitude() / 1E6
+					+ " Lon= " + argLocation.getLongitude());
+
+			// m_mapView.getController().setCenter(myGeoPoint);
+			// m_mapView.invalidate();
 			// ((IMapController) m_mapView).animateTo(myGeoPoint);
 			// CenterLocatio(myGeoPoint);
 		}
@@ -314,5 +307,28 @@ public class New_request extends Activity {
 		// TODO Auto-generated method stub
 		return false;
 	};
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// creates a menu inflater
+		MenuInflater inflater = getMenuInflater();
+		// generates a Menu from a menu resource file
+		// R.menu.main_menu represents the ID of the XML resource file
+		inflater.inflate(R.menu.menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.opt:
+
+			startActivity(new Intent(getApplicationContext(), Options.class));
+
+			return true;
+
+		}
+		return false;
+	}
 
 }

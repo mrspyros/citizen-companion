@@ -49,7 +49,7 @@ public class Startup  {
                 File dirs=new File(SDCardRoot+"/osmdroid/");
                 dirs.mkdirs();
                
-                File file = new File(SDCardRoot+"/osmdroid/","Pois.xml");
+                File file = new File(SDCardRoot+"/osmdroid/","Options.xml");
             
                 
                 //this will be used to write the downloaded data into the file we created
@@ -110,7 +110,7 @@ public class Startup  {
                 
                 //return CheckFileExists(Environment.getExternalStorageDirectory().getAbsolutePath()+"/osmdroid/");
                 
-                return CheckFileExists(Environment.getExternalStorageDirectory().getAbsolutePath()+"/osmdroid/Pois.xml");
+                return CheckFileExists(Environment.getExternalStorageDirectory().getAbsolutePath()+"/osmdroid/Options.xml");
                                 
         }
         

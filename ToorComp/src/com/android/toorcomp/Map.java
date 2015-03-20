@@ -17,7 +17,6 @@ import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.MyLocationOverlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
@@ -29,6 +28,7 @@ import org.xml.sax.XMLReader;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -40,8 +40,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -69,9 +69,9 @@ public class Map extends Activity implements SensorEventListener {
 	private LocationListener InnerLocationListener;
 
 	// Compass and Rotation
-	
+
 	private MyLocationNewOverlay myPositionOverlay;
-	
+
 	ArrayList<OverlayItem> overlayItemArray = new ArrayList<OverlayItem>();
 	private float compassBearing;
 
@@ -86,13 +86,19 @@ public class Map extends Activity implements SensorEventListener {
 	private boolean mLastMagnetometerSet = false;
 	private float[] mR = new float[9];
 	private float[] mOrientation = new float[3];
-	private float mCurrentDegree = 0f;
+	private String Pois_To_Display;
+	//
+	private List<Poi_Struct> pois = new ArrayList<Poi_Struct>();
+	private XMLParser parser = new XMLParser();
+	private Activity _activity;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+		_activity = this;
 
 		// ----- seeeeeensorrrr
 
@@ -109,36 +115,42 @@ public class Map extends Activity implements SensorEventListener {
 		m_mapView.setMultiTouchControls(true);
 		m_mapView.setClickable(false);
 		m_mapView.setUseDataConnection(true);
+		m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
 
 		// https://github.com/johnjohndoe/OSMDroidOfflineDemo/blob/master/app/src/main/java/com/example/android/osmdroidofflinedemo/MainActivity.java
 
 		m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
 		m_mapView.getController().setZoom(MAP_DEFAULT_ZOOM);
 
+		// -------------------------
+		// MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,
+		// overlayItemArray);
+		// ---------------------------
+
 		// My location overlay
 		{
 			// Create a static Overlay showing a the current location and a
 			// compass
 
-			
 			myPositionOverlay = new MyLocationNewOverlay(this,
 					new GpsMyLocationProvider(this), m_mapView);
 			// Enables user's location
 			myPositionOverlay.enableMyLocation();
-			// Enable follwing user
+			// Enable following user
 			myPositionOverlay.enableFollowLocation();
 			// And we add the Overlay
 			m_mapView.getOverlays().add(myPositionOverlay);
-			
-			
-			this.myPositionOverlay.runOnFirstFix(new Runnable()
-			       { public void run() {
-		               // Animate to the current location on first GPS fix
-		               // --- https://github.com/osmdroid/osmdroid/issues/47
-			    	   // --- getMyLocation!=null
-			    	   if (myPositionOverlay.getMyLocation()!=null) 
-			    	   m_mapView.getController().animateTo( myPositionOverlay.getMyLocation());
-			       }});
+
+			this.myPositionOverlay.runOnFirstFix(new Runnable() {
+				public void run() {
+					// Animate to the current location on first GPS fix
+					// --- https://github.com/osmdroid/osmdroid/issues/47
+					// --- getMyLocation!=null
+					if (myPositionOverlay.getMyLocation() != null)
+						m_mapView.getController().animateTo(
+								myPositionOverlay.getMyLocation());
+				}
+			});
 
 			// We add the compass
 			mCompassOverlay = new CompassOverlay(this,
@@ -214,9 +226,10 @@ public class Map extends Activity implements SensorEventListener {
 		} else {
 			m_mapView.getController().setCenter(
 					Globals.getInstance().getMap_Center());
+			m_mapView.getController().setZoom(Globals.getInstance().getMapZoomLevel());
 		}
 
-		m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
+		
 		// start overlays ----------------------------
 
 		// -------------------------------------------------------------
@@ -231,7 +244,7 @@ public class Map extends Activity implements SensorEventListener {
 
 			String XMLData;
 			try {
-				XMLData = getXmlFromFile("/osmdroid/Pois.xml");
+				XMLData = getXmlFromFile("/osmdroid/Options.xml");
 
 				BufferedReader br = new BufferedReader(
 						new StringReader(XMLData));
@@ -239,7 +252,7 @@ public class Map extends Activity implements SensorEventListener {
 
 				/************ Parse XML **************/
 
-				XMLParser parser = new XMLParser();
+				// XMLParser parser = new XMLParser();
 				SAXParserFactory factory = SAXParserFactory.newInstance();
 
 				SAXParser sp;
@@ -251,23 +264,33 @@ public class Map extends Activity implements SensorEventListener {
 
 				// -----------------------------------------------------------------
 
-				List<Poi_Struct> pois = new ArrayList<Poi_Struct>();
+				// List<Poi_Struct> pois = new ArrayList<Poi_Struct>();
 
 				pois = parser.getPois();
 				int marker = R.drawable.markerbig;
 				OverlayItem olItem;
+
+				// ------ SELECT POIS TO DISPLAY FROM OPTIONS
+				Pois_To_Display = g.getPois_To_Display();
+				String Pois_Used = convertNumbersToPois(Pois_To_Display);
+
 				for (int i = 0; i < pois.size(); i++) {
-					olItem = new OverlayItem(pois.get(i).getName(), pois.get(i)
-							.getDesc() + "#" + pois.get(i).getLink(),
-							new GeoPoint(pois.get(i).getLon(), pois.get(i)
-									.getLat()));
 
-					Drawable newMarker = this.getResources()
-							.getDrawable(marker);
+					// ---- SELECT POIS TO DISPLAY FROM OPTIONS
 
-					olItem.setMarker(newMarker);
-					overlayItemArray.add(olItem);
+					if (Pois_Used.contains(pois.get(i).getType().toString())) {
+						olItem = new OverlayItem(pois.get(i).getName(),
+								pois.get(i).getDesc() + "#"
+										+ pois.get(i).getLink(), new GeoPoint(
+										pois.get(i).getLon(), pois.get(i)
+												.getLat()));
 
+						Drawable newMarker = this.getResources().getDrawable(
+								marker);
+
+						olItem.setMarker(newMarker);
+						overlayItemArray.add(olItem);
+					}
 				}
 
 				// ---------- Here we put xml overlays to map -----------------
@@ -303,16 +326,6 @@ public class Map extends Activity implements SensorEventListener {
 
 		// ------------------------------------------------------------
 
-		/*
-		 * Toast.makeText(getApplicationContext(),
-		 * "ZoomLevel="+MAP_DEFAULT_ZOOM, Toast.LENGTH_LONG).show();
-		 */
-
-		// Globals.getInstance().setFirstTimeOnMapActivity(false);
-		// Globals.getInstance().setMap_Center(m_mapView.getMapCenter());
-		// Globals.getInstance().setMapZoomLevel(m_mapView.getZoomLevel());
-
-		//sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
 	} // end onCreate()
 
@@ -344,8 +357,7 @@ public class Map extends Activity implements SensorEventListener {
 			m_mapView.setMapOrientation(-compassBearing);
 			m_mapView.getController().setCenter(myGeoPoint);
 			m_mapView.invalidate();
-			// ((IMapController) m_mapView).animateTo(myGeoPoint);
-			// CenterLocatio(myGeoPoint);
+		
 		}
 
 		public void onProviderDisabled(String provider) {
@@ -368,15 +380,29 @@ public class Map extends Activity implements SensorEventListener {
 
 	@Override
 	public void onResume() {
-		
+
 		super.onResume();
-		
+
 		myPositionOverlay.enableMyLocation();
 		myPositionOverlay.enableFollowLocation();
 		mSensorManager.registerListener(this, mAccelerometer,
 				SensorManager.SENSOR_DELAY_GAME);
 		mSensorManager.registerListener(this, mMagnetometer,
 				SensorManager.SENSOR_DELAY_GAME);
+
+		Globals g = Globals.getInstance();
+		if (g.isOptions_Changed()) {
+			g.setMapZoomLevel(m_mapView.getZoomLevel());
+			
+			g.setMap_Center(m_mapView.getMapCenter());
+			g.setMapZoomLevel(m_mapView.getZoomLevel());
+			g.setOptions_Changed(false);
+		//	g.setFirstTimeOnMapActivity(true);
+			this._activity.finish();
+			overridePendingTransition(0, 0);
+			Intent intent = new Intent(getApplicationContext(), Map.class);
+			startActivity(intent);
+		}
 
 	}
 
@@ -396,7 +422,7 @@ public class Map extends Activity implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		
+
 		if (event.sensor == mAccelerometer) {
 			System.arraycopy(event.values, 0, mLastAccelerometer, 0,
 					event.values.length);
@@ -413,20 +439,64 @@ public class Map extends Activity implements SensorEventListener {
 			float azimuthInRadians = mOrientation[0];
 			float azimuthInDegress = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
 			m_mapView.setMapOrientation(-azimuthInDegress);
-			mCurrentDegree = -azimuthInDegress;
 		}
 
 	}
 
-	
-	public boolean onCreateOptionsMenu(Menu menu) {
-		  MenuItem item = menu.add ("Clear Array");
-		  item.setOnMenuItemClickListener (new OnMenuItemClickListener(){
-		    public boolean onMenuItemClick (MenuItem item){
-		    //  clearArray();
-		      return true;
-		    }
-		  });
-		  return true;
+	private String convertNumbersToPois(String numbers) {
+
+		// ---- This gets numbers 123456 from globals
+		// ---- loaded from shared prefs
+		// ---- if it finds number makes a string with poi's_en name
+		// ---- IT IS FOR SELECTING POIS TO SHOW
+
+		String pois = "";
+		try {
+			for (int i = 0; i < numbers.length(); ++i) {
+				char c = numbers.charAt(i);
+
+				if (i == 0 & c == '1')
+					pois = getResources().getString(R.string.poi1_en);
+				if (i == 1 & c == '2')
+					pois = pois.concat(getResources().getString(
+							R.string.poi2_en));
+				if (i == 2 & c == '3')
+					pois = pois.concat(getResources().getString(
+							R.string.poi3_en));
+				if (i == 3 & c == '4')
+					pois = pois.concat(getResources().getString(
+							R.string.poi4_en));
+				if (i == 4 & c == '5')
+					pois = pois.concat(getResources().getString(
+							R.string.poi5_en));
+				if (i == 5 & c == '6')
+					pois = pois.concat(getResources().getString(
+							R.string.poi6_en));
+			}
+		} catch (Exception e) {
+			Toast.makeText(getApplicationContext(), "Error=" + e.toString(),
+					Toast.LENGTH_LONG).show();
 		}
+
+		return pois;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.opt:
+			startActivity(new Intent(getApplicationContext(), Options.class));
+			return true;
+		}
+		return false;
+	}
+
 } // end class YourMap

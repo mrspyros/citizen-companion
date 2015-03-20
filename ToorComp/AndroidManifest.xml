@@ -17,7 +17,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
     <application
@@ -36,11 +36,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.android.toorcomp.Pois"
+            android:name="com.android.toorcomp.Options"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.android.toorcomp.Map"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
         <activity

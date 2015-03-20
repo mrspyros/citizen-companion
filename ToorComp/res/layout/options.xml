@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="484dp"
+        android:background="@color/black"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/opt_text_1"
+            android:layout_width="wrap_content"
+            android:text="@string/pois_intro"
+            android:textColor="@color/white" 
+            android:layout_height="30dp"/>
+
+        
+        <CheckBox
+            android:id="@+id/poi1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/poi1"
+            android:textColor="@color/white" />
+        
+        
+        <CheckBox
+            android:id="@+id/poi2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/poi2"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/poi3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/poi3"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/poi4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/poi4"
+            android:textColor="@color/white" />
+
+
+        <CheckBox
+            android:id="@+id/poi5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/poi5"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/poi6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/poi6"
+            android:layout_marginLeft="20dp"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/opt_text_2"
+            android:layout_width="wrap_content"
+            android:text="@string/opt_offlinemap"
+            android:textColor="@color/white"
+            android:layout_height="30dp" />
+
+        <CheckBox
+            android:id="@+id/offlinemap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/opt_offlinemap"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/opt_text_3"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:background="@color/black"
+            android:enabled="false"
+            android:editable="false"
+            android:focusable="false"
+            android:ems="10"
+            android:inputType="textMultiLine" >
+
+           
+        </EditText>
+
+        <Button
+            android:id="@+id/btn1"
+            style="@drawable/btn_red"
+            android:layout_width="80dp"
+            android:layout_height="32dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/btn_red"
+            android:text="Πίσω" />
+    </LinearLayout>
+
+</ScrollView>
+
