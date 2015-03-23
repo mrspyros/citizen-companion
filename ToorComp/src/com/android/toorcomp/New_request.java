@@ -34,14 +34,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class New_request extends Activity {
+public class New_request extends Base_Activity {
 
 	private static int PICK_IMAGE = 0;
 	private LocationManager InnerLocationManager;
 	private LocationListener InnerLocationListener;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_request);
@@ -308,27 +308,6 @@ public class New_request extends Activity {
 		return false;
 	};
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// creates a menu inflater
-		MenuInflater inflater = getMenuInflater();
-		// generates a Menu from a menu resource file
-		// R.menu.main_menu represents the ID of the XML resource file
-		inflater.inflate(R.menu.menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.opt:
-
-			startActivity(new Intent(getApplicationContext(), Options.class));
-
-			return true;
-
-		}
-		return false;
-	}
+	
 
 }

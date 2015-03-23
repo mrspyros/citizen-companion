@@ -45,7 +45,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public class Map extends Activity implements SensorEventListener {
+public class Map extends Base_Activity implements SensorEventListener {
 
 	Double latToPass;
 	Double longToPass;
@@ -92,7 +92,6 @@ public class Map extends Activity implements SensorEventListener {
 	private XMLParser parser = new XMLParser();
 	private Activity _activity;
 
-	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -386,9 +385,9 @@ public class Map extends Activity implements SensorEventListener {
 		myPositionOverlay.enableMyLocation();
 		myPositionOverlay.enableFollowLocation();
 		mSensorManager.registerListener(this, mAccelerometer,
-				SensorManager.SENSOR_DELAY_GAME);
+				SensorManager.SENSOR_DELAY_NORMAL);
 		mSensorManager.registerListener(this, mMagnetometer,
-				SensorManager.SENSOR_DELAY_GAME);
+				SensorManager.SENSOR_DELAY_NORMAL);
 
 		Globals g = Globals.getInstance();
 		if (g.isOptions_Changed()) {
@@ -481,22 +480,6 @@ public class Map extends Activity implements SensorEventListener {
 		return pois;
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.opt:
-			startActivity(new Intent(getApplicationContext(), Options.class));
-			return true;
-		}
-		return false;
-	}
+	
 
 } // end class YourMap

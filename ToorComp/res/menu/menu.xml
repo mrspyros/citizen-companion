@@ -21,14 +21,14 @@
         android:enabled="true"
         android:icon="@drawable/ic_action_about"
         android:title="@string/about"
-        android:visible="true">
+        android:visible="true" android:orderInCategory="1" android:showAsAction="never">
     </item>
    
     <item android:id="@+id/opt" 
         android:icon="@drawable/ic_action_settings" 
         android:title="@string/menu_opt_sel" 
         android:visible="true" 
-        android:enabled="true">
+        android:enabled="true" android:orderInCategory="2">
         
     </item>
     

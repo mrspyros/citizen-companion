@@ -11,12 +11,12 @@ import android.os.Bundle;
  * @author mrspyros
  * 
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Base_Activity {
 
 	private static final String MY_PREFS_NAME = "CitizenCompanion";
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.main);
