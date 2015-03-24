@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -26,6 +27,8 @@ public class MainScreen extends Base_Activity {
         @Override
 		public void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
+                getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        		getActionBar().show();
                 setContentView(R.layout.activity_main);
 
                 File M_PATH = new File(Environment.getExternalStorageDirectory(),

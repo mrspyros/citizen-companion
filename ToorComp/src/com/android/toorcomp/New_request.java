@@ -10,6 +10,7 @@ import org.osmdroid.util.GeoPoint;
 
 //import com.android.toorcomp.Map.InnerLocationListener;
 
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -29,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -44,6 +46,9 @@ public class New_request extends Base_Activity {
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		getActionBar().show();
 		setContentView(R.layout.new_request);
 
 		final GPSTracker mGPS = new GPSTracker(this);

@@ -42,6 +42,7 @@ import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -91,12 +92,14 @@ public class Map extends Base_Activity implements SensorEventListener {
 	private List<Poi_Struct> pois = new ArrayList<Poi_Struct>();
 	private XMLParser parser = new XMLParser();
 	private Activity _activity;
+	static final float ALPHA = 0.25f; // if ALPHA = 1 OR 0, no filter applies.
 
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+		getActionBar().show();
 		_activity = this;
 
 		// ----- seeeeeensorrrr
@@ -377,6 +380,9 @@ public class Map extends Base_Activity implements SensorEventListener {
 		return false;
 	};
 
+		
+	
+	
 	@Override
 	public void onResume() {
 
@@ -419,10 +425,24 @@ public class Map extends Base_Activity implements SensorEventListener {
 
 	}
 
+	
+	// http://en.wikipedia.org/wiki/Low-pass_filter
+		// http://www.raweng.com/blog/2013/05/28/applying-low-pass-filter-to-android-sensors-readings/
+		
+		protected float[] lowPassFilter( float[] input, float[] output ) {
+		    if ( output == null ) return input;     
+		    for ( int i=0; i<input.length; i++ ) {
+		        output[i] = output[i] + ALPHA * (input[i] - output[i]);
+		    }
+		    return output;
+		}
+	
+	
+	
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 
-		if (event.sensor == mAccelerometer) {
+		/*if (event.sensor == mAccelerometer) {
 			System.arraycopy(event.values, 0, mLastAccelerometer, 0,
 					event.values.length);
 			mLastAccelerometerSet = true;
@@ -438,8 +458,35 @@ public class Map extends Base_Activity implements SensorEventListener {
 			float azimuthInRadians = mOrientation[0];
 			float azimuthInDegress = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
 			m_mapView.setMapOrientation(-azimuthInDegress);
-		}
+		}*/
 
+		
+		if (event.sensor == mAccelerometer) {
+			
+			mLastAccelerometer = lowPassFilter(event.values.clone(), mLastAccelerometer);
+			mLastAccelerometerSet = true;
+		} else if (event.sensor == mMagnetometer) {
+			
+			mLastMagnetometer = lowPassFilter(event.values.clone(), mLastMagnetometer);
+			mLastMagnetometerSet = true;
+		}
+		if (mLastAccelerometerSet && mLastMagnetometerSet) {
+			float R[] = new float[9];
+	        float I[] = new float[9];
+
+	        boolean success = SensorManager.getRotationMatrix(mR, I, mLastAccelerometer, mLastMagnetometer);
+	        if (success) {
+	        	SensorManager.getOrientation(mR, mOrientation);
+				float azimuthInRadians = mOrientation[0];
+				float azimuthInDegress = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
+				m_mapView.setMapOrientation(-azimuthInDegress);
+	        }
+			
+		
+		}
+		
+	  
+		
 	}
 
 	private String convertNumbersToPois(String numbers) {
