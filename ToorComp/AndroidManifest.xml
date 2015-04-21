@@ -25,6 +25,15 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        <receiver android:name="net.viralpatel.network.NetworkChangeReceiver" android:label="NetworkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE">
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED">
+            </action></action></intent-filter>
+        </receiver>
+        
+        
         <activity
             android:name="com.android.toorcomp.MainActivity"
             android:label="@string/app_name"
@@ -42,7 +51,8 @@
         <activity
             android:name="com.android.toorcomp.Map"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"  >
         </activity>
         <activity
             android:name="com.android.toorcomp.MainScreen"

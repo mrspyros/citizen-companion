@@ -70,9 +70,9 @@
         <TextView
             android:id="@+id/opt_text_2"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/opt_offlinemap"
-            android:textColor="@color/white"
-            android:layout_height="30dp" />
+            android:textColor="@color/white" />
 
         <CheckBox
             android:id="@+id/offlinemap"
@@ -80,6 +80,29 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="@string/opt_offlinemap"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/opt_data_tv"
+            android:layout_width="208dp"
+            android:layout_height="wrap_content"
+            android:text="@string/opt_data_tv"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/opt_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/opt_Wifi"
+            android:textColor="@color/white" />
+
+        <CheckBox
+            android:id="@+id/opt_roaming"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/opt_roaming"
             android:textColor="@color/white" />
 
         <EditText

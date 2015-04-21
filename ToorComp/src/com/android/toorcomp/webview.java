@@ -12,7 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 
-class webview extends Base_Activity {
+public class webview extends Base_Activity {
 
 	// ----- Simple as it gets
 	// ----- We get a link from globals

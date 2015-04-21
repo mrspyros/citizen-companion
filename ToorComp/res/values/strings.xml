@@ -43,5 +43,8 @@
         <string name="poi5_en">Useful</string>
         <string name="poi6_en">Places</string>
         <string name="poi6">Μέρη</string>
+        <string name="opt_data_tv">Επιλογή σύδεσης δεδομένων</string>
+        <string name="opt_Wifi">Wifi</string>
+        <string name="opt_roaming">GPRS/3G/4G</string>
     
 </resources>

@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -37,8 +40,11 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -116,12 +122,17 @@ public class Map extends Base_Activity implements SensorEventListener {
 		m_mapView.setBuiltInZoomControls(true);
 		m_mapView.setMultiTouchControls(true);
 		m_mapView.setClickable(false);
-		m_mapView.setUseDataConnection(true);
+		
+		
+		
+		if (useOfflineMap())
+		{
+	    	m_mapView.setUseDataConnection(false);
+		} else m_mapView.setUseDataConnection(true);
+		
+		
 		m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
-
-		// https://github.com/johnjohndoe/OSMDroidOfflineDemo/blob/master/app/src/main/java/com/example/android/osmdroidofflinedemo/MainActivity.java
-
-		m_mapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
+			// https://github.com/johnjohndoe/OSMDroidOfflineDemo/blob/master/app/src/main/java/com/example/android/osmdroidofflinedemo/MainActivity.java
 		m_mapView.getController().setZoom(MAP_DEFAULT_ZOOM);
 
 		// -------------------------
@@ -391,9 +402,9 @@ public class Map extends Base_Activity implements SensorEventListener {
 		myPositionOverlay.enableMyLocation();
 		myPositionOverlay.enableFollowLocation();
 		mSensorManager.registerListener(this, mAccelerometer,
-				SensorManager.SENSOR_DELAY_NORMAL);
+				SensorManager.SENSOR_DELAY_FASTEST);
 		mSensorManager.registerListener(this, mMagnetometer,
-				SensorManager.SENSOR_DELAY_NORMAL);
+				SensorManager.SENSOR_DELAY_FASTEST);
 
 		Globals g = Globals.getInstance();
 		if (g.isOptions_Changed()) {
@@ -409,6 +420,10 @@ public class Map extends Base_Activity implements SensorEventListener {
 			startActivity(intent);
 		}
 
+		
+		
+		
+		
 	}
 
 	/** disable compass and location updates */
@@ -426,9 +441,10 @@ public class Map extends Base_Activity implements SensorEventListener {
 	}
 
 	
-	// http://en.wikipedia.org/wiki/Low-pass_filter
+	    // http://en.wikipedia.org/wiki/Low-pass_filter
 		// http://www.raweng.com/blog/2013/05/28/applying-low-pass-filter-to-android-sensors-readings/
-		
+		//---- We use lowpass filter to stabilize map
+	
 		protected float[] lowPassFilter( float[] input, float[] output ) {
 		    if ( output == null ) return input;     
 		    for ( int i=0; i<input.length; i++ ) {
@@ -442,25 +458,7 @@ public class Map extends Base_Activity implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 
-		/*if (event.sensor == mAccelerometer) {
-			System.arraycopy(event.values, 0, mLastAccelerometer, 0,
-					event.values.length);
-			mLastAccelerometerSet = true;
-		} else if (event.sensor == mMagnetometer) {
-			System.arraycopy(event.values, 0, mLastMagnetometer, 0,
-					event.values.length);
-			mLastMagnetometerSet = true;
-		}
-		if (mLastAccelerometerSet && mLastMagnetometerSet) {
-			SensorManager.getRotationMatrix(mR, null, mLastAccelerometer,
-					mLastMagnetometer);
-			SensorManager.getOrientation(mR, mOrientation);
-			float azimuthInRadians = mOrientation[0];
-			float azimuthInDegress = (float) (Math.toDegrees(azimuthInRadians) + 360) % 360;
-			m_mapView.setMapOrientation(-azimuthInDegress);
-		}*/
-
-		
+				
 		if (event.sensor == mAccelerometer) {
 			
 			mLastAccelerometer = lowPassFilter(event.values.clone(), mLastAccelerometer);
@@ -527,6 +525,54 @@ public class Map extends Base_Activity implements SensorEventListener {
 		return pois;
 	}
 
+	private boolean useOfflineMap() {
+		
+		if (Globals.getInstance().isOfflineMap()) return true;
+				
+		if (! Globals.getInstance().isOfflineMap()){
+			if (!isNetworkAvailable()){
+				
+		            	
+		            		/*Intent intent = new Intent(Intent.ACTION_MAIN);
+		     				intent.setClassName("com.android.phone", "com.android.phone.NetworkSetting");
+		     				startActivity(intent);*/
+				Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+				startActivity(intent);
+			
+		    }
+		}
+		
+		return false;
+	}
 	
-
+	private boolean isNetworkAvailable() {
+	    ConnectivityManager connectivityManager 
+	          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
+	
+	public class NetworkChangeReceiver extends BroadcastReceiver {
+		 
+	    @Override
+	    public void onReceive(final Context context, final Intent intent) {
+	    	new Runnable() {
+	            @Override
+	            public void run() {
+	            	 try {
+	                     HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
+	                     urlc.setRequestProperty("User-Agent", "Test");
+	                     urlc.setRequestProperty("Connection", "close");
+	                     urlc.setConnectTimeout(1500); 
+	                     urlc.connect();
+	                 } catch (IOException e) {
+	                	 Toast.makeText(context, "Δέν υπάρχει σύνδεση στο διαδίκτυο", Toast.LENGTH_LONG).show();
+	                 }
+	            }
+	        };
+	    	
+	    }
+	}
+	
+	
 } // end class YourMap

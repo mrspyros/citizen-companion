@@ -15,7 +15,9 @@ public class Options extends Activity {
 	private static final String MY_PREFS_NAME = "CitizenCompanion";
 	private String Pois_To_Display;
 	private boolean offlinemap;
-
+    private boolean wifi;
+    private boolean roaming;
+    
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.options);
@@ -132,6 +134,35 @@ public class Options extends Activity {
 		});
 		;
 		
+		final CheckBox opt_wifi = (CheckBox) findViewById(R.id.opt_wifi);
+		if (g.isOptions_Wifi()) {
+			opt_wifi.setChecked(true);
+		} else
+			opt_wifi.setChecked(false);
+		opt_wifi.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton v, boolean isChecked) {
+				onCheckboxClicked(v);
+
+			}
+		});
+		;
+		
+		final CheckBox opt_roaming = (CheckBox) findViewById(R.id.opt_roaming);
+		if (g.isOptions_Roaming()) {
+			opt_roaming.setChecked(true);
+		} else
+			opt_roaming.setChecked(false);
+		opt_roaming.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton v, boolean isChecked) {
+				onCheckboxClicked(v);
+
+			}
+		});
+		;
 		
 		
 		Button btn1 = (Button) findViewById(R.id.btn1);
@@ -168,8 +199,12 @@ public class Options extends Activity {
 		if (poi6.isChecked()) Pois_To_Display=Pois_To_Display.concat("6"); else Pois_To_Display=Pois_To_Display.concat("0");
 		
 		final CheckBox _offlinemap = (CheckBox) findViewById(R.id.offlinemap);
+		final CheckBox _wifi = (CheckBox) findViewById(R.id.opt_wifi);
+		final CheckBox _roaming = (CheckBox) findViewById(R.id.opt_roaming);
 		
 		if (_offlinemap.isChecked()) offlinemap = true; else offlinemap = false;
+		if (_wifi.isChecked()) wifi = true; else wifi = false;
+		if (_roaming.isChecked()) roaming = true; else roaming = false;
 		
 		set_prefs();
 	}
@@ -181,6 +216,8 @@ public class Options extends Activity {
 		SharedPreferences.Editor editor = sharedPref.edit();
 		editor.putString("Pois_To_Display", Pois_To_Display);
 		editor.putBoolean("Offline_Map", offlinemap);
+		editor.putBoolean("Wifi", wifi);
+		editor.putBoolean("Roaming", roaming);
 		editor.commit();
 
 		// Now set new prefs on Globals
@@ -188,6 +225,8 @@ public class Options extends Activity {
 		Globals g = Globals.getInstance();
 		g.setOfflineMap(offlinemap);
 		g.setPois_To_Display(Pois_To_Display);
+		g.setOptions_Wifi(wifi);
+		g.setOptions_Roaming(roaming);
 		g.setOptions_Changed(true);
 		
 

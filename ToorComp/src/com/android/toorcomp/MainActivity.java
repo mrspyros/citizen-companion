@@ -79,6 +79,8 @@ public class MainActivity extends Base_Activity {
 		Globals g = Globals.getInstance();
 		g.setOfflineMap(prefs.getBoolean("Offline_Map", false));
 		g.setPois_To_Display(prefs.getString("Pois_To_Display", "123456"));
+		g.setOptions_Wifi(prefs.getBoolean("Wifi", false));
+		g.setOptions_Roaming(prefs.getBoolean("Offline_Map", false));
 
 		// pref.getBoolean("key_name1", null); // getting boolean
 		// pref.getInt("key_name2", null); // getting Integer
@@ -91,8 +93,10 @@ public class MainActivity extends Base_Activity {
 
 	private boolean init_prefs() {
 		Globals g = Globals.getInstance();
-		g.setOfflineMap(false);
+		g.setOfflineMap(true);
 		g.setPois_To_Display("123456");
+		g.setOptions_Wifi(true);
+		g.setOptions_Roaming(true);
 
 		return true;
 	}

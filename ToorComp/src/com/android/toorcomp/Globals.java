@@ -19,7 +19,9 @@ public class Globals {
     private boolean Enable_Pois;
     private String Pois_To_Display;  // 12345 for all zeroes if not
     private boolean Options_Changed;
-	
+	private boolean Options_Wifi;
+	private boolean Options_Roaming;
+    
 	public IGeoPoint getSelected() {
 		return Selected;
 	}
@@ -125,5 +127,21 @@ public class Globals {
 
 	public void setOptions_Changed(boolean options_Changed) {
 		Options_Changed = options_Changed;
+	}
+
+	public boolean isOptions_Wifi() {
+		return Options_Wifi;
+	}
+
+	public void setOptions_Wifi(boolean options_Wifi) {
+		Options_Wifi = options_Wifi;
+	}
+
+	public boolean isOptions_Roaming() {
+		return Options_Roaming;
+	}
+
+	public void setOptions_Roaming(boolean options_roaming) {
+		Options_Roaming = options_roaming;
 	}
 }
