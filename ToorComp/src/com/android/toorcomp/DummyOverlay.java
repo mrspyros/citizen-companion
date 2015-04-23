@@ -9,7 +9,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.widget.Toast;
-
+ 
 public class DummyOverlay extends org.osmdroid.views.overlay.Overlay {
 
 	private IGeoPoint Geo=null; 

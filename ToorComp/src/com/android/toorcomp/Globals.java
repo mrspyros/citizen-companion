@@ -1,7 +1,7 @@
 package com.android.toorcomp;
 
 import org.osmdroid.api.IGeoPoint;
-
+ 
 // --------------------------------------------   Singleton class
 
 public class Globals {

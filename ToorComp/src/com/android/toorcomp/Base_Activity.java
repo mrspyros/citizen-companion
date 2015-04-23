@@ -13,7 +13,7 @@ import android.view.Window;
 
 public class Base_Activity extends Activity {
 
-	
+	 
 	private static final String TAG = "Base_Activity";
 
 	@Override

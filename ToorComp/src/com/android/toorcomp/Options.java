@@ -11,7 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class Options extends Activity {
-
+ 
 	private static final String MY_PREFS_NAME = "CitizenCompanion";
 	private String Pois_To_Display;
 	private boolean offlinemap;

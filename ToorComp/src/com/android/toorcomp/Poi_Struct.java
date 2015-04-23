@@ -1,7 +1,7 @@
 package com.android.toorcomp;
 
 public class Poi_Struct {
-
+ 
 	 private String type;
 	 private Double lon=0.0;
 	 private Double lat=0.0;
