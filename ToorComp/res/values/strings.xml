@@ -46,5 +46,12 @@
         <string name="opt_data_tv">Επιλογή σύδεσης δεδομένων</string>
         <string name="opt_Wifi">Wifi</string>
         <string name="opt_roaming">GPRS/3G/4G</string>
+        <string name="opt_map_tab">Επιλογές Χάρτη</string>
+        <string name="opt_rotating">Περιστροφή Χάρτη</string>
+        <string name="kml_main_name">Ονομα</string>
+        <string name="kml_main_description">Περιγραφή</string>
+        <string name="kml_main_visible">Ορατό</string>
+        <string name="kml_main_style_prompt">kml Στύλ</string>
+        <string name="menu_opt_search">Εισαγωγή KML</string>
     
 </resources>

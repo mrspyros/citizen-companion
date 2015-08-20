@@ -56,8 +56,7 @@ public class Base_Activity extends Activity {
         switch (item.getItemId()) 
         {
         	case R.id.opt:
-        		
-        		
+   
         		startActivity(new Intent(getApplicationContext(), Options.class));
 		
         		return true;

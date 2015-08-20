@@ -4,119 +4,188 @@
     android:layout_height="wrap_content" >
 
     <LinearLayout
+        android:id="@+id/Lin_main"
         android:layout_width="fill_parent"
         android:layout_height="484dp"
         android:background="@color/black"
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/opt_text_1"
-            android:layout_width="wrap_content"
+            android:id="@+id/Opt_poi"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:background="@color/light_grey"
+            android:gravity="center"
             android:text="@string/pois_intro"
-            android:textColor="@color/white" 
-            android:layout_height="30dp"/>
-
-        
-        <CheckBox
-            android:id="@+id/poi1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="@string/poi1"
-            android:textColor="@color/white" />
-        
-        
-        <CheckBox
-            android:id="@+id/poi2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="@string/poi2"
             android:textColor="@color/white" />
 
-        <CheckBox
-            android:id="@+id/poi3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="@string/poi3"
-            android:textColor="@color/white" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/black" />
 
-        <CheckBox
-            android:id="@+id/poi4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="@string/poi4"
-            android:textColor="@color/white" />
+        <LinearLayout
+            android:id="@+id/Lin_poi"
+            android:layout_width="fill_parent"
+            android:layout_height="329dp"
+            android:background="@color/black"
+            android:clickable="true"
+            android:orientation="vertical" >
 
+            <CheckBox
+                android:id="@+id/poi1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/poi1"
+                android:textColor="@color/white" />
 
-        <CheckBox
-            android:id="@+id/poi5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="@string/poi5"
-            android:textColor="@color/white" />
+            <CheckBox
+                android:id="@+id/poi2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/poi2"
+                android:textColor="@color/white" />
 
-        <CheckBox
-            android:id="@+id/poi6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/poi6"
-            android:layout_marginLeft="20dp"
-            android:textColor="@color/white" />
+            <CheckBox
+                android:id="@+id/poi3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/poi3"
+                android:textColor="@color/white" />
+
+            <CheckBox
+                android:id="@+id/poi4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/poi4"
+                android:textColor="@color/white" />
+
+            <CheckBox
+                android:id="@+id/poi5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/poi5"
+                android:textColor="@color/white" />
+
+            <CheckBox
+                android:id="@+id/poi6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/poi6"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/black" />
 
         <TextView
-            android:id="@+id/opt_text_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/opt_offlinemap"
+            android:id="@+id/Opt_map"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:background="@color/light_grey"
+            android:gravity="center"
+            android:text="@string/opt_map_tab"
             android:textColor="@color/white" />
 
-        <CheckBox
-            android:id="@+id/offlinemap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="@string/opt_offlinemap"
-            android:textColor="@color/white" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/black" />
+
+        <LinearLayout
+            android:id="@+id/Lin_map"
+            android:layout_width="fill_parent"
+            android:layout_height="118dp"
+            android:background="@color/black"
+            android:clickable="true"
+            android:orientation="vertical" >
+
+            <CheckBox
+                android:id="@+id/offlinemap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/opt_offlinemap"
+                android:textColor="@color/white" />
+      
+              <CheckBox
+                android:id="@+id/rotatingmap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/opt_rotating"
+                android:textColor="@color/white" />
+            
+            
+            </LinearLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/black" />
 
         <TextView
-            android:id="@+id/opt_data_tv"
-            android:layout_width="208dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/Opt_conn"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:background="@color/light_grey"
+            android:gravity="center"
             android:text="@string/opt_data_tv"
             android:textColor="@color/white" />
 
-        <CheckBox
-            android:id="@+id/opt_wifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="@string/opt_Wifi"
-            android:textColor="@color/white" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/black" />
 
-        <CheckBox
-            android:id="@+id/opt_roaming"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="@string/opt_roaming"
-            android:textColor="@color/white" />
+        <LinearLayout
+            android:id="@+id/Lin_conn"
+            android:layout_width="fill_parent"
+            android:layout_height="138dp"
+            android:background="@color/black"
+            android:clickable="true"
+            android:orientation="vertical" >
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
+
+            <CheckBox
+                android:id="@+id/opt_wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/opt_Wifi"
+                android:textColor="@color/white" />
+
+            <CheckBox
+                android:id="@+id/opt_roaming"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="@string/opt_roaming"
+                android:textColor="@color/white" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/opt_text_3"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="@color/black"
-            android:enabled="false"
             android:editable="false"
-            android:focusable="false"
             android:ems="10"
+            android:enabled="false"
+            android:focusable="false"
             android:inputType="textMultiLine" >
-
-           
         </EditText>
 
         <Button
@@ -130,4 +199,3 @@
     </LinearLayout>
 
 </ScrollView>
-

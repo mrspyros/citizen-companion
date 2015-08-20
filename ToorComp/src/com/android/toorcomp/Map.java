@@ -14,11 +14,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.osmdroid.bonuspack.overlays.ExtendedOverlayItem;
-import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
+//import org.osmdroid.bonuspack.overlays.ExtendedOverlayItem;
+//import org.osmdroid.bonuspack.overlays.ItemizedOverlayWithBubble;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
@@ -69,7 +70,12 @@ public class Map extends Base_Activity implements SensorEventListener {
 	// Default map Longitude:
 	private double MAP_DEFAULT_LONGITUDE = 20.881799;
 
-	protected ItemizedOverlayWithBubble<ExtendedOverlayItem> markerOverlays;
+	@SuppressWarnings("deprecation")
+	//protected ItemizedOverlayWithBubble<ExtendedOverlayItem> markerOverlays;
+	protected ItemizedOverlayWithFocus markerOverlays;
+	
+	
+	
 	protected GeoPoint startPoint, destinationPoint;
 
 	private LocationManager InnerLocationManager;
@@ -128,6 +134,7 @@ public class Map extends Base_Activity implements SensorEventListener {
 		if (useOfflineMap())
 		{
 	    	m_mapView.setUseDataConnection(false);
+	    	
 		} else m_mapView.setUseDataConnection(true);
 		
 		

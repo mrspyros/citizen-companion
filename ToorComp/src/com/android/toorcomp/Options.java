@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class Options extends Activity {
  
@@ -17,6 +19,7 @@ public class Options extends Activity {
 	private boolean offlinemap;
     private boolean wifi;
     private boolean roaming;
+    private boolean rotating;
     
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,7 +28,46 @@ public class Options extends Activity {
 		
 		
 		Globals g = Globals.getInstance();
-
+		
+		
+		final LinearLayout Lin_Poi = (LinearLayout) this.findViewById(R.id.Lin_poi);
+		final TextView Opt_Poi = (TextView) this.findViewById(R.id.Opt_poi);
+		Opt_Poi.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+		
+			    if (Lin_Poi.isShown()) {
+			    	Lin_Poi.setVisibility(View.GONE);
+			    } else {
+			    	Lin_Poi.setVisibility(View.VISIBLE);
+			    }
+			  }
+		});
+		
+		final LinearLayout Lin_Map = (LinearLayout) this.findViewById(R.id.Lin_map);
+		final TextView Opt_Map = (TextView) this.findViewById(R.id.Opt_map);
+		Opt_Map.setOnClickListener(new View.OnClickListener() {
+			  public void onClick(View v) {
+			    if (Lin_Map.isShown()) {
+			    	Lin_Map.setVisibility(View.GONE);
+			    } else {
+			    	Lin_Map.setVisibility(View.VISIBLE);
+			    }
+			  }
+		});
+		
+		final LinearLayout Lin_Conn = (LinearLayout) this.findViewById(R.id.Lin_conn);
+		final TextView Opt_Conn= (TextView) this.findViewById(R.id.Opt_conn);
+		Opt_Conn.setOnClickListener(new View.OnClickListener() {
+			  public void onClick(View v) {
+			    if (Lin_Conn.isShown()){
+			    	Lin_Conn.setVisibility(View.GONE);
+			    } else {
+				  Lin_Conn.setVisibility(View.VISIBLE);
+			  }
+			  }
+		});
+		
+		
 		final CheckBox poi1 = (CheckBox) findViewById(R.id.poi1);
 		if (g.getPois_To_Display().contains("1")) {
 			poi1.setChecked(true);
@@ -134,6 +176,19 @@ public class Options extends Activity {
 		});
 		;
 		
+		final CheckBox _rotatingmap = (CheckBox) findViewById(R.id.rotatingmap);
+		_rotatingmap.setChecked(g.isOptions_Rotating());
+		_rotatingmap.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton v, boolean isChecked) {
+				onCheckboxClicked(v);
+
+			}
+		});
+		
+		
+		
 		final CheckBox opt_wifi = (CheckBox) findViewById(R.id.opt_wifi);
 		if (g.isOptions_Wifi()) {
 			opt_wifi.setChecked(true);
@@ -198,13 +253,17 @@ public class Options extends Activity {
 		if (poi5.isChecked()) Pois_To_Display=Pois_To_Display.concat("5"); else Pois_To_Display=Pois_To_Display.concat("0");
 		if (poi6.isChecked()) Pois_To_Display=Pois_To_Display.concat("6"); else Pois_To_Display=Pois_To_Display.concat("0");
 		
+		
 		final CheckBox _offlinemap = (CheckBox) findViewById(R.id.offlinemap);
 		final CheckBox _wifi = (CheckBox) findViewById(R.id.opt_wifi);
 		final CheckBox _roaming = (CheckBox) findViewById(R.id.opt_roaming);
+		final CheckBox _rotatingmap = (CheckBox) findViewById (R.id.rotatingmap);
+		
 		
 		if (_offlinemap.isChecked()) offlinemap = true; else offlinemap = false;
 		if (_wifi.isChecked()) wifi = true; else wifi = false;
 		if (_roaming.isChecked()) roaming = true; else roaming = false;
+		if (_rotatingmap.isChecked())rotating = true; else rotating = false;
 		
 		set_prefs();
 	}
@@ -218,6 +277,7 @@ public class Options extends Activity {
 		editor.putBoolean("Offline_Map", offlinemap);
 		editor.putBoolean("Wifi", wifi);
 		editor.putBoolean("Roaming", roaming);
+		editor.putBoolean("Rotating", rotating);
 		editor.commit();
 
 		// Now set new prefs on Globals
@@ -227,6 +287,7 @@ public class Options extends Activity {
 		g.setPois_To_Display(Pois_To_Display);
 		g.setOptions_Wifi(wifi);
 		g.setOptions_Roaming(roaming);
+		g.setOptions_Rotating(rotating);
 		g.setOptions_Changed(true);
 		
 

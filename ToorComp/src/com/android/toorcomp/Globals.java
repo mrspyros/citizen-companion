@@ -21,7 +21,11 @@ public class Globals {
     private boolean Options_Changed;
 	private boolean Options_Wifi;
 	private boolean Options_Roaming;
+	private boolean Options_Rotating;
+  
+	private String Kml_File;
     
+	
 	public IGeoPoint getSelected() {
 		return Selected;
 	}
@@ -143,5 +147,21 @@ public class Globals {
 
 	public void setOptions_Roaming(boolean options_roaming) {
 		Options_Roaming = options_roaming;
+	}
+
+	public boolean isOptions_Rotating() {
+		return Options_Rotating;
+	}
+
+	public void setOptions_Rotating(boolean options_Rotating) {
+		Options_Rotating = options_Rotating;
+	}
+
+	public String getKml_File() {
+		return Kml_File;
+	}
+
+	public void setKml_File(String kml_File) {
+		Kml_File = kml_File;
 	}
 }

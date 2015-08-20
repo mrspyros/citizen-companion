@@ -64,7 +64,7 @@ public class MainScreen extends Base_Activity {
                         public void onClick(View v) {
                                 Globals.getInstance().setFirstTimeOnMapActivity(true);
                                 Globals.getInstance().setMapZoomLevel(16);
-                                Intent intent = new Intent(getApplicationContext(), Map.class);
+                                Intent intent = new Intent(getApplicationContext(), KMLMap.class);
                                 startActivity(intent);
                         }
                 });
@@ -81,8 +81,8 @@ public class MainScreen extends Base_Activity {
                 Button stream = (Button) findViewById(R.id.stream_btn);
                 stream.setOnClickListener(new android.view.View.OnClickListener() {
                         public void onClick(View v) {
-                                Intent intent = new Intent(getApplicationContext(), StreamPlayer.class);
-                                
+                             //   Intent intent = new Intent(getApplicationContext(), StreamPlayer.class);
+                        	Intent intent = new Intent(getApplicationContext(), Map.class);
                                 startActivity(intent);
                         }
                 });

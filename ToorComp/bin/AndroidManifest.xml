@@ -89,6 +89,23 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>
+       
+        <activity
+            android:name="com.android.toorcomp.KMLMap"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false">
+        </activity>
+        
+           <activity
+            android:name="com.android.toorcomp.File_picker_activity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false">
+        </activity>
+        
+        
+        
     </application>
 
     <supports-screens

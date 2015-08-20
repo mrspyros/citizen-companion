@@ -44,6 +44,8 @@ public class MainActivity extends Base_Activity {
 
 		setContentView(R.layout.main);
 
+		Globals.getInstance().setKml_File("");
+		
 		boolean prefs;
 		File f = new File(
 				"/data/data/com.android.toorcomp/shared_prefs/CitizenCompanion.xml");
@@ -81,6 +83,7 @@ public class MainActivity extends Base_Activity {
 		g.setPois_To_Display(prefs.getString("Pois_To_Display", "123456"));
 		g.setOptions_Wifi(prefs.getBoolean("Wifi", false));
 		g.setOptions_Roaming(prefs.getBoolean("Offline_Map", false));
+		g.setOptions_Rotating(prefs.getBoolean("Rotating", true));
 
 		// pref.getBoolean("key_name1", null); // getting boolean
 		// pref.getInt("key_name2", null); // getting Integer
@@ -97,6 +100,7 @@ public class MainActivity extends Base_Activity {
 		g.setPois_To_Display("123456");
 		g.setOptions_Wifi(true);
 		g.setOptions_Roaming(true);
+		g.setOptions_Rotating(true);
 
 		return true;
 	}

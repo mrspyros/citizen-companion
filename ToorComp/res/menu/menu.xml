@@ -20,5 +20,14 @@
         
     </item>
     
+     <item android:id="@+id/kml_search" 
+        android:icon="@drawable/ic_action_search"
+        android:title="@string/menu_opt_search"
+        android:visible="false" 
+        android:enabled="true"
+        android:orderInCategory="3"
+        android:showAsAction="never">
+        
+    </item>
 
 </menu>

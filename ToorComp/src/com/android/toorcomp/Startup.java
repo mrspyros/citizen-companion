@@ -33,7 +33,7 @@ public class Startup {
 
 			URL url = new URL(
 					"https://drive.google.com/uc?export=download&id=0B2s4PStL3vizdEtGcjNDMUFqUEU");
-
+//                     "http://dodoni.gr/component/k2/item/download/536_785c33839a385b7583ea5023b705d50c");
 			// create the new connection
 			HttpURLConnection urlConnection = (HttpURLConnection) url
 					.openConnection();
