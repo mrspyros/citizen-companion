@@ -22,7 +22,9 @@ public class Globals {
 	private boolean Options_Wifi;
 	private boolean Options_Roaming;
 	private boolean Options_Rotating;
-  
+    private boolean KMLonMap;
+	
+	
 	private String Kml_File;
     
 	
@@ -163,5 +165,13 @@ public class Globals {
 
 	public void setKml_File(String kml_File) {
 		Kml_File = kml_File;
+	}
+
+	public boolean isKMLonMap() {
+		return KMLonMap;
+	}
+
+	public void setKMLonMap(boolean kMLonMap) {
+		KMLonMap = kMLonMap;
 	}
 }

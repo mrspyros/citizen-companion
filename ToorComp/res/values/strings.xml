@@ -53,5 +53,8 @@
         <string name="kml_main_visible">Ορατό</string>
         <string name="kml_main_style_prompt">kml Στύλ</string>
         <string name="menu_opt_search">Εισαγωγή KML</string>
+        <string name="wait">Παρακαλώ περιμένετε</string>
+        <string name="loading">Λήψη αρχείου</string>
+        <string name="delete_kml">Αφαίρεση KML</string>
     
 </resources>

@@ -45,6 +45,7 @@ public class MainActivity extends Base_Activity {
 		setContentView(R.layout.main);
 
 		Globals.getInstance().setKml_File("");
+		Globals.getInstance().setKMLonMap(false);
 		
 		boolean prefs;
 		File f = new File(

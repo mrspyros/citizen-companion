@@ -60,16 +60,24 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-//import com.osmnavigator.R;
+
+
+
+
+
 
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -80,6 +88,7 @@ import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -100,6 +109,12 @@ public class KMLMap extends Base_Activity implements MapEventsReceiver,
 	float mAzimuthAngleSpeed = 0.0f;
 	protected boolean mTrackingMode = true; // FolowLocation
 	protected boolean mGps = false;
+	protected FolderOverlay mKmlOverlay;
+	protected FolderOverlay roadMarkers;
+	protected Polyline mRoadOverlay;
+	protected Polyline roadOverlay ;
+	protected FolderOverlay kmlOverlay; 
+	
 
 	public static KmlDocument mKmlDocument; // made static to pass between
 											// activities
@@ -176,7 +191,7 @@ public class KMLMap extends Base_Activity implements MapEventsReceiver,
 		FolderOverlay roadMarkers = new FolderOverlay(this);
 		map.getOverlays().add(roadMarkers);
 
-		// ----------------------------------------------------------------
+		/*// ----------------------------------------------------------------
 		if (Globals.getInstance().getKml_File() != "") {
 
 			// 12. Loading KML content
@@ -195,7 +210,7 @@ public class KMLMap extends Base_Activity implements MapEventsReceiver,
 			boolean ok = mKmlDocument.parseKMLFile(mFile);
 
 			// Get OpenStreetMap content as KML with Overpass API:
-			/*
+			
 			 * OverpassAPIProvider overpassProvider = new OverpassAPIProvider();
 			 * BoundingBoxE6 oBB = new
 			 * BoundingBoxE6(startPoint.getLatitude()+0.25,
@@ -204,7 +219,7 @@ public class KMLMap extends Base_Activity implements MapEventsReceiver,
 			 * overpassProvider.urlForTagSearchKml("highway=speed_camera", oBB,
 			 * 500, 30); boolean ok =
 			 * overpassProvider.addInKmlFolder(mKmlDocument.mKmlRoot, oUrl);
-			 */
+			 
 
 			if (ok) {
 				// 13.1 Simple styling
@@ -249,7 +264,7 @@ public class KMLMap extends Base_Activity implements MapEventsReceiver,
 						.getDefaultPathForAndroid("my_route.json"));
 			}
 
-		}
+		}*/
 		// ------------------------------------------------------------------------
 		// My Location Overlay
 		// ------------------------------------------------------------------------
@@ -379,7 +394,36 @@ public class KMLMap extends Base_Activity implements MapEventsReceiver,
 		boolean isOneProviderEnabled = startLocationUpdates();
 		myLocationOverlay.setEnabled(isOneProviderEnabled);
 		mTrackingMode = Globals.getInstance().isOptions_Rotating();
-        map.invalidate();
+
+	
+		
+		if (Globals.getInstance().getKml_File() != "") {
+			new KmlLoadingTask(getString(R.string.loading) + " "
+					+ Globals.getInstance().getKml_File()).execute(Globals
+					.getInstance().getKml_File(), true);
+
+			if (kmlOverlay != null) {
+				kmlOverlay.closeAllInfoWindows();
+				map.getOverlays().remove(kmlOverlay);
+			}
+			//mKmlOverlay = (FolderOverlay) mKmlDocument.mKmlRoot.buildOverlay(
+				//	map, buildDefaultStyle(), null, mKmlDocument);
+			//map.getOverlays().add(mKmlOverlay);
+			// map.invalidate();
+		} else{
+			if (kmlOverlay != null) {
+				try {
+					
+					kmlOverlay.closeAllInfoWindows();
+					map.getOverlays().remove(kmlOverlay);
+				} catch (Exception e) {
+					Log.d("kmlOverlay Error", e.toString());
+				}
+			}
+		}
+			
+
+		map.invalidate();
 		// TODO: not used currently
 		// mSensorManager.registerListener(this, mOrientation,
 		// SensorManager.SENSOR_DELAY_NORMAL);
@@ -774,10 +818,126 @@ public class KMLMap extends Base_Activity implements MapEventsReceiver,
 		}
 	}
 
+	// ------------------- KML --------------------------------------------
+	
+	ProgressDialog createSpinningDialog(String title){
+		ProgressDialog pd = new ProgressDialog(map.getContext());
+		pd.setTitle(title);
+		pd.setMessage(getString(R.string.wait));
+		pd.setCancelable(false);
+		pd.setIndeterminate(true);
+		return pd;
+	}
+	
+	Style buildDefaultStyle(){
+		Drawable defaultKmlMarker = getResources().getDrawable(R.drawable.marker_kml_point);
+		Bitmap bitmap = ((BitmapDrawable)defaultKmlMarker).getBitmap();
+		Style defaultStyle = new Style(bitmap, 0x901010AA, 3.0f, 0x20AA1010);
+		return defaultStyle;
+	}
+
+	class KmlLoadingTask extends AsyncTask<Object, Void, Boolean>{
+		String mUri;
+		boolean mOnCreate;
+		ProgressDialog mPD;
+		String mMessage;
+		KmlLoadingTask(String message){
+			super();
+			mMessage = message;
+		}
+		@Override protected void onPreExecute() {
+			mPD = createSpinningDialog(mMessage);
+			mPD.show();
+		}
+		@Override protected Boolean doInBackground(Object... params) {
+			mUri = (String)params[0];
+			mOnCreate = (Boolean)params[1];
+			mKmlDocument = new KmlDocument();
+			
+			File mFile = new File(Environment.getExternalStorageDirectory()
+					+ "/osmdroid/kml/" + Globals.getInstance().getKml_File());
+			boolean ok = mKmlDocument.parseKMLFile(mFile);
+			
+			return ok;
+		}
+		@Override protected void onPostExecute(Boolean ok) {
+			if (mPD != null)
+				mPD.dismiss();
+
+			if (ok) {
+				Globals.getInstance().setKMLonMap(true);
+				// 13.1 Simple styling
+				Drawable defaultMarker = getResources().getDrawable(
+						R.drawable.marker_kml_point);
+				Bitmap defaultBitmap = ((BitmapDrawable) defaultMarker)
+						.getBitmap();
+				Style defaultStyle = new Style(defaultBitmap, 0x901010AA, 3.0f,
+						0x20AA1010);
+				// 13.2 Advanced styling with Styler
+				KmlFeature.Styler styler = new MyKmlStyler(defaultStyle);
+
+			    kmlOverlay = (FolderOverlay) mKmlDocument.mKmlRoot
+						.buildOverlay(map, defaultStyle, styler, mKmlDocument);
+				map.getOverlays().add(kmlOverlay);
+				
+				BoundingBoxE6 bb = mKmlDocument.mKmlRoot.getBoundingBox();
+				if (bb != null) {
+					// map.zoomToBoundingBox(bb); => not working in onCreate -
+					// this
+					// is a well-known osmdroid bug.
+					// Workaround:
+					map.getController().setCenter(
+							new GeoPoint(bb.getLatSouthE6()
+									+ bb.getLatitudeSpanE6() / 2, bb
+									.getLonWestE6()
+									+ bb.getLongitudeSpanE6()
+									/ 2));
+				}
+			} else
+				Toast.makeText(getApplicationContext(), "Error when loading KML",
+						Toast.LENGTH_SHORT).show();
+
+			// 14. Grab overlays in KML structure, save KML document locally
+			if (mKmlDocument.mKmlRoot != null) {
+				KmlFolder root = (KmlFolder) mKmlDocument.mKmlRoot;
+				root.addOverlay(roadOverlay, mKmlDocument);
+				root.addOverlay(roadMarkers, mKmlDocument);
+				mKmlDocument.saveAsKML(mKmlDocument
+						.getDefaultPathForAndroid("my_route.kml"));
+				// 15. Loading and saving of GeoJSON content
+				mKmlDocument.saveAsGeoJSON(mKmlDocument
+						.getDefaultPathForAndroid("my_route.json"));
+			}
+			
+			
+			
+			
+		}
+	}
+	
+	
+	
+	// --------------------------------------------------------------------
+	
+	
+	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		MenuItem register = menu.findItem(R.id.kml_search);
-		register.setVisible(true);
+		
+		if (Globals.getInstance().isKMLonMap()){
+			MenuItem kml_delete = menu.findItem(R.id.kml_delete);
+			kml_delete.setVisible(true);	
+			MenuItem kml_search = menu.findItem(R.id.kml_search);
+			kml_search.setVisible(false);
+			
+		}else {
+			MenuItem register = menu.findItem(R.id.kml_search);
+			register.setVisible(true);
+			MenuItem kml_delete = menu.findItem(R.id.kml_delete);
+			kml_delete.setVisible(false);
+			
+		}
+		
 
 		return true;
 	}
@@ -785,15 +945,22 @@ public class KMLMap extends Base_Activity implements MapEventsReceiver,
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		
 		case R.id.opt:
-
 			startActivity(new Intent(getApplicationContext(), Options.class));
+			return true;
+			
 		case R.id.kml_search:
-
 			startActivity(new Intent(getApplicationContext(),
 					File_picker_activity.class));
 			return true;
-
+		
+		case R.id.kml_delete:
+		    Globals.getInstance().setKml_File("");
+		    Globals.getInstance().setKMLonMap(false);
+		 	KMLMap.this.onResume();    
+		   	return true;
+	
 		}
 		return false;
 	}

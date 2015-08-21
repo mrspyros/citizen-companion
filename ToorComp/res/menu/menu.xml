@@ -29,5 +29,16 @@
         android:showAsAction="never">
         
     </item>
+    
+     <item android:id="@+id/kml_delete" 
+        android:icon="@drawable/ic_action_delete"
+        android:title="@string/delete_kml"
+        android:visible="false" 
+        android:enabled="true"
+        android:orderInCategory="4"
+        android:showAsAction="never">
+        
+    </item>
+     
 
 </menu>

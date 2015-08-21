@@ -104,7 +104,16 @@
             android:hardwareAccelerated="false">
         </activity>
         
-        
+              
+              <activity
+                  
+               android:name="com.android.toorcomp.Dummy"
+               android:theme="@style/Theme.Transparent">
+
+             </activity>
+   
+              
+              
         
     </application>
 
