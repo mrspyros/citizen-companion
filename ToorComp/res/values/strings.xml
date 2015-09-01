@@ -9,8 +9,7 @@
     <string name="noxmlmessage">Θέλετε να γίνει λήψη της βάσης?</string>
     <string name="noxmldl">Δέν ήταν δυνατή η λήψη της βάσης</string>
     <string name="noxmldlok">Εγινε λήψη της Βάσης</string>
-    
-    
+
     <string-array name="ypiresies">
         <item>Υδρευσης</item>
         <item>Καθαριότητας</item>
@@ -21,40 +20,41 @@
         <item>Συντήρησης οδών</item>
         <item>Τεχνική</item>
     </string-array>
-        <string name="stream_btn">Live Stream</string>
-        <string name="poi_btn">P O I S</string>
-        <string name="qr_btn">QrCode</string>
-        <string name="map_btn">Χάρτης</string>
-        <string name="exit_btn">Έξοδος</string>
-        <string name="form_subm_btn">Υποβολή Αιτήματος</string>
-        <string name="opt_offlinemap">Χρήση Χάρτη χωρίς σύνδεση</string>
-        <string name="poistodisplay">Σημεία ενδιαφέροντος</string>
-        <string name="about">Πληροφορίες</string>
-        <string name="poi1">Δημόσιο</string>
-        <string name="poi2">Φυσικό κάλος</string>
-        <string name="poi3">Ιστορικά</string>
-        <string name="poi4">Θρησκευτικά</string>
-        <string name="poi5">Χρήσιμα</string>
-        <string name="menu_opt_sel">Επιλογές</string>
-        <string name="poi1_en">Public</string>
-        <string name="poi2_en">Sights</string>
-        <string name="poi3_en">History</string>
-        <string name="poi4_en">Religion</string>
-        <string name="poi5_en">Useful</string>
-        <string name="poi6_en">Places</string>
-        <string name="poi6">Μέρη</string>
-        <string name="opt_data_tv">Επιλογή σύδεσης δεδομένων</string>
-        <string name="opt_Wifi">Wifi</string>
-        <string name="opt_roaming">GPRS/3G/4G</string>
-        <string name="opt_map_tab">Επιλογές Χάρτη</string>
-        <string name="opt_rotating">Περιστροφή Χάρτη</string>
-        <string name="kml_main_name">Ονομα</string>
-        <string name="kml_main_description">Περιγραφή</string>
-        <string name="kml_main_visible">Ορατό</string>
-        <string name="kml_main_style_prompt">kml Στύλ</string>
-        <string name="menu_opt_search">Εισαγωγή KML</string>
-        <string name="wait">Παρακαλώ περιμένετε</string>
-        <string name="loading">Λήψη αρχείου</string>
-        <string name="delete_kml">Αφαίρεση KML</string>
-    
+
+    <string name="stream_btn">Live Stream</string>
+    <string name="poi_btn">P O I S</string>
+    <string name="qr_btn">QrCode</string>
+    <string name="map_btn">Χάρτης</string>
+    <string name="exit_btn">Έξοδος</string>
+    <string name="form_subm_btn">Υποβολή Αιτήματος</string>
+    <string name="opt_offlinemap">Χρήση Χάρτη χωρίς σύνδεση</string>
+    <string name="poistodisplay">Σημεία ενδιαφέροντος</string>
+    <string name="about">Πληροφορίες</string>
+    <string name="poi1">Δημόσιο</string>
+    <string name="poi2">Φυσικό κάλος</string>
+    <string name="poi3">Ιστορικά</string>
+    <string name="poi4">Θρησκευτικά</string>
+    <string name="poi5">Χρήσιμα</string>
+    <string name="menu_opt_sel">Επιλογές</string>
+    <string name="poi1_en">Public</string>
+    <string name="poi2_en">Sights</string>
+    <string name="poi3_en">History</string>
+    <string name="poi4_en">Religion</string>
+    <string name="poi5_en">Useful</string>
+    <string name="poi6_en">Places</string>
+    <string name="poi6">Μέρη</string>
+    <string name="opt_data_tv">Επιλογή σύδεσης δεδομένων</string>
+    <string name="opt_Wifi">Wifi</string>
+    <string name="opt_roaming">GPRS/3G/4G</string>
+    <string name="opt_map_tab">Επιλογές Χάρτη</string>
+    <string name="opt_rotating">Περιστροφή Χάρτη</string>
+    <string name="kml_main_name">Ονομα</string>
+    <string name="kml_main_description">Περιγραφή</string>
+    <string name="kml_main_visible">Ορατό</string>
+    <string name="kml_main_style_prompt">kml Στύλ</string>
+    <string name="menu_opt_search">Εισαγωγή KML</string>
+    <string name="wait">Παρακαλώ περιμένετε</string>
+    <string name="loading">Λήψη αρχείου</string>
+    <string name="delete_kml">Αφαίρεση KML</string>
+
 </resources>

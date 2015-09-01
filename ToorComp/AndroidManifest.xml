@@ -25,15 +25,17 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        
-        <receiver android:name="net.viralpatel.network.NetworkChangeReceiver" android:label="NetworkChangeReceiver">
+        <receiver
+            android:name="net.viralpatel.network.NetworkChangeReceiver"
+            android:label="NetworkChangeReceiver" >
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE">
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED">
-            </action></action></intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" >
+                    <action android:name="android.net.wifi.WIFI_STATE_CHANGED" >
+                    </action>
+                </action>
+            </intent-filter>
         </receiver>
-        
-        
+
         <activity
             android:name="com.android.toorcomp.MainActivity"
             android:label="@string/app_name"
@@ -50,9 +52,9 @@
         </activity>
         <activity
             android:name="com.android.toorcomp.Map"
+            android:hardwareAccelerated="false"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="false"  >
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.android.toorcomp.MainScreen"
@@ -89,39 +91,40 @@
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>
-       
         <activity
             android:name="com.android.toorcomp.KMLMap"
+            android:hardwareAccelerated="false"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="false">
+            android:screenOrientation="portrait" >
         </activity>
-        
-           <activity
+        <activity
             android:name="com.android.toorcomp.File_picker_activity"
+            android:hardwareAccelerated="false"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="false">
+            android:screenOrientation="portrait" >
         </activity>
-        
-              
-              <activity
-                  
-               android:name="com.android.toorcomp.Dummy"
-               android:theme="@style/Theme.Transparent">
+        <activity
+            android:name="com.android.toorcomp.Dummy"
+            android:theme="@style/Theme.Transparent" >
+        </activity>
+        <activity
+            android:name="com.android.toorcomp.downloadservice.Downloader"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
+        </activity>
 
-             </activity>
-   
-              
-              
-        
+        <service
+            android:name="com.android.toorcomp.downloadservice.DownloadService"
+            android:exported="false" />
+
+    
     </application>
 
-    <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="true"
-        android:normalScreens="true"
-        android:smallScreens="false"
-        android:xlargeScreens="true" />
-
+        <supports-screens
+            android:anyDensity="true"
+            android:largeScreens="true"
+            android:normalScreens="true"
+            android:smallScreens="false"
+            android:xlargeScreens="true" />
 </manifest>

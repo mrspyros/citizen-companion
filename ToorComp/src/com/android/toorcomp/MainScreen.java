@@ -3,6 +3,8 @@ package com.android.toorcomp;
  
 import java.io.File;
 
+import com.android.toorcomp.downloadservice.Downloader;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -82,7 +84,7 @@ public class MainScreen extends Base_Activity {
                 stream.setOnClickListener(new android.view.View.OnClickListener() {
                         public void onClick(View v) {
                              //   Intent intent = new Intent(getApplicationContext(), StreamPlayer.class);
-                        	Intent intent = new Intent(getApplicationContext(), Map.class);
+                        	Intent intent = new Intent(getApplicationContext(),Downloader.class );
                                 startActivity(intent);
                         }
                 });
