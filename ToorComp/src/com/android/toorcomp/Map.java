@@ -144,7 +144,7 @@ public class Map extends Base_Activity implements SensorEventListener {
 
 		// -------------------------
 		// MyOwnItemizedOverlay overlay = new MyOwnItemizedOverlay(this,
-		// overlayItemArray);
+		// mOverlayItemArray);
 		// ---------------------------
 
 		// My location overlay
@@ -272,7 +272,7 @@ public class Map extends Base_Activity implements SensorEventListener {
 
 				/************ Parse XML **************/
 
-				// XMLParser parser = new XMLParser();
+				// XMLParser mParser = new XMLParser();
 				SAXParserFactory factory = SAXParserFactory.newInstance();
 
 				SAXParser sp;
@@ -552,7 +552,7 @@ public class Map extends Base_Activity implements SensorEventListener {
 		return false;
 	}
 	
-	private boolean isNetworkAvailable() {
+	protected boolean isNetworkAvailable() {
 	    ConnectivityManager connectivityManager 
 	          = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();

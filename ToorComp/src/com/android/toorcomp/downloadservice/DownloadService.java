@@ -1,12 +1,30 @@
 package com.android.toorcomp.downloadservice;
 
-import android.R;
+/**
+ * @author MrSpyros
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   any later version.
+
+ *  This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ResultReceiver;
@@ -14,7 +32,7 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.toorcomp.Globals;
+import com.android.toorcomp.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,182 +42,245 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DecimalFormat;
+
+/**
+ *
+ * 'url' the download url 'Directory' the directory to download To 'F_name' the
+ * saved filename
+ * 
+ * @return STATUS_RUNNING/FINISHED/ERROR
+ * 
+ */
 
 public class DownloadService extends IntentService {
 
-    public static final int STATUS_RUNNING = 0;
-    public static final int STATUS_FINISHED = 1;
-    public static final int STATUS_ERROR = 2;
+	public static final int STATUS_RUNNING = 0;
+	public static final int STATUS_FINISHED = 1;
+	public static final int STATUS_ERROR = 2;
 
-    private static final String TAG = "DownloadService";
-    private NotificationManager mNotificationManager;
-   // private Notification notification ;
-    private String dir;
-    private String _fname;
-    
-    
-    public DownloadService() {
-        super(DownloadService.class.getName());
-    }
+	NotificationCompat.Builder mBuilder;
+	private static final String TAG = "DownloadService";
+	private NotificationManager mNotificationManager;
+	private String mDirName;
+	private String mFileName;
+	protected final NetworkChangeReceiver mConnReceiver = new NetworkChangeReceiver();
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
+	protected void registerReceivers() {
+		registerReceiver(mConnReceiver, new IntentFilter(
+				ConnectivityManager.CONNECTIVITY_ACTION));
+		isReceiverRegistered = true;
+	}
 
-        Log.d(TAG, "Service Started!");
+	protected void unRegisterReceivers() {
+		unregisterReceiver(mConnReceiver);
+		isReceiverRegistered = false;
+	}
 
-        final ResultReceiver receiver = intent.getParcelableExtra("receiver");
-        String url = intent.getStringExtra("url");
-        dir = intent.getStringExtra("Directory");
-        _fname = intent.getStringExtra("F_name");
+	protected boolean isReceiverRegistered;
 
-        Bundle bundle = new Bundle();
+	public DownloadService() {
+		super(DownloadService.class.getName());
+	}
 
-        if (!TextUtils.isEmpty(url)) {
-            /* Update UI: Download Service is Running */
-            receiver.send(STATUS_RUNNING, Bundle.EMPTY);
+	@Override
+	protected void onHandleIntent(Intent intent) {
 
-            try {
-              //  String[] results = downloadData(url);
-                  boolean ok = FileDownload(url);
-                /* Sending result back to activity */
-                //if (null != results && results.length > 0) {
-                  if (ok){
-                    //bundle.putStringArray("result", results);
-                    
-                	String [] res = new String[]{"Downloaded",url};
-                    bundle.putStringArray("Result", res);
-                    
-                    
-                    receiver.send(STATUS_FINISHED, bundle);
-                }
-            } catch (Exception e) {
+		Log.d(TAG, "Service Started!");
 
-                /* Sending error message back to activity */
-                bundle.putString(Intent.EXTRA_TEXT, e.toString());
-                receiver.send(STATUS_ERROR, bundle);
-            }
-        }
-        Log.d(TAG, "Service Stopping!");
-        this.stopSelf();
-    }
+		final ResultReceiver receiver = intent.getParcelableExtra("receiver");
+		String url = intent.getStringExtra("url");
+		mDirName = intent.getStringExtra("Directory");
+		mFileName = intent.getStringExtra("F_name");
 
-    @SuppressWarnings("deprecation")
-	private boolean FileDownload (String _url) throws DownloadException, IOException{
-    	
-    	FileOutputStream fileOutput=null;
-    	
-    	Globals g = Globals.getInstance();
+		Bundle bundle = new Bundle();
+
+		if (!TextUtils.isEmpty(url)) {
+			/* Update UI: Download Service is Running */
+			receiver.send(STATUS_RUNNING, Bundle.EMPTY);
+			Log.d("URL", url.toString());
+			try {
+				// String[] results = downloadData(url);
+				boolean ok = FileDownload(url);
+				/* Sending result back to activity */
+				// if (null != results && results.length > 0) {
+				if (ok) {
+					// bundle.putStringArray("result", results);
+
+					String[] res = new String[] { "Downloaded", url };
+					bundle.putStringArray("Result", res);
+
+					receiver.send(STATUS_FINISHED, bundle);
+				}
+			} catch (Exception e) {
+
+				/* Sending error message back to activity */
+				bundle.putString(Intent.EXTRA_TEXT, e.toString());
+				receiver.send(STATUS_ERROR, bundle);
+			}
+		}
+		Log.d(TAG, "Service Stopping!");
+		this.stopSelf();
+	}
+
+	private boolean FileDownload(String _url) throws DownloadException,
+			IOException {
+
+		registerReceivers();
+
+		FileOutputStream fileOutput = null;
+
+		Globals g = Globals.getInstance();
 		g.setWait("YES");
 
 		// ---------------Notification-------------------
-		
-		
+
 		String ns = Context.NOTIFICATION_SERVICE;
-        mNotificationManager = (NotificationManager) getSystemService(ns);
-            
+		mNotificationManager = (NotificationManager) getSystemService(ns);
 
-            int icon = R.drawable.ic_dialog_alert;
-            CharSequence tickerText = "Downloading";
-            long when = System.currentTimeMillis();
-            
-            @SuppressWarnings("deprecation")
-        //    Notification notification = new Notification(icon,
-          //          tickerText, when);
-         //   notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            Context context = getApplicationContext();
-            CharSequence contentTitle = getResources().getText(com.android.toorcomp.R.string.app_name);
-            CharSequence contentText = getResources().getText(com.android.toorcomp.R.string.loading);
-            Intent notificationIntent = new Intent(context,            
-            		Downloader.class);
-            PendingIntent contentIntent = PendingIntent
-                    .getActivity(context, 0, notificationIntent, 0);            
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-                    getApplicationContext()).setSmallIcon(R.drawable.ic_dialog_alert)
-                    .setSmallIcon(icon)
-                    .setContentTitle(contentTitle)
-                    .setContentText(contentText)
-                    .setContentIntent(contentIntent);
-            
-            mBuilder.setProgress(0, 0, true);
-            // Displays the progress bar for the first time.
-            
-            
-         //   notification.setLatestEventInfo(context, contentTitle,
-                //    contentText, contentIntent);
+		int icon = R.drawable.ic_action_download;
 
-            //mNotificationManager.notify(1, notification);
-            mNotificationManager.notify(1, mBuilder.build());
-		
+		Context context = getApplicationContext();
+		CharSequence contentTitle = getResources().getText(
+				com.android.toorcomp.R.string.app_name);
+		CharSequence contentText = getResources().getText(
+				com.android.toorcomp.R.string.loading);
+		Intent notificationIntent = new Intent(context, Downloader.class);
+		PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
+				notificationIntent, 0);
+		mBuilder = new NotificationCompat.Builder(getApplicationContext())
+				.setSmallIcon(R.drawable.ic_action_download).setSmallIcon(icon)
+				.setContentTitle(contentTitle).setContentText(contentText)
+				.setContentIntent(contentIntent);
+
+		mBuilder.setProgress(100, 0, false);
+		// Displays the progress bar for the first time.
+
+		mNotificationManager.notify(1, mBuilder.build());
+
 		// ----------------------------------
-		
-		
-		
+
 		try {
 			URL url = new URL(_url);
-			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-			//urlConnection.setInstanceFollowRedirects(true); 
+			HttpURLConnection urlConnection = (HttpURLConnection) url
+					.openConnection();
+			// urlConnection.setInstanceFollowRedirects(true);
 			urlConnection.connect();
 			File SDCardRoot = Environment.getExternalStorageDirectory();
-			File dirs = new File(SDCardRoot + dir);
+			File dirs = new File(SDCardRoot + mDirName);
 			dirs.mkdirs();
-			File file = new File(SDCardRoot + dir, _fname);
+			File file = new File(SDCardRoot + mDirName, mFileName);
 			fileOutput = new FileOutputStream(file);
 			InputStream inputStream = urlConnection.getInputStream();
-				
-			//int totalSize = urlConnection.getContentLength();
-			//int downloadedSize = 0;
+			Log.d("URL", url.toString());
+			int totalSize = urlConnection.getContentLength();
+
+			if (totalSize == -1)
+				totalSize = 47514203;
+
+			int downloadedSize = 0;
 
 			byte[] buffer = new byte[1024];
-			int bufferLength = 0; 
+			int bufferLength = 0;
 
 			while ((bufferLength = inputStream.read(buffer)) > 0) {
-				
-			//	fileOutput.write(buffer, 0, bufferLength);
-			//	downloadedSize += bufferLength;
 
+				fileOutput.write(buffer, 0, bufferLength);
+				downloadedSize += bufferLength;
+				mBuilder.setContentText("Downloading ..."
+						+ (getFileSize(downloadedSize)));
+				mBuilder.setProgress(totalSize, downloadedSize, false);
+				mNotificationManager.notify(1, mBuilder.build());
+				if (!Globals.getInstance().isIsNetworkAvailable()) {
+					mBuilder.setContentText("ERROR ...No Internet");
+					mBuilder.setProgress(0, 0, false);
+					mNotificationManager.notify(1, mBuilder.build());
+					break;
+				}
 			}
 			fileOutput.close();
-			
-			
-            mBuilder.setContentText("Download Finished");
-            mBuilder.setProgress(0, 0, false);
-            mNotificationManager.notify(1, mBuilder.build());
-			
-            
-			 //  notification.setLatestEventInfo(context, "Finished",
-	         //           "Download Finished", contentIntent);
-			 //  mNotificationManager.notify(1, notification);
+
+			mBuilder.setContentText("Download Finished");
+			mBuilder.setProgress(0, 0, false);
+			mNotificationManager.notify(1, mBuilder.build());
+
+			// notification.setLatestEventInfo(context, "Finished",
+			// "Download Finished", contentIntent);
+			// mNotificationManager.notify(1, notification);
 		} catch (MalformedURLException e) {
-			 
-			mBuilder.setContentText("Download Error");
-            mBuilder.setProgress(0, 0, false);
-            mNotificationManager.notify(1, mBuilder.build());
-			
+			mBuilder.setContentText("Wrong Url");
+			mBuilder.setProgress(0, 0, false);
+			mNotificationManager.notify(1, mBuilder.build());
+			if (isReceiverRegistered)
+				unRegisterReceivers();
+
 			throw new DownloadException("Failed to fetch data!!");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			if (isReceiverRegistered)
+				unRegisterReceivers();
+
+			mBuilder.setContentText("File Not Found");
+			mBuilder.setProgress(0, 0, false);
+			mNotificationManager.notify(1, mBuilder.build());
 		} catch (IOException e) {
+			if (isReceiverRegistered)
+				unRegisterReceivers();
+
 			mBuilder.setContentText("IO Error");
-            mBuilder.setProgress(0, 0, false);
-            mNotificationManager.notify(1, mBuilder.build());
-			
+			mBuilder.setProgress(0, 0, false);
+			mNotificationManager.notify(1, mBuilder.build());
+
 		}
-			
-			
-    	
-    	return false;
-    }
-    
-    
-    public class DownloadException extends Exception {
 
-        public DownloadException(String message) {
-            super(message);
-        }
+		if (isReceiverRegistered)
+			unRegisterReceivers();
+		
+			Integrity_Check();
+	
 
-        public DownloadException(String message, Throwable cause) {
-            super(message, cause);
-        }
-    }
+		return false;
+
+	}
+
+	public static String getFileSize(long size) {
+		if (size <= 0)
+			return "0";
+		final String[] units = new String[] { "B", "KB", "MB", "GB", "TB" };
+		int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
+		return new DecimalFormat("#,##0.#").format(size
+				/ Math.pow(1024, digitGroups))
+				+ " " + units[digitGroups];
+	}
+
+	@SuppressWarnings("serial")
+	public class DownloadException extends Exception {
+
+		public DownloadException(String message) {
+			super(message);
+			Integrity_Check();
+		}
+
+		public DownloadException(String message, Throwable cause) {
+			super(message, cause);
+			Integrity_Check();
+		}
+	}
+
+	/**
+	 * 
+	 * Check if file downloaded ok and if not delete remainings
+	 * 
+	 */
+
+	private void Integrity_Check() {
+
+		File SDCardRoot = Environment.getExternalStorageDirectory();
+		File file = new File(SDCardRoot + mDirName, mFileName);
+
+		if (file.length() == 0) {
+			file.delete();
+		}
+
+	}
+
 }

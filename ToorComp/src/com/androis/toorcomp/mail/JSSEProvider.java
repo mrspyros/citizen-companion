@@ -1,4 +1,4 @@
-package mail;
+package com.androis.toorcomp.mail;
 
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one or more
@@ -26,6 +26,7 @@ package mail;
 import java.security.AccessController;
 import java.security.Provider;
 
+@SuppressWarnings("serial")
 public final class JSSEProvider extends Provider {
 
     public JSSEProvider() {

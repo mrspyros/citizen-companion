@@ -1,4 +1,22 @@
-package mail;
+package com.androis.toorcomp.mail;
+
+/**
+ * @author MrSpyros
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   any later version.
+
+ *  This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 import javax.activation.DataHandler;   
 import javax.activation.DataSource;   
@@ -13,6 +31,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;   
 import javax.mail.internet.MimeMultipart;
 
+import com.androis.toorcomp.mail.JSSEProvider;
+
 import android.util.Log;
 
 import java.io.ByteArrayInputStream;   
@@ -22,8 +42,6 @@ import java.io.InputStream;
 import java.io.OutputStream;   
 import java.security.Security;   
 import java.util.Properties;   
-
-import mail.JSSEProvider;
 
 public class GMailSender extends javax.mail.Authenticator {   
     private String mailhost = "smtp.gmail.com";   
@@ -40,15 +58,15 @@ public class GMailSender extends javax.mail.Authenticator {
         this.password = password;   
 
         Properties props = new Properties();   
-        props.setProperty("mail.transport.protocol", "smtp");   
-        props.setProperty("mail.host", mailhost);   
-        props.put("mail.smtp.auth", "true");   
-        props.put("mail.smtp.port", "465");   
-        props.put("mail.smtp.socketFactory.port", "465");   
-        props.put("mail.smtp.socketFactory.class",   
+        props.setProperty("com.androis.toorcomp.mail.transport.protocol", "smtp");   
+        props.setProperty("com.androis.toorcomp.mail.host", mailhost);   
+        props.put("com.androis.toorcomp.mail.smtp.auth", "true");   
+        props.put("com.androis.toorcomp.mail.smtp.port", "465");   
+        props.put("com.androis.toorcomp.mail.smtp.socketFactory.port", "465");   
+        props.put("com.androis.toorcomp.mail.smtp.socketFactory.class",   
                 "javax.net.ssl.SSLSocketFactory");   
-        props.put("mail.smtp.socketFactory.fallback", "false");   
-        props.setProperty("mail.smtp.quitwait", "false");   
+        props.put("com.androis.toorcomp.mail.smtp.socketFactory.fallback", "false");   
+        props.setProperty("com.androis.toorcomp.mail.smtp.quitwait", "false");   
 
         session = Session.getDefaultInstance(props, this);   
     }   
@@ -57,22 +75,7 @@ public class GMailSender extends javax.mail.Authenticator {
         return new PasswordAuthentication(user, password);   
     }   
 
-   /* public synchronized void sendMail(String subject, String body, String sender, String recipients) throws Exception {   
-        try{
-        MimeMessage message = new MimeMessage(session);   
-        DataHandler handler = new DataHandler(new ByteArrayDataSource(body.getBytes(), "text/plain"));   
-        message.setSender(new InternetAddress(sender));   
-        message.setSubject(subject);   
-        message.setDataHandler(handler);   
-        if (recipients.indexOf(',') > 0)   
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipients));   
-        else  
-            message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipients));   
-        Transport.send(message);   
-        }catch(Exception e){
 
-        }
-    }   */
 
     public synchronized void sendMail(String subject, String body,  File attachment, String sender, String recipients ) throws Exception {   
         try{

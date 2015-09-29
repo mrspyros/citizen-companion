@@ -34,7 +34,7 @@
         android:layout_alignBottom="@+id/main_btn1"
         android:layout_centerHorizontal="true"
         android:background="@drawable/btn"
-        android:text="@string/poi_btn" />
+        android:text="@string/main_act_btn2" />
 
     <Button
         android:id="@+id/main_btn1"

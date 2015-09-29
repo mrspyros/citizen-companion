@@ -18,46 +18,48 @@ package com.android.toorcomp;
  *
  */
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.Window;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.text.Html;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * 
- *	Simple as it gets
- *	We get a link from globals
- *  And show it
+ * Menu/Information Activity
  *
  */
 
-public class webview extends Base_Activity {
+public class Info extends Base_Activity{
 
-	private WebView webView;
-
-	@SuppressLint("SetJavaScriptEnabled")
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_info);
 		
-		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-		getActionBar().show();
-		setContentView(R.layout.webview);
-
-		Globals g = Globals.getInstance();
-
-		webView = (WebView) findViewById(R.id.webView1);
-		webView.setWebViewClient(new WebViewClient());
-		webView.getSettings().setJavaScriptEnabled(true);
-		webView.loadUrl(g.getWebViewUrl());
-		g.setWebViewUrl("");
-
-	}
-
-	public void onResume() {
-		super.onResume();
+		
+		TextView text = (TextView) findViewById(R.id.infoEditText);
+		Globals.getInstance();
+		final String mPrgversion = Globals.getPROGRAMVERSION();
+		final String mDbversion = Globals.getDBVERSION();
+		
+		text.setEnabled(false);
+		text.setText(Html.fromHtml(""
+				+ "<b>Program Version : </b>"+mPrgversion+"<br><b>Database Version : </b>"+mDbversion+"<br>"
+				));
+		
+				
+		Button btn_back = (Button) findViewById(R.id.info_back);
+		btn_back.setOnClickListener(new android.view.View.OnClickListener() {
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		
+		
+		
 	}
 
 	
-
+	
 }

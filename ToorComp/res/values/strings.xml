@@ -56,5 +56,11 @@
     <string name="wait">Παρακαλώ περιμένετε</string>
     <string name="loading">Λήψη αρχείου</string>
     <string name="delete_kml">Αφαίρεση KML</string>
+    <string name="title_activity_main_downloader">Λήψεις</string>
+    <string name="main_dl_btn1">Λήψη KML</string>
+    <string name="main_dl_btn2">Λήψη Βάσης σημείων ενδιαφέροντοε</string>
+    <string name="main_dl_btn3">Λήψη Χάρτη</string>
+    <string name="title_activity_info">Πληροφορίες</string>
+    <string name="main_act_btn2">Λήψεις</string>
 
 </resources>

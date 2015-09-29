@@ -5,8 +5,20 @@ import org.osmdroid.api.IGeoPoint;
 // --------------------------------------------   Singleton class
 
 public class Globals {
+	
+	
 	private static Globals instance;
 	// Global variable
+	
+	private static String PROGRAMVERSION;
+	private static String DBVERSION;
+	
+	private boolean isPRGVersionChanged;
+	private boolean isDBVersionchanged;
+	
+	
+	private String NewDBVersion;
+	
 	private boolean XmLERROR;
 	private String Wait; // YES NO ERROR
 	private int MapZoomLevel;
@@ -23,6 +35,8 @@ public class Globals {
 	private boolean Options_Roaming;
 	private boolean Options_Rotating;
     private boolean KMLonMap;
+    private boolean IsNetworkAvailable;
+    private int DownloadID = 101;
 	
 	
 	private String Kml_File;
@@ -173,5 +187,61 @@ public class Globals {
 
 	public void setKMLonMap(boolean kMLonMap) {
 		KMLonMap = kMLonMap;
+	}
+
+	public static String getDBVERSION() {
+		return DBVERSION;
+	}
+
+	public static void setDBVERSION(String dBVERSION) {
+		DBVERSION = dBVERSION;
+	}
+
+	public static String getPROGRAMVERSION() {
+		return PROGRAMVERSION;
+	}
+
+	public static void setPROGRAMVERSION(String pROGRAMVERSION) {
+		PROGRAMVERSION = pROGRAMVERSION;
+	}
+
+	public boolean isPRGVersionChanged() {
+		return isPRGVersionChanged;
+	}
+
+	public void setPRGVersionChanged(boolean isPRGVersionChanged) {
+		this.isPRGVersionChanged = isPRGVersionChanged;
+	}
+
+	public boolean isDBVersionchanged() {
+		return isDBVersionchanged;
+	}
+
+	public void setDBVersionchanged(boolean isDBVersionchanged) {
+		this.isDBVersionchanged = isDBVersionchanged;
+	}
+
+	public String getNewDBVersion() {
+		return NewDBVersion;
+	}
+
+	public void setNewDBVersion(String newDBVersion) {
+		NewDBVersion = newDBVersion;
+	}
+
+	public boolean isIsNetworkAvailable() {
+		return IsNetworkAvailable;
+	}
+
+	public void setIsNetworkAvailable(boolean isNetworkAvailable) {
+		IsNetworkAvailable = isNetworkAvailable;
+	}
+
+	public int getDownloadID() {
+		return DownloadID;
+	}
+
+	public void setDownloadID(int downloadID) {
+		DownloadID = downloadID;
 	}
 }

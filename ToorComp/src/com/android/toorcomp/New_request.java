@@ -2,18 +2,11 @@ package com.android.toorcomp;
 
 import java.io.File;
 
-import javax.mail.internet.MimeMessage;
-
-import mail.GMailSender;
-
 import org.osmdroid.util.GeoPoint;
 
-//import com.android.toorcomp.Map.InnerLocationListener;
+import com.androis.toorcomp.mail.GMailSender;
 
-
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,20 +15,16 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
- 
+
+//import com.android.toorcomp.Map.InnerLocationListener;
+
 public class New_request extends Base_Activity {
 
 	private static int PICK_IMAGE = 0;
@@ -46,11 +35,12 @@ public class New_request extends Base_Activity {
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		
+
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
 		getActionBar().show();
 		setContentView(R.layout.new_request);
 
+		@SuppressWarnings("unused")
 		final GPSTracker mGPS = new GPSTracker(this);
 		final TextView descText = (TextView) findViewById(R.id.editText2);
 		final TextView shortDes = (TextView) findViewById(R.id.editText1);
@@ -257,6 +247,7 @@ public class New_request extends Base_Activity {
 		if (requestCode == 1) {
 
 			if (resultCode == RESULT_OK) {
+				@SuppressWarnings("unused")
 				String result = data.getStringExtra("result");
 			}
 			if (resultCode == RESULT_CANCELED) {
@@ -281,6 +272,7 @@ public class New_request extends Base_Activity {
 		public void onLocationChanged(Location argLocation) {
 			// TODO Auto-generated method stub
 			// super.onLocationChanged(location);
+			@SuppressWarnings("unused")
 			GeoPoint myGeoPoint = new GeoPoint(
 					(int) (argLocation.getLatitude() * 1000000),
 					(int) (argLocation.getLongitude() * 1000000));
@@ -312,7 +304,5 @@ public class New_request extends Base_Activity {
 		// TODO Auto-generated method stub
 		return false;
 	};
-
-	
 
 }

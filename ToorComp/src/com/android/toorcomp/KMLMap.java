@@ -1,5 +1,24 @@
 package com.android.toorcomp;
 
+/**
+ * @author MrSpyros
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   any later version.
+
+ *  This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,9 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.bonuspack.clustering.StaticCluster;
@@ -30,9 +50,7 @@ import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
 import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.bonuspack.overlays.Polygon;
 import org.osmdroid.bonuspack.overlays.Polyline;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
-import org.osmdroid.bonuspack.routing.RoadManager;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.NetworkLocationIgnorer;
@@ -44,21 +62,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-
-
-
-
-
-
-
-
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Environment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -71,6 +74,13 @@ import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -81,28 +91,38 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+/**
+ * 
+ * Our Main map
+ * 
+ * Based on "https://github.com/MKergall/osmbonuspack/tree/master/OSMBonusPackTuto/"
+ *  
+ *  
+ */
+
+
 public class KMLMap extends Base_Activity implements 
 		LocationListener, SensorEventListener {
 
 	MapView map;
 
-	private String Pois_To_Display;
+	private String mPois_To_Display;
 	protected LocationManager mLocationManager;
-	protected DirectedLocationOverlay myLocationOverlay;
+	protected DirectedLocationOverlay mLocationOverlay;
 	float mAzimuthAngleSpeed = 0.0f;
 	protected boolean mTrackingMode = true; // FolowLocation
 	protected boolean mGps = false;
-	protected FolderOverlay mKmlOverlay;
-	protected FolderOverlay roadMarkers;
-	protected Polyline mRoadOverlay;
-	protected Polyline roadOverlay ;
-	protected FolderOverlay kmlOverlay; 
-	protected XMLParser parser;
-	protected MyOwnItemizedOverlay POIoverlay;
-	protected OverlayItem POIolItem;
-	protected List<Poi_Struct> _pois;
-	protected ArrayList<OverlayItem> overlayItemArray; 
-	protected XMLReader reader; 
+	//protected FolderOverlay mKmlOverlay;
+	protected FolderOverlay mRoadMarkers;
+	//protected Polyline mRoadOverlay;
+	protected Polyline mRoadOverlay ;
+	protected FolderOverlay mKmlOverlay; 
+	protected XMLParser mParser;
+	protected MyOwnItemizedOverlay mPOIoverlay;
+	protected OverlayItem mPoilItem;
+	protected List<Poi_Struct> mPoisList;
+	protected ArrayList<OverlayItem> mOverlayItemArray; 
+	protected XMLReader mReader; 
 	
 	
 
@@ -114,9 +134,9 @@ public class KMLMap extends Base_Activity implements
 	public static KmlFolder mKmlClipboard;
 
 	// Default map Latitude:
-	private double MAP_DEFAULT_LATITUDE = 39.524125;
+	private static final double MAP_DEFAULT_LATITUDE = 39.524125;
 	// Default map Longitude:
-	private double MAP_DEFAULT_LONGITUDE = 20.881799;
+	private static final double MAP_DEFAULT_LONGITUDE = 20.881799;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -132,7 +152,14 @@ public class KMLMap extends Base_Activity implements
 		map = (MapView) findViewById(R.id.mapview);
 		map.setBuiltInZoomControls(true);
 		map.setMultiTouchControls(true);
-
+		map.setUseDataConnection(false);
+		
+		
+		if (!isNetworkAvailable()){
+			map.setTileSource(TileSourceFactory.MAPQUESTOSM);
+		}
+		
+		
 		// ------------- check if GPS is enabled
 		// ------------- only one time
 
@@ -163,7 +190,7 @@ public class KMLMap extends Base_Activity implements
 		map.getOverlays().add(startMarker);
 
 		// 1. "Hello, Routing World"
-		RoadManager roadManager = new OSRMRoadManager();
+		// RoadManager roadManager = new OSRMRoadManager();
 		// 2. Playing with the RoadManager
 		// roadManager roadManager = new MapQuestRoadManager("YOUR_API_KEY");
 		// roadManager.addRequestOption("routeType=bicycle");
@@ -172,14 +199,27 @@ public class KMLMap extends Base_Activity implements
 		// GeoPoint endPoint = new GeoPoint(MAP_DEFAULT_LATITUDE,
 		// MAP_DEFAULT_LONGITUDE);
 		// waypoints.add(endPoint);
-		Road road = roadManager.getRoad(waypoints);
-		if (road.mStatus != Road.STATUS_OK)
-			Toast.makeText(this,
-					"Error when loading the road - status=" + road.mStatus,
-					Toast.LENGTH_SHORT).show();
-
-		Polyline roadOverlay = RoadManager.buildRoadOverlay(road, this);
-		map.getOverlays().add(roadOverlay);
+		
+		/**
+		 * TODO
+		 * 
+		 * This is for use for road overlay
+		 * 
+		 * eg Show route
+		 * 
+		 
+		 * Road road = roadManager.getRoad(waypoints);
+		 *
+		 *
+		 * if (road.mStatus != Road.STATUS_OK) Toast.makeText(this,
+		 * "Error when loading the road - status=" + road.mStatus,
+		 * Toast.LENGTH_SHORT).show();
+		 *
+		 * Polyline mRoadOverlay = RoadManager.buildRoadOverlay(road, this);
+		 * map.getOverlays().add(mRoadOverlay);
+		 */
+		
+		
 		// --------------------------------------------------------------
 
 		// 3. Showing the Route steps on the map
@@ -191,8 +231,8 @@ public class KMLMap extends Base_Activity implements
 		// My Location Overlay
 		// ------------------------------------------------------------------------
 		mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-		myLocationOverlay = new DirectedLocationOverlay(this);
-		map.getOverlays().add(myLocationOverlay);
+		mLocationOverlay = new DirectedLocationOverlay(this);
+		map.getOverlays().add(mLocationOverlay);
 
 		if (savedInstanceState == null) {
 			Location location = mLocationManager
@@ -205,13 +245,13 @@ public class KMLMap extends Base_Activity implements
 				onLocationChanged(location);
 			} else {
 				// no location known: hide myLocationOverlay
-				myLocationOverlay.setEnabled(false);
+				mLocationOverlay.setEnabled(false);
 			}
 			startPoint = null;
 			// destinationPoint = null;
 			// viaPoints = new ArrayList<GeoPoint>();
 		} else {
-			myLocationOverlay.setLocation((GeoPoint) savedInstanceState
+			mLocationOverlay.setLocation((GeoPoint) savedInstanceState
 					.getParcelable("location"));
 			// TODO: restore other aspects of myLocationOverlay...
 			startPoint = savedInstanceState.getParcelable("start");
@@ -240,13 +280,13 @@ public class KMLMap extends Base_Activity implements
 	protected void onResume() {
 		super.onResume();
 		boolean isOneProviderEnabled = startLocationUpdates();
-		myLocationOverlay.setEnabled(isOneProviderEnabled);
+		mLocationOverlay.setEnabled(isOneProviderEnabled);
 		mTrackingMode = Globals.getInstance().isOptions_Rotating();
 	
 		new POILoadingTask(getString(R.string.loading)).execute("" , true);
 		
-		if (POIoverlay !=null){
-			//map.getOverlays().add(POIoverlay);
+		if (mPOIoverlay !=null){
+			//map.getOverlays().add(mPOIoverlay);
 		} 
 				
 		if (Globals.getInstance().getKml_File() != "") {
@@ -254,22 +294,22 @@ public class KMLMap extends Base_Activity implements
 					+ Globals.getInstance().getKml_File()).execute(Globals
 					.getInstance().getKml_File(), true);
 
-			if (kmlOverlay != null) {
-				kmlOverlay.closeAllInfoWindows();
-				map.getOverlays().remove(kmlOverlay);
+			if (mKmlOverlay != null) {
+				mKmlOverlay.closeAllInfoWindows();
+				map.getOverlays().remove(mKmlOverlay);
 			}
 			//mKmlOverlay = (FolderOverlay) mKmlDocument.mKmlRoot.buildOverlay(
 				//	map, buildDefaultStyle(), null, mKmlDocument);
 			//map.getOverlays().add(mKmlOverlay);
 			// map.invalidate();
 		} else{
-			if (kmlOverlay != null) {
+			if (mKmlOverlay != null) {
 				try {
 					
-					kmlOverlay.closeAllInfoWindows();
-					map.getOverlays().remove(kmlOverlay);
+					mKmlOverlay.closeAllInfoWindows();
+					map.getOverlays().remove(mKmlOverlay);
 				} catch (Exception e) {
-					Log.d("kmlOverlay Error", e.toString());
+					Log.d("mKmlOverlay Error", e.toString());
 				}
 			}
 		}
@@ -293,9 +333,9 @@ public class KMLMap extends Base_Activity implements
 	void updateUIWithTrackingMode() {
 		if (mTrackingMode) {
 			// mTrackingModeButton.setBackgroundResource(R.drawable.btn_tracking_on);
-			if (myLocationOverlay.isEnabled()
-					&& myLocationOverlay.getLocation() != null) {
-				map.getController().animateTo(myLocationOverlay.getLocation());
+			if (mLocationOverlay.isEnabled()
+					&& mLocationOverlay.getLocation() != null) {
+				map.getController().animateTo(mLocationOverlay.getLocation());
 			}
 			map.setMapOrientation(-mAzimuthAngleSpeed);
 			// mTrackingModeButton.setKeepScreenOn(true);
@@ -553,7 +593,7 @@ public class KMLMap extends Base_Activity implements
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putParcelable("location", myLocationOverlay.getLocation());
+		outState.putParcelable("location", mLocationOverlay.getLocation());
 		outState.putBoolean("isgps", mGps);
 		// outState.putBoolean("tracking_mode", mTrackingMode);
 		// outState.putParcelable("start", startPoint);
@@ -588,15 +628,15 @@ public class KMLMap extends Base_Activity implements
 		mLastTime = currentTime;
 
 		GeoPoint newLocation = new GeoPoint(pLoc);
-		if (!myLocationOverlay.isEnabled()) {
+		if (!mLocationOverlay.isEnabled()) {
 			// we get the location for the first time:
-			myLocationOverlay.setEnabled(true);
+			mLocationOverlay.setEnabled(true);
 			map.getController().animateTo(newLocation);
 		}
 
-		GeoPoint prevLocation = myLocationOverlay.getLocation();
-		myLocationOverlay.setLocation(newLocation);
-		myLocationOverlay.setAccuracy((int) pLoc.getAccuracy());
+		GeoPoint prevLocation = mLocationOverlay.getLocation();
+		mLocationOverlay.setLocation(newLocation);
+		mLocationOverlay.setAccuracy((int) pLoc.getAccuracy());
 
 		if (prevLocation != null
 				&& pLoc.getProvider().equals(LocationManager.GPS_PROVIDER)) {
@@ -605,6 +645,13 @@ public class KMLMap extends Base_Activity implements
 			 * d/dT*1000.0; // m/s mSpeed = mSpeed * 3.6; //km/h
 			 */
 			mSpeed = pLoc.getSpeed() * 3.6;
+			
+			/**
+			 * @TODO
+			 * For future use
+			 */
+			
+			@SuppressWarnings("unused")
 			long speedInt = Math.round(mSpeed);
 			// TextView speedTxt = (TextView)findViewById(R.id.speed);
 			// speedTxt.setText(speedInt + " km/h");
@@ -614,7 +661,7 @@ public class KMLMap extends Base_Activity implements
 				// mAzimuthAngleSpeed =
 				// (float)prevLocation.bearingTo(newLocation);
 				mAzimuthAngleSpeed = (float) pLoc.getBearing();
-				myLocationOverlay.setBearing(mAzimuthAngleSpeed);
+				mLocationOverlay.setBearing(mAzimuthAngleSpeed);
 			}
 		}
 
@@ -643,14 +690,26 @@ public class KMLMap extends Base_Activity implements
 	// ------------ SensorEventListener implementation
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		myLocationOverlay.setAccuracy(accuracy);
+		mLocationOverlay.setAccuracy(accuracy);
 		map.invalidate();
 	}
 
 	static float mAzimuthOrientation = 0.0f;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+		
+		/**
+		 * 
+		 * We use orientation because the other way is to use
+		 * ACCELEROMETER and MAGNETOMETER and they do NOT work so well YET
+		 * 
+		 * TODO Use other sensors if we find a way to work better
+		 * 
+		 */
+		
+		
 		switch (event.sensor.getType()) {
 		case Sensor.TYPE_ORIENTATION:
 			if (mSpeed < 0.1) {
@@ -728,9 +787,9 @@ public class KMLMap extends Base_Activity implements
 				// 13.2 Advanced styling with Styler
 				KmlFeature.Styler styler = new MyKmlStyler(defaultStyle);
 
-			    kmlOverlay = (FolderOverlay) mKmlDocument.mKmlRoot
+			    mKmlOverlay = (FolderOverlay) mKmlDocument.mKmlRoot
 						.buildOverlay(map, defaultStyle, styler, mKmlDocument);
-				map.getOverlays().add(kmlOverlay);
+				map.getOverlays().add(mKmlOverlay);
 				
 				BoundingBoxE6 bb = mKmlDocument.mKmlRoot.getBoundingBox();
 				if (bb != null) {
@@ -752,8 +811,8 @@ public class KMLMap extends Base_Activity implements
 			// 14. Grab overlays in KML structure, save KML document locally
 			if (mKmlDocument.mKmlRoot != null) {
 				KmlFolder root = (KmlFolder) mKmlDocument.mKmlRoot;
-				root.addOverlay(roadOverlay, mKmlDocument);
-				root.addOverlay(roadMarkers, mKmlDocument);
+				root.addOverlay(mRoadOverlay, mKmlDocument);
+				root.addOverlay(mRoadMarkers, mKmlDocument);
 				mKmlDocument.saveAsKML(mKmlDocument
 						.getDefaultPathForAndroid("my_route.kml"));
 				// 15. Loading and saving of GeoJSON content
@@ -791,12 +850,12 @@ public class KMLMap extends Base_Activity implements
 		protected Boolean doInBackground(Object... params) {
 			
 		 	try {
-				map.getOverlays().remove(POIoverlay);
+				map.getOverlays().remove(mPOIoverlay);
 			} catch (Exception e1) {
 				Log.d("I WAS HERE ", e1.toString());
 			}
 		
-			parser = new XMLParser();
+			mParser = new XMLParser();
 			String XMLData;
 			try {
 				XMLData = getXmlFromFile("/osmdroid/Options.xml");
@@ -807,28 +866,28 @@ public class KMLMap extends Base_Activity implements
 
 				/************ Parse XML **************/
 
-				// XMLParser parser = new XMLParser();
+				// XMLParser mParser = new XMLParser();
 				SAXParserFactory factory = SAXParserFactory.newInstance();
 
 				SAXParser sp;
 
 				sp = factory.newSAXParser();
 
-				reader = sp.getXMLReader();
-				reader.setContentHandler(parser);
-				reader.parse(is);
+				mReader = sp.getXMLReader();
+				mReader.setContentHandler(mParser);
+				mReader.parse(is);
 				
-				boolean ok =true;
+				//boolean ok =true;
 			} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block
-				Toast.makeText(getApplicationContext(), "ParserConf Error" + e,
-						Toast.LENGTH_SHORT).show();
+				mMessage= "ParserConf Error" + e;
+						
 			} catch (SAXException e) {
-				Toast.makeText(getApplicationContext(), "SAX Error" + e,
-						Toast.LENGTH_SHORT).show();
+				mMessage="SAX Error" + e;
+				
 			} catch (IOException e) {
-				Toast.makeText(getApplicationContext(), "IOError" + e,
-						Toast.LENGTH_SHORT).show();
+				mMessage= "IOError" + e;
+			
 			}
 
 			// ------ End Parsing start building overlays from POIS
@@ -840,42 +899,45 @@ public class KMLMap extends Base_Activity implements
 		protected void onPostExecute(Boolean ok) {
 			if (mPD != null)
 				mPD.dismiss();
-
+						
 			if (ok) {
-				 _pois = new ArrayList<Poi_Struct>();
-				overlayItemArray = new ArrayList<OverlayItem>();
+				 mPoisList = new ArrayList<Poi_Struct>();
+				mOverlayItemArray = new ArrayList<OverlayItem>();
 
-				_pois = parser.getPois();
+				mPoisList = mParser.getPois();
 				int marker = R.drawable.markerbig;
 				
 
 				// ------ SELECT POIS TO DISPLAY FROM OPTIONS
 
-				Pois_To_Display = Globals.getInstance().getPois_To_Display();
-				String Pois_Used = convertNumbersToPois(Pois_To_Display);
-				for (int i = 0; i < _pois.size(); i++) {
+				mPois_To_Display = Globals.getInstance().getPois_To_Display();
+				String Pois_Used = convertNumbersToPois(mPois_To_Display);
+				for (int i = 0; i < mPoisList.size(); i++) {
 
-					if (Pois_Used.contains(_pois.get(i).getType().toString())) {
+					if (Pois_Used.contains(mPoisList.get(i).getType().toString())) {
 
-						POIolItem = new OverlayItem(_pois.get(i).getName(),
-								_pois.get(i).getDesc() + "#"
-										+ _pois.get(i).getLink(), new GeoPoint(
-										_pois.get(i).getLon(), _pois.get(i)
+						mPoilItem = new OverlayItem(mPoisList.get(i).getName(),
+								mPoisList.get(i).getDesc() + "#"
+										+ mPoisList.get(i).getLink(), new GeoPoint(
+										mPoisList.get(i).getLon(), mPoisList.get(i)
 												.getLat()));
 
 						Drawable newMarker = getApplicationContext()
 								.getResources().getDrawable(marker);
 
-						POIolItem.setMarker(newMarker);
-						overlayItemArray.add(POIolItem);
+						mPoilItem.setMarker(newMarker);
+						mOverlayItemArray.add(mPoilItem);
 						
 						
 					}
 				}
-				POIoverlay = new MyOwnItemizedOverlay(KMLMap.this,overlayItemArray);
-				map.getOverlays().add(POIoverlay);
+				mPOIoverlay = new MyOwnItemizedOverlay(KMLMap.this,mOverlayItemArray);
+				map.getOverlays().add(mPOIoverlay);
 				map.invalidate();
 
+			}else {
+				Toast.makeText(getApplicationContext(),mMessage,
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 

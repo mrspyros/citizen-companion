@@ -1,4 +1,9 @@
 { "kml_item" : [
-    {"type" : "Hiking", "name" : "Vargiades-melliggoi.kml" , "description" : "Vargiades to Melliggoi Distance 12km Starting Height 898m Ending Height 744m Max Height 1974m","link" : "http://www.gobreadcrumbs.com/en/tracks/131310/placemarks/download.kml" },
-    {"type" : "hiking", "name" : "Tomaros_Cross.kml" , "description" : "Tomaros cross: Melligoi Ag Anastasia  22km Starting Height 717m Ending Height 709m Max Height 1974m","link" : "http://www.gobreadcrumbs.com/en/tracks/131066/placemarks/download.kml" }
+    {"type" : "KML_Hiking", "name" : "Vargiades-melliggoi.kml" , "description" : "Vargiades to Melliggoi Distance 12km Starting Height 898m Ending Height 744m Max Height 1974m","link" : "http://www.gobreadcrumbs.com/en/tracks/131310/placemarks/download.kml" },
+    {"type" : "KML_Hiking", "name" : "Tomaros_Cross.kml" , "description" : "Tomaros cross: Melligoi Ag Anastasia  22km Starting Height 717m Ending Height 709m Max Height 1974m","link" : "http://www.gobreadcrumbs.com/en/tracks/131066/placemarks/download.kml" },
+    {"type" : "MAP", "name" : "tiles.zip" , "description" : "/osmdroid/tiles/","link" : "https://dl.dropboxusercontent.com/s/gvgursa8a3d7j9i/MapquestOSM_2015-09-16_104138.zip?dl=0" },
+    {"type" : "POI", "name" : "Options.xml" , "description" : "/osmdroid/","link" : "https://drive.google.com/uc?export=download&id=0B2s4PStL3vizdEtGcjNDMUFqUEU" },
+    {"type" : "VERSION", "name" : "Version.xml" , "description" : "/osmdroid/","link" : "https://drive.google.com/uc?export=download&id=0B2s4PStL3vizejdaY05IMWluY3c" }
 ]}
+
+

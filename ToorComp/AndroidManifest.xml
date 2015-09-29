@@ -25,19 +25,11 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <receiver
-            android:name="net.viralpatel.network.NetworkChangeReceiver"
-            android:label="NetworkChangeReceiver" >
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" >
-                    <action android:name="android.net.wifi.WIFI_STATE_CHANGED" >
-                    </action>
-                </action>
-            </intent-filter>
-        </receiver>
+        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" >
+        </action>
 
         <activity
-            android:name="com.android.toorcomp.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -47,32 +39,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.android.toorcomp.Options"
+            android:name=".Options"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.toorcomp.Map"
+            android:name=".Map"
             android:hardwareAccelerated="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.toorcomp.MainScreen"
+            android:name=".MainScreen"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.toorcomp.New_request"
+            android:name=".New_request"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.toorcomp.Selector_map"
+            android:name=".Selector_map"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.toorcomp.webview"
+            android:name=".webview"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name="com.android.toorcomp.custom_dialog" >
+        <activity android:name=".custom_dialog" >
         </activity>
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
@@ -87,44 +79,53 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.android.toorcomp.StreamPlayer"
+            android:name=".StreamPlayer"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.toorcomp.KMLMap"
+            android:name=".KMLMap"
             android:hardwareAccelerated="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.toorcomp.File_picker_activity"
+            android:name=".File_picker_activity"
             android:hardwareAccelerated="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.android.toorcomp.Dummy"
+            android:name=".Dummy"
             android:theme="@style/Theme.Transparent" >
         </activity>
         <activity
-            android:name="com.android.toorcomp.downloadservice.Downloader"
+            android:name=".downloadservice.Downloader"
             android:hardwareAccelerated="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
         </activity>
 
         <service
-            android:name="com.android.toorcomp.downloadservice.DownloadService"
-            android:exported="false" />
+            android:name=".downloadservice.DownloadService"
+            android:exported="false"
+            android:process=":CitizenCompanion" />
 
-    
+        <activity
+            android:name=".MainDownloader"
+            android:label="@string/title_activity_main_downloader" >
+        </activity>
+        <activity
+            android:name=".Info"
+            android:label="@string/title_activity_info" >
+        </activity>
     </application>
 
-        <supports-screens
-            android:anyDensity="true"
-            android:largeScreens="true"
-            android:normalScreens="true"
-            android:smallScreens="false"
-            android:xlargeScreens="true" />
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:smallScreens="false"
+        android:xlargeScreens="true" />
+
 </manifest>

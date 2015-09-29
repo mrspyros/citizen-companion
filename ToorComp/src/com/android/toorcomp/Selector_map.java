@@ -1,39 +1,56 @@
 package com.android.toorcomp;
 
-import org.osmdroid.api.IGeoPoint;
+/**
+ * @author MrSpyros
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   any later version.
+
+ *  This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+
+ * You should have received a copy of the GNU General Public License
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.Projection;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+/**
+ * 
+ * Map to select location to use for Requests geotagging
+ *
+ */
 
 public class Selector_map extends Base_Activity /* implements MapEventsReceiver */{
 	// The MapView variable:
 	// private MapView m_mapView;
 
 	// Default map zoom level:
-	private int MAP_DEFAULT_ZOOM = 14;
+	private static  int MAP_DEFAULT_ZOOM = 14;
 
 	// Default map Latitude:
-	private double MAP_DEFAULT_LATITUDE = 39.524125;
+	private static final double MAP_DEFAULT_LATITUDE = 39.524125;
 
 	// Default map Longitude:
-	private double MAP_DEFAULT_LONGITUDE = 20.881799;
+	private static final double MAP_DEFAULT_LONGITUDE = 20.881799;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -113,7 +130,5 @@ public class Selector_map extends Base_Activity /* implements MapEventsReceiver 
 				new GeoPoint(MAP_DEFAULT_LATITUDE, MAP_DEFAULT_LONGITUDE));
 
 	}
-
-	
 
 }
