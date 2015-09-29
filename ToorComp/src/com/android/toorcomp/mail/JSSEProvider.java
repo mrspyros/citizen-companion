@@ -1,4 +1,4 @@
-package com.androis.toorcomp.mail;
+package com.android.toorcomp.mail;
 
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one or more

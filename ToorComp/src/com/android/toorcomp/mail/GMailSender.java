@@ -1,4 +1,4 @@
-package com.androis.toorcomp.mail;
+package com.android.toorcomp.mail;
 
 /**
  * @author MrSpyros
@@ -31,7 +31,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;   
 import javax.mail.internet.MimeMultipart;
 
-import com.androis.toorcomp.mail.JSSEProvider;
+import com.android.toorcomp.mail.JSSEProvider;
 
 import android.util.Log;
 
@@ -58,15 +58,15 @@ public class GMailSender extends javax.mail.Authenticator {
         this.password = password;   
 
         Properties props = new Properties();   
-        props.setProperty("com.androis.toorcomp.mail.transport.protocol", "smtp");   
-        props.setProperty("com.androis.toorcomp.mail.host", mailhost);   
-        props.put("com.androis.toorcomp.mail.smtp.auth", "true");   
-        props.put("com.androis.toorcomp.mail.smtp.port", "465");   
-        props.put("com.androis.toorcomp.mail.smtp.socketFactory.port", "465");   
-        props.put("com.androis.toorcomp.mail.smtp.socketFactory.class",   
+        props.setProperty("com.android.toorcomp.mail.transport.protocol", "smtp");   
+        props.setProperty("com.android.toorcomp.mail.host", mailhost);   
+        props.put("com.android.toorcomp.mail.smtp.auth", "true");   
+        props.put("com.android.toorcomp.mail.smtp.port", "465");   
+        props.put("com.android.toorcomp.mail.smtp.socketFactory.port", "465");   
+        props.put("com.android.toorcomp.mail.smtp.socketFactory.class",   
                 "javax.net.ssl.SSLSocketFactory");   
-        props.put("com.androis.toorcomp.mail.smtp.socketFactory.fallback", "false");   
-        props.setProperty("com.androis.toorcomp.mail.smtp.quitwait", "false");   
+        props.put("com.android.toorcomp.mail.smtp.socketFactory.fallback", "false");   
+        props.setProperty("com.android.toorcomp.mail.smtp.quitwait", "false");   
 
         session = Session.getDefaultInstance(props, this);   
     }   

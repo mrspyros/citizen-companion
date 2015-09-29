@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.osmdroid.util.GeoPoint;
 
-import com.androis.toorcomp.mail.GMailSender;
+import com.android.toorcomp.mail.GMailSender;
 
 import android.app.AlertDialog;
 import android.content.Context;

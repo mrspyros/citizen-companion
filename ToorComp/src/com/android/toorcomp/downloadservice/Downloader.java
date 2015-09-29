@@ -57,9 +57,7 @@ public class Downloader extends Base_Activity implements
 
 	
 	public void onCreate(Bundle savedInstanceState) {
-
-		
-		
+	
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
