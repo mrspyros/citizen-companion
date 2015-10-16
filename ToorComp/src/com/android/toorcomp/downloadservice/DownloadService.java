@@ -46,8 +46,9 @@ import java.text.DecimalFormat;
 
 /**
  *
- * 'url' the download url 'Directory' the directory to download To 'F_name' the
- * saved filename
+ * @PARAM 'url' the download url 
+ * @PARAM 'Directory' the directory to download To 
+ * @PARAM 'F_name' the filename to save file
  * 
  * @return STATUS_RUNNING/FINISHED/ERROR
  * 

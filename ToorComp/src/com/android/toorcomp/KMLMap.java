@@ -50,7 +50,13 @@ import org.osmdroid.bonuspack.overlays.Marker.OnMarkerDragListener;
 import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.bonuspack.overlays.Polygon;
 import org.osmdroid.bonuspack.overlays.Polyline;
+import org.osmdroid.tileprovider.MapTileProviderArray;
+import org.osmdroid.tileprovider.modules.ArchiveFileFactory;
+import org.osmdroid.tileprovider.modules.IArchiveFile;
+import org.osmdroid.tileprovider.modules.MapTileFileArchiveProvider;
+import org.osmdroid.tileprovider.modules.MapTileModuleProviderBase;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.tileprovider.util.SimpleRegisterReceiver;
 import org.osmdroid.util.BoundingBoxE6;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.util.NetworkLocationIgnorer;
@@ -58,6 +64,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.DirectedLocationOverlay;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.TilesOverlay;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -89,6 +96,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -123,6 +132,8 @@ public class KMLMap extends Base_Activity implements
 	protected List<Poi_Struct> mPoisList;
 	protected ArrayList<OverlayItem> mOverlayItemArray; 
 	protected XMLReader mReader; 
+	private static final int MAXZOOMLEVEL=16;
+	private static final int MINZOOMLEVEL=11;
 	
 	
 
@@ -138,6 +149,13 @@ public class KMLMap extends Base_Activity implements
 	// Default map Longitude:
 	private static final double MAP_DEFAULT_LONGITUDE = 20.881799;
 
+	
+	private TilesOverlay tilesOverlay;
+	private TextView speedTextView; 
+	
+	
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -148,15 +166,109 @@ public class KMLMap extends Base_Activity implements
 		getWindow().requestFeature(Window.FEATURE_ACTION_BAR);		
 		
 		
-		setContentView(R.layout.map);
-		map = (MapView) findViewById(R.id.mapview);
+		//setContentView(R.layout.map);
+		//map = (MapView) findViewById(R.id.mapview);
+				
+		
+		// -----------------------------------------------------
+		// ---- Test Dynamicaly drawing 
+		
+		map = new MapView(this, 256);
+		speedTextView = new TextView(this);
+		speedTextView.setBackgroundColor(Color.parseColor("#AAD3D3D3"));
+		speedTextView.setText("Speed:");
+				
+		
+		final RelativeLayout relativeLayout = new RelativeLayout(this);
+		@SuppressWarnings("deprecation")
+		final RelativeLayout.LayoutParams mapViewLayoutParams = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.FILL_PARENT,
+				RelativeLayout.LayoutParams.FILL_PARENT);
+
+//		final RelativeLayout.LayoutParams crossLayoutParams = new RelativeLayout.LayoutParams(
+//				RelativeLayout.LayoutParams.FILL_PARENT,
+//				RelativeLayout.LayoutParams.WRAP_CONTENT);
+//		crossLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//		crossLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
+
+		@SuppressWarnings("deprecation")
+		final RelativeLayout.LayoutParams textViewLayoutParams = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams.FILL_PARENT,
+				RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+//		final RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(
+//				RelativeLayout.LayoutParams.FILL_PARENT,
+//				RelativeLayout.LayoutParams.WRAP_CONTENT);
+//		buttonLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+
+		relativeLayout.addView(map, mapViewLayoutParams);
+		//relativeLayout.addView(cross, crossLayoutParams);
+		relativeLayout.addView(speedTextView, textViewLayoutParams);
+		//relativeLayout.addView(selectBtn, buttonLayoutParams);
+
+		setContentView(relativeLayout);
+		
+		// ----- End Dynamic drawing ---------------------------------------
+
 		map.setBuiltInZoomControls(true);
 		map.setMultiTouchControls(true);
-		map.setUseDataConnection(false);
+		map.setUseDataConnection(true);
+		map.setTileSource(TileSourceFactory.MAPNIK);
 		
 		
-		if (!isNetworkAvailable()){
-			map.setTileSource(TileSourceFactory.MAPQUESTOSM);
+		
+		// In case there is no internet
+		// But there is Offline map
+		// We create a new tileprovider
+		
+		if (!isNetworkAvailable()&& CheckFileExists(Environment.getExternalStorageDirectory()+"/osmdroid/DodoniMap.zip")){
+			map.setUseDataConnection(false);
+		
+			String packageDir = "/osmdroid/DodoniMap.zip";
+	        String p = Environment.getExternalStorageDirectory() + packageDir;
+			
+			IArchiveFile[] archives = new IArchiveFile[1];
+		    archives[0] = ArchiveFileFactory.getArchiveFile(new File (p));
+
+		    // Simple implementation that extends BitmapTileSourceBase and nothing else
+		    CustomTileSource customTiles = new CustomTileSource("MapQuest", null, MINZOOMLEVEL, MAXZOOMLEVEL, 256, ".jpg");  
+
+		    MapTileModuleProviderBase[] providers = new MapTileModuleProviderBase[1];
+		    providers[0] = new MapTileFileArchiveProvider(new SimpleRegisterReceiver(this.getApplicationContext()), customTiles, archives);    // this one is for local tiles (zip etc.)
+		    //providers[1] =  new MapTileDownloader(TileSourceFactory.MAPNIK);    // MAPNIK web tile source
+		   
+		    MapTileProviderArray tileProvider = new MapTileProviderArray(customTiles, 
+		            new SimpleRegisterReceiver(this.getApplicationContext()), providers);
+		    		    	    
+		    tilesOverlay = new TilesOverlay(tileProvider, this.getApplicationContext());
+		    tilesOverlay.setLoadingBackgroundColor(Color.TRANSPARENT);  // this makes sure that the invisble tiles of local tiles
+
+	        map.getOverlays().add(tilesOverlay);
+	        
+	    
+		    double north = 39.653813;
+		    double east  =  21.042938;
+		    double south = 39.291797;
+		    double west  =  20.674896;
+		    BoundingBoxE6 bBox = new BoundingBoxE6(north, east, south, west);
+		    
+		    // Limit scrolable area and zoom levels to
+		    // Ones that exist in local map database
+		    
+		    map.setScrollableAreaLimit(bBox);
+		    map.setMaxZoomLevel(MAXZOOMLEVEL);
+		    map.setMinZoomLevel(MINZOOMLEVEL);
+		    
+		}
+		
+		// inform if no Internet and no cashed map exists
+		
+		if (!isNetworkAvailable()&& !CheckFileExists(Environment.getExternalStorageDirectory()+"/osmdroid/DodoniMap.zip")){
+		
+			Toast.makeText(this,
+					 "No Internet Connection and no map database available",
+					 Toast.LENGTH_LONG).show();
+			
 		}
 		
 		
@@ -173,7 +285,7 @@ public class KMLMap extends Base_Activity implements
 				MAP_DEFAULT_LONGITUDE);
 
 		IMapController mapController = map.getController();
-		mapController.setZoom(10);
+		mapController.setZoom(MINZOOMLEVEL);
 		mapController.setCenter(startPoint);
 
 		// 0. Using the Marker overlay
@@ -312,6 +424,7 @@ public class KMLMap extends Base_Activity implements
 					Log.d("mKmlOverlay Error", e.toString());
 				}
 			}
+			map.getOverlays().add(tilesOverlay);
 		}
 			
 
@@ -673,6 +786,8 @@ public class KMLMap extends Base_Activity implements
 			// just redraw the location overlay:
 			map.invalidate();
 		}
+		
+		speedTextView.setText("Speed: "+ pLoc.getSpeed() * 3.6);
 	}
 
 	@Override

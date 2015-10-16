@@ -18,7 +18,9 @@ package com.android.toorcomp;
  *
  */
 
+import java.io.File;
 import java.lang.reflect.Method;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -118,4 +120,10 @@ public class Base_Activity extends Activity {
 
 	}
 
+	protected Boolean CheckFileExists(String path) {
+
+		File file = new File(path);
+		return file.exists();
+	}
+	
 }
