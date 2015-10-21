@@ -41,4 +41,15 @@
     </item>
      
 
+       <item android:id="@+id/mail_send" 
+        android:icon="@drawable/ic_action_email"
+        android:title="@string/opt_sendmail"
+        android:visible="false" 
+        android:enabled="true"
+        android:orderInCategory="4"
+        android:showAsAction="never">
+        
+    </item>
+     
+     
 </menu>

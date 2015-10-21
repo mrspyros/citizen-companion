@@ -1,12 +1,12 @@
 package com.android.toorcomp;
 
 import java.io.File;
-
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import org.osmdroid.util.GeoPoint;
-
-import com.android.toorcomp.mail.GMailSender;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,13 +15,21 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import com.android.toorcomp.mail.GMailSender;
+import com.android.toorcomp.mail.MailObject;
 
 //import com.android.toorcomp.Map.InnerLocationListener;
 
@@ -30,6 +38,16 @@ public class New_request extends Base_Activity {
 	private static int PICK_IMAGE = 0;
 	private LocationManager InnerLocationManager;
 	private LocationListener InnerLocationListener;
+
+	// ---- mail params
+
+	public boolean delete_Mail = false;
+	public String mail_param_Date;
+	public String mail_param_ShortDesc;
+	public String mail_param_Category;
+	public String mail_param_Description;
+	public String mail_param_TelNumber;
+	public String mail_param_ImageFile;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -170,9 +188,6 @@ public class New_request extends Base_Activity {
 				TextView descText = (TextView) findViewById(R.id.editText2);
 				descText.setText("");
 
-				// Intent intent =new Intent(getApplicationContext(),
-				// New_request.class);
-				// startActivity(intent);
 			}
 		});
 
@@ -180,27 +195,102 @@ public class New_request extends Base_Activity {
 
 		Button button4 = (Button) findViewById(R.id.send);
 		button4.setOnClickListener(new android.view.View.OnClickListener() {
+			@SuppressLint("SimpleDateFormat")
 			public void onClick(View v) {
 
-				File imageFile = new File("");
-				try {
+				// --------- set email params
 
-					GMailSender sender = new GMailSender("aaa@gmail.com",
-							"password");
-					try {
-						imageFile = new File(photoTextView.getText().toString());
-					} catch (Exception e) {
-						imageFile = new File("");
-						Log.e("imageFile", e.getMessage(), e);
-					}
-					sender.sendMail(shortDes.getText().toString(), "For = "
-							+ forSelector.getSelectedItem().toString()
-							+ " Desc = " + descText.getText().toString(),
-							imageFile, "aaa@gmail.com", "aaa@gmail.com");
-				} catch (Exception e) {
-					Log.e("SendMail", e.getMessage(), e);
+				Context mAppContext = New_request.this.getApplicationContext();
+				TelephonyManager tMgr = (TelephonyManager) mAppContext
+						.getSystemService(Context.TELEPHONY_SERVICE);
+				String mPhoneNumber = tMgr.getLine1Number();
+
+				Calendar c = Calendar.getInstance();
+				SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+				String fDate = df.format(c.getTime());
+
+				mail_param_Date = fDate;
+				mail_param_ShortDesc = shortDes.getText().toString();
+				mail_param_Category = forSelector.getSelectedItem().toString();
+				mail_param_Description = descText.getText().toString();
+				mail_param_TelNumber = mPhoneNumber;
+				mail_param_ImageFile = photoTextView.getText().toString();
+
+				if (isNetworkAvailable()) {
+
+					// ----- start async task to send email
+
+					mailSendingTask what = new mailSendingTask(null);
+					what.execute();
+
+				} else
+
+				{
+					// ------ if no internet connection
+					// ------ store request for future
+
+					AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+							New_request.this);
+
+					// set title
+					alertDialogBuilder
+							.setTitle("Δέν υπάρχει σύνδεση στο Διαδίκτυο.. ");
+
+					// set dialog message
+					alertDialogBuilder
+							.setMessage(
+									"Θέλετε να γίνει αποθήκευση της αίτησης για μελοντική αποστολή")
+							.setCancelable(false)
+							.setPositiveButton("Ναί",
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog, int id) {
+											Context mAppContext = New_request.this
+													.getApplicationContext();
+											MailObject sMail = new MailObject(
+													mail_param_ShortDesc,
+													mail_param_Category,
+													mail_param_Description,
+													mail_param_ImageFile,
+													mail_param_TelNumber);
+											if (sMail.Write_To_Sd()) {
+
+												Toast.makeText(mAppContext,
+														"Έγινε αποθήκευση",
+														Toast.LENGTH_LONG)
+														.show();
+
+											} else {
+
+												Toast.makeText(mAppContext,
+														"Σφάλμα αποθήκευσης",
+														Toast.LENGTH_LONG)
+														.show();
+											}
+
+											// TODO Implement
+
+										}
+									})
+							.setNegativeButton("Οχι",
+									new DialogInterface.OnClickListener() {
+										public void onClick(
+												DialogInterface dialog, int id) {
+
+											finish();
+
+										}
+									}
+
+							);
+
+					// create alert dialog
+					AlertDialog alertDialog = alertDialogBuilder.create();
+
+					// show it
+					alertDialog.show();
+
 				}
-
 			}
 		});
 
@@ -305,4 +395,145 @@ public class New_request extends Base_Activity {
 		return false;
 	};
 
+	// ----- if file exists in mail folder
+	// ----- show send mail menu item
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+
+		File root = new File(Environment.getExternalStorageDirectory(),
+				"osmdroid/mail/Mail.json");
+
+		if (root.exists()) {
+			MenuItem mail_send = menu.findItem(R.id.mail_send);
+			mail_send.setVisible(true);
+
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+
+		case R.id.opt:
+			startActivity(new Intent(getApplicationContext(), Options.class));
+			return true;
+
+		case R.id.mail_send:
+			
+			MailObject sMail = new MailObject();
+
+			// TODO Check for wrong or corrupted data in file
+			
+			mail_param_Date = sMail.Date;
+			mail_param_ShortDesc = sMail.Short_Desc;
+			mail_param_Category = sMail.Category;
+			mail_param_Description = sMail.Description;
+			mail_param_TelNumber = sMail.TelNumber;
+			mail_param_ImageFile = sMail.Image_File;
+
+			// --- set the flag that we send stored message
+
+			delete_Mail = true;
+
+			mailSendingTask what = new mailSendingTask(null);
+			what.execute();
+
+			return true;
+
+		}
+		return false;
+
+	}
+
+	ProgressDialog createSpinningDialog(String title) {
+		ProgressDialog pd = new ProgressDialog(this);
+		pd.setTitle(title);
+		pd.setMessage(getString(R.string.wait));
+		pd.setCancelable(false);
+		pd.setIndeterminate(true);
+		return pd;
+	}
+
+	class mailSendingTask extends AsyncTask<Object, Void, Boolean> {
+		boolean mOnCreate;
+		ProgressDialog mPD;
+		String mMessage;
+
+		mailSendingTask(String message) {
+			super();
+			mMessage = "Sending";
+		}
+
+		@Override
+		protected void onPreExecute() {
+			mPD = createSpinningDialog(mMessage);
+			mPD.show();
+		}
+
+		@Override
+		protected Boolean doInBackground(Object... params) {
+
+			if (isNetworkAvailable()) {
+
+				File imageFile = new File("");
+				try {
+
+					GMailSender sender = new GMailSender("aaa@gmail.com",
+							"aaaaa");
+					try {
+						imageFile = new File(mail_param_ImageFile);
+					} catch (Exception e) {
+						imageFile = new File("");
+						Log.e("imageFile", e.getMessage(), e);
+					}
+					sender.sendMail(mail_param_ShortDesc, " Date = "
+							+ mail_param_Date + " For = " + mail_param_Category
+							+ " Desc = " + mail_param_Description + " Phone= "
+							+ mail_param_TelNumber, imageFile,
+							"aaa@gmail.com", "aaa@gmail.com");
+
+				} catch (Exception e) {
+					Context mAppContext = New_request.this
+							.getApplicationContext();
+					Toast.makeText(mAppContext, "Σφάλμα αποστολής",
+							Toast.LENGTH_LONG).show();
+
+					Log.e("SendMail", e.getMessage(), e);
+				}
+			} else {
+				Context mAppContext = New_request.this.getApplicationContext();
+				Toast.makeText(mAppContext, "Σφάλμα δικτύου", Toast.LENGTH_LONG)
+						.show();
+
+			}
+
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean ok) {
+			if (delete_Mail) {
+
+				File root = new File(Environment.getExternalStorageDirectory(),
+						"osmdroid/mail/Mail.json");
+
+				if (root.exists())
+					root.delete();
+				delete_Mail = false;
+			}
+
+			mPD.dismiss();
+
+			Context mAppContext = New_request.this.getApplicationContext();
+			Toast.makeText(mAppContext, "Έγινε αποστολή", Toast.LENGTH_LONG)
+					.show();
+
+		}
+
+		// -------------------------------------------
+
+	}
 }

@@ -424,7 +424,7 @@ public class KMLMap extends Base_Activity implements
 					Log.d("mKmlOverlay Error", e.toString());
 				}
 			}
-			map.getOverlays().add(tilesOverlay);
+			//map.getOverlays().add(tilesOverlay);
 		}
 			
 

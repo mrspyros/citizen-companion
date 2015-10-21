@@ -62,5 +62,6 @@
     <string name="main_dl_btn3">Λήψη Χάρτη</string>
     <string name="title_activity_info">Πληροφορίες</string>
     <string name="main_act_btn2">Λήψεις</string>
+     <string name="opt_sendmail">Αποστολή</string>
 
 </resources>
